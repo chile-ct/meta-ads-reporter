@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chotot Meta Ads Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d40;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --brand: #3b82f6;
+      --growth: #10b981;
+      --vertical: #f59e0b;
+      --red: #ef4444;
+      --yellow: #eab308;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; }
+
+    header {
+      padding: 18px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: var(--bg); z-index: 10;
+    }
+    header h1 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+    .updated { color: var(--muted); font-size: 12px; }
+
+    main { max-width: 1200px; margin: 0 auto; padding: 28px 32px; }
+
+    /* ── Cards ── */
+    .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 24px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+    .card .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .card .value { font-size: 20px; font-weight: 700; line-height: 1; }
+    .card .sub { color: var(--muted); font-size: 11px; margin-top: 6px; }
+    .wow-pos { color: var(--growth); }
+    .wow-neg { color: var(--red); }
+
+    /* ── Chart ── */
+    .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 18px; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .section-header h2 { font-size: 13px; font-weight: 600; color: var(--text); }
+    .btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      padding: 4px 12px; border-radius: 5px; cursor: pointer; font-size: 12px;
+      transition: all 0.12s;
+    }
+    .btn:hover { border-color: var(--brand); color: var(--brand); }
+    .btn.active-spend  { background: var(--brand);    border-color: var(--brand);    color: #fff; }
+    .btn.active-qe     { background: #8b5cf6;         border-color: #8b5cf6;         color: #fff; }
+    .btn.active-er     { background: var(--vertical);  border-color: var(--vertical);  color: #fff; }
+    .btn.active-installs{ background: var(--growth);   border-color: var(--growth);   color: #fff; }
+    canvas { max-height: 260px; }
+
+    /* ── Table ── */
+    .overflow { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      color: var(--muted); font-weight: 500; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 8px 12px; text-align: right;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    th:first-child, th:nth-child(2) { text-align: left; }
+    td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+    td:first-child { text-align: left; color: var(--muted); font-size: 12px; }
+    td:nth-child(2) { text-align: left; font-weight: 500; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.025); }
+    .g-brand    { color: var(--brand); }
+    .g-growth   { color: var(--growth); }
+    .g-vertical { color: var(--vertical); }
+
+    /* ── Freq ── */
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-red    { background: rgba(239,68,68,.15);  color: var(--red); }
+    .badge-yellow { background: rgba(234,179,8,.15);  color: var(--yellow); }
+
+    /* ── Loading / Empty ── */
+    .empty { text-align: center; color: var(--muted); padding: 48px 0; font-size: 14px; }
+
+    @media (max-width: 860px) {
+      header, main { padding: 16px; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .cards .card:last-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 500px) {
+      .cards { grid-template-columns: 1fr; }
+      .cards .card:last-child { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📈 Chotot Meta Ads Dashboard</h1>
+  <span class="updated" id="updated-at">Loading…</span>
+</header>
+
+<main>
+  <div class="empty" id="loading">Đang tải dữ liệu…</div>
+  <div id="content" style="display:none">
+
+    <!-- Summary cards -->
+    <div class="cards" id="cards"></div>
+
+    <!-- Trend chart -->
+    <div class="section">
+      <div class="section-header">
+        <h2>Trend theo tuần</h2>
+        <div class="btn-row" id="metric-btns">
+          <button class="btn active-spend" data-metric="spend">Spend</button>
+          <button class="btn" data-metric="qe">QE</button>
+          <button class="btn" data-metric="er">ER%</button>
+          <button class="btn" data-metric="installs">Installs</button>
+        </div>
+      </div>
+      <canvas id="trendChart"></canvas>
+    </div>
+
+    <!-- History table -->
+    <div class="section">
+      <div class="section-header">
+        <h2>📋 Lịch sử báo cáo</h2>
+        <div class="btn-row" id="group-filter">
+          <button class="btn" data-group="ALL" style="border-color:var(--brand);color:var(--brand)">All</button>
+          <button class="btn" data-group="BRAND">Brand</button>
+          <button class="btn" data-group="GROWTH">Growth</button>
+          <button class="btn" data-group="VERTICAL">Vertical</button>
+        </div>
+      </div>
+      <div class="overflow">
+        <table>
+          <thead>
+            <tr>
+              <th>Tuần</th>
+              <th>Group</th>
+              <th>Spend (SGD)</th>
+              <th>QE</th>
+              <th>ER%</th>
+              <th>CPE</th>
+              <th>Installs</th>
+              <th>CPI</th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Freq watch list -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🚨 Frequency Watch List — tuần gần nhất</h2>
+      </div>
+      <div id="freq-content"></div>
+    </div>
+
+  </div><!-- #content -->
+</main>
+
+<script>
+const GROUPS   = ['BRAND', 'GROWTH', 'VERTICAL'];
+const G_LABEL  = { BRAND: 'Brand', GROWTH: 'Growth', VERTICAL: 'Vertical' };
+const G_COLOR  = { BRAND: '#3b82f6', GROWTH: '#10b981', VERTICAL: '#f59e0b' };
+const M_LABEL  = { spend: 'Spend (SGD)', qe: 'QE', er: 'ER%', installs: 'Installs' };
+
+let allData    = [];
+let chart      = null;
+let activeMetric = 'spend';
+let activeGroup  = 'ALL';
+
+/* ── Formatters ── */
+function fMoney(v) {
+  if (!v && v !== 0) return '—';
+  return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fInt(v) {
+  if (!v && v !== 0) return '—';
+  if (v >= 1e6) return (v / 1e6).toFixed(1) + 'M';
+  if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K';
+  return Math.round(v).toLocaleString();
+}
+function fPct(v) { return (v == null ? '—' : v.toFixed(2) + '%'); }
+
+function wowHtml(curr, prev, isPp) {
+  if (!prev) return '';
+  const d   = isPp ? curr - prev : (curr - prev) / prev * 100;
+  const cls = d >= 0 ? 'wow-pos' : 'wow-neg';
+  const str = isPp ? `${d >= 0 ? '+' : ''}${d.toFixed(2)}pp` : `${d >= 0 ? '+' : ''}${d.toFixed(1)}%`;
+  return ` <span class="${cls}">${str}</span>`;
+}
+
+/* ── Cards ── */
+function renderCards(latest, prev) {
+  const totalSpend  = GROUPS.reduce((s, g) => s + latest.groups[g].spend, 0);
+  const totalQe     = GROUPS.reduce((s, g) => s + latest.groups[g].qe, 0);
+  const avgEr       = GROUPS.reduce((s, g) => s + latest.groups[g].er, 0) / 3;
+  const installs    = latest.groups.GROWTH.installs || 0;
+  const cpi         = latest.groups.GROWTH.cpi || 0;
+  const freqAlerts  = (latest.watch_list || []).filter(w => w.frequency >= 7).length;
+  const prevSpend   = prev ? GROUPS.reduce((s, g) => s + prev.groups[g].spend, 0) : 0;
+
+  document.getElementById('cards').innerHTML = `
+    <div class="card">
+      <div class="label">Total Spend</div>
+      <div class="value">SGD ${fMoney(totalSpend)}</div>
+      <div class="sub">${prev ? wowHtml(totalSpend, prevSpend, false) + ' WoW' : latest.week_label}</div>
+    </div>
+    <div class="card">
+      <div class="label">Quality Engagement</div>
+      <div class="value">${fInt(totalQe)}</div>
+      <div class="sub">${latest.week_label}</div>
+    </div>
+    <div class="card">
+      <div class="label">Avg ER%</div>
+      <div class="value">${fPct(avgEr)}</div>
+      <div class="sub">across 3 groups</div>
+    </div>
+    <div class="card">
+      <div class="label">App Installs</div>
+      <div class="value">${fInt(installs)}</div>
+      <div class="sub">CPI: SGD ${fMoney(cpi)}</div>
+    </div>
+    <div class="card">
+      <div class="label">Freq Alerts 🔴</div>
+      <div class="value">${freqAlerts}</div>
+      <div class="sub">campaigns ≥ 7×</div>
+    </div>
+  `;
+}
+
+/* ── Chart ── */
+function buildChart() {
+  const reversed = [...allData].reverse();
+  const labels   = reversed.map(d => d.week_label.split(',')[0]);
+
+  const datasets = GROUPS
+    .filter(g => activeGroup === 'ALL' || g === activeGroup)
+    .map(g => ({
+      label:           G_LABEL[g],
+      data:            reversed.map(d => {
+        if (activeMetric === 'installs') return g === 'GROWTH' ? (d.groups[g].installs || 0) : null;
+        return d.groups[g][activeMetric] ?? null;
+      }),
+      borderColor:     G_COLOR[g],
+      backgroundColor: G_COLOR[g] + '20',
+      borderWidth:     2,
+      pointRadius:     4,
+      pointHoverRadius: 6,
+      tension:         0.35,
+      fill:            false,
+      spanGaps:        true,
+    }));
+
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#64748b', boxWidth: 10, font: { size: 12 } } },
+        tooltip: {
+          backgroundColor: '#1a1d27',
+          borderColor: '#2a2d40',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor: '#94a3b8',
+          callbacks: {
+            label: ctx => {
+              const v = ctx.parsed.y;
+              if (v === null) return null;
+              if (activeMetric === 'spend')    return ` ${ctx.dataset.label}: SGD ${fMoney(v)}`;
+              if (activeMetric === 'er')       return ` ${ctx.dataset.label}: ${fPct(v)}`;
+              if (activeMetric === 'installs') return ` ${ctx.dataset.label}: ${fInt(v)}`;
+              return ` ${ctx.dataset.label}: ${fInt(v)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#1e2130' } },
+        y: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#1e2130' } }
+      }
+    }
+  });
+}
+
+/* ── History table ── */
+function renderTable() {
+  const showGroups = activeGroup === 'ALL' ? GROUPS : [activeGroup];
+  const rows = [];
+
+  for (const d of allData) {
+    const groups = showGroups;
+    for (let i = 0; i < groups.length; i++) {
+      const g = groups[i];
+      const m = d.groups[g];
+      rows.push(`
+        <tr>
+          ${i === 0 ? `<td rowspan="${groups.length}" style="border-bottom:1px solid var(--border);vertical-align:middle">${d.week_label}</td>` : ''}
+          <td class="g-${g.toLowerCase()}">${G_LABEL[g]}</td>
+          <td>${fMoney(m.spend)}</td>
+          <td>${fInt(m.qe)}</td>
+          <td>${fPct(m.er)}</td>
+          <td>${m.cpe ? fMoney(m.cpe) : '—'}</td>
+          <td>${g === 'GROWTH' && m.installs ? fInt(m.installs) : '—'}</td>
+          <td>${g === 'GROWTH' && m.cpi ? fMoney(m.cpi) : '—'}</td>
+        </tr>
+      `);
+    }
+  }
+
+  document.getElementById('history-body').innerHTML = rows.join('') || `<tr><td colspan="8" class="empty">Chưa có dữ liệu</td></tr>`;
+}
+
+/* ── Freq list ── */
+function renderFreq(latest) {
+  const items = latest.watch_list || [];
+  if (!items.length) {
+    document.getElementById('freq-content').innerHTML = '<p style="color:var(--muted)">Tất cả campaigns trong ngưỡng an toàn ✅</p>';
+    return;
+  }
+  document.getElementById('freq-content').innerHTML = `
+    <div class="overflow">
+      <table>
+        <thead><tr>
+          <th>Campaign</th>
+          <th>Account</th>
+          <th>Frequency</th>
+          <th>Spend (SGD)</th>
+        </tr></thead>
+        <tbody>
+          ${items.map(it => `
+            <tr>
+              <td style="text-align:left;color:var(--text)">${it.name}</td>
+              <td style="text-align:left">${it.account}</td>
+              <td style="text-align:right">
+                <span class="badge ${it.frequency >= 7 ? 'badge-red' : 'badge-yellow'}">${it.frequency.toFixed(1)}×</span>
+              </td>
+              <td>${fMoney(it.spend)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ── Controls ── */
+function setupMetricBtns() {
+  document.getElementById('metric-btns').addEventListener('click', e => {
+    const btn = e.target.closest('.btn');
+    if (!btn) return;
+    document.querySelectorAll('#metric-btns .btn').forEach(b => {
+      b.className = 'btn';
+    });
+    activeMetric = btn.dataset.metric;
+    btn.classList.add('active-' + activeMetric);
+    buildChart();
+  });
+}
+
+function setupGroupFilter() {
+  document.getElementById('group-filter').addEventListener('click', e => {
+    const btn = e.target.closest('.btn');
+    if (!btn) return;
+    document.querySelectorAll('#group-filter .btn').forEach(b => {
+      b.style.borderColor = ''; b.style.color = ''; b.style.background = '';
+    });
+    activeGroup = btn.dataset.group;
+    const c = activeGroup === 'ALL' ? 'var(--brand)' : G_COLOR[activeGroup];
+    btn.style.borderColor = c;
+    btn.style.color = c;
+    buildChart();
+    renderTable();
+  });
+}
+
+/* ── Bootstrap ── */
+async function load() {
+  try {
+    const idx   = await fetch('data/index.json').then(r => r.json());
+    allData     = await Promise.all(idx.map(w => fetch(`data/${w}.json`).then(r => r.json())));
+
+    const latest = allData[0];
+    const prev   = allData[1] || null;
+
+    const ts = new Date(latest.generated_at).toLocaleString('vi-VN', { timeZone: 'Asia/Saigon' });
+    document.getElementById('updated-at').textContent = `Updated: ${ts}`;
+
+    renderCards(latest, prev);
+    buildChart();
+    renderTable();
+    renderFreq(latest);
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+
+    setupMetricBtns();
+    setupGroupFilter();
+  } catch (err) {
+    document.getElementById('loading').textContent =
+      'Chưa có dữ liệu. Báo cáo đầu tiên sẽ chạy vào thứ Hai 29/6.';
+    console.error(err);
+  }
+}
+
+load();
+</script>
+</body>
+</html>

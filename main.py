@@ -1,6 +1,8 @@
 import os
 import sys
-from datetime import date, timedelta
+import json
+from datetime import date, timedelta, datetime, timezone
+from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from reporter.config import ACCOUNTS, FREQ_GREEN, FREQ_YELLOW
@@ -194,6 +196,53 @@ def generate_insights(groups_w1: dict, groups_w2: dict) -> list:
     return insights[:5]
 
 
+# ── Weekly snapshot (for GitHub Pages dashboard) ──────────────────────────────
+
+def save_weekly_snapshot(groups_w1: dict, watch_list: list, w_label_str: str, date_ranges: dict) -> None:
+    week_start = date_ranges["w1"][0]
+    snapshot = {
+        "week_start":    week_start,
+        "week_label":    w_label_str,
+        "generated_at":  datetime.now(timezone.utc).isoformat(),
+        "groups": {
+            name: {
+                "spend":    round(groups_w1[name]["spend"], 2),
+                "qe":       int(groups_w1[name]["qe"]),
+                "er":       round(groups_w1[name]["er"], 4),
+                "cpe":      round(groups_w1[name]["cpe"], 2),
+                "installs": int(groups_w1[name].get("installs", 0)),
+                "cpi":      round(groups_w1[name].get("cpi", 0), 2),
+            }
+            for name in ("BRAND", "GROWTH", "VERTICAL")
+        },
+        "watch_list": [
+            {
+                "name":      item["name"],
+                "account":   item["account"],
+                "frequency": round(item["frequency"], 2),
+                "spend":     round(item["spend"], 2),
+                "flag":      item["flag"],
+            }
+            for item in watch_list
+        ],
+    }
+
+    data_dir = Path(__file__).parent / "docs" / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    (data_dir / f"{week_start}.json").write_text(
+        json.dumps(snapshot, ensure_ascii=False, indent=2)
+    )
+
+    index_file = data_dir / "index.json"
+    index = json.loads(index_file.read_text()) if index_file.exists() else []
+    if week_start not in index:
+        index.insert(0, week_start)
+    index_file.write_text(json.dumps(index, indent=2))
+
+    print(f"  Snapshot saved: docs/data/{week_start}.json")
+
+
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -223,7 +272,10 @@ def main() -> None:
     watch_list = build_watch_list_from_results(results)
     insights   = generate_insights(groups_w1, groups_w2)
 
-    print(f"\nSending Slack messages (test_mode={test_mode})...")
+    print("\nSaving weekly snapshot for dashboard...")
+    save_weekly_snapshot(groups_w1, watch_list, w_label, date_ranges)
+
+    print(f"Sending Slack messages (test_mode={test_mode})...")
     send_reports(weekly_groups, watch_list, insights, w_label, test_mode=test_mode)
 
     print("Writing Notion report...")
