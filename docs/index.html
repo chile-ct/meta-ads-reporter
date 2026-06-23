@@ -7,16 +7,16 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --border: #2a2d40;
-      --text: #e2e8f0;
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
       --muted: #64748b;
-      --brand: #3b82f6;
-      --growth: #10b981;
-      --vertical: #f59e0b;
-      --red: #ef4444;
-      --yellow: #eab308;
+      --brand: #2563eb;
+      --growth: #059669;
+      --vertical: #d97706;
+      --red: #dc2626;
+      --yellow: #ca8a04;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; }
@@ -270,11 +270,11 @@ function buildChart() {
       plugins: {
         legend: { labels: { color: '#64748b', boxWidth: 10, font: { size: 12 } } },
         tooltip: {
-          backgroundColor: '#1a1d27',
-          borderColor: '#2a2d40',
+          backgroundColor: '#ffffff',
+          borderColor: '#e2e8f0',
           borderWidth: 1,
-          titleColor: '#e2e8f0',
-          bodyColor: '#94a3b8',
+          titleColor: '#0f172a',
+          bodyColor: '#64748b',
           callbacks: {
             label: ctx => {
               const v = ctx.parsed.y;
@@ -288,8 +288,8 @@ function buildChart() {
         }
       },
       scales: {
-        x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#1e2130' } },
-        y: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#1e2130' } }
+        x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#f1f5f9' } },
+        y: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#f1f5f9' } }
       }
     }
   });

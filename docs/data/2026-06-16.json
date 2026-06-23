@@ -1,0 +1,41 @@
+{
+  "week_start": "2026-06-16",
+  "week_label": "Jun 16–22, 2026",
+  "generated_at": "2026-06-23T03:30:00Z",
+  "notes": "VERTICAL accounts (job_trade_sgd, pty_sgd) returned access-denied — data shows 0.",
+  "groups": {
+    "BRAND": {
+      "spend": 1813.29,
+      "qe": 1713,
+      "er": 0.0944,
+      "cpe": 1.06,
+      "installs": 0,
+      "cpi": 0
+    },
+    "GROWTH": {
+      "spend": 1200.35,
+      "qe": 32593,
+      "er": 8.064,
+      "cpe": 0.037,
+      "installs": 0,
+      "cpi": 0
+    },
+    "VERTICAL": {
+      "spend": 0,
+      "qe": 0,
+      "er": 0,
+      "cpe": 0,
+      "installs": 0,
+      "cpi": 0
+    }
+  },
+  "watch_list": [
+    { "name": "digital_fb_job_nvkd",                    "account": "job_sgd",      "frequency": 7.69, "flag": "🔴", "spend": 78.04  },
+    { "name": "digital_elt_bl_mf_clicklink_web",         "account": "gds_elt_sgd",  "frequency": 7.35, "flag": "🔴", "spend": 215.80 },
+    { "name": "digital_fb_job_worker",                   "account": "job_sgd",      "frequency": 4.46, "flag": "🟡", "spend": 41.64  },
+    { "name": "digital_fb_job_banhang",                  "account": "job_sgd",      "frequency": 4.27, "flag": "🟡", "spend": 51.94  },
+    { "name": "digital_fb_job_shipper",                  "account": "job_sgd",      "frequency": 4.27, "flag": "🟡", "spend": 23.98  },
+    { "name": "digital_fb_job_baove",                    "account": "job_sgd",      "frequency": 4.15, "flag": "🟡", "spend": 57.61  },
+    { "name": "digital_elt_fb_web_rtg",                  "account": "gds_elt_sgd",  "frequency": 3.89, "flag": "🟡", "spend": 70.04  }
+  ]
+}
