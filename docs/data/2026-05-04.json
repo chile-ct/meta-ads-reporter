@@ -1,0 +1,102 @@
+{
+  "week_start": "2026-05-04",
+  "week_label": "May 4–10, 2026",
+  "total_spend": 2344.74,
+  "generated_at": "2026-06-23T08:00:00Z",
+  "notes": "Historical data pulled via Meta MCP (Apr–Jun 2026). VERTICAL pty_sgd paused May 11–Jun 7. Impressions approximate for growth accounts.",
+  "groups": {
+    "BRAND": {
+      "spend": 788.82,
+      "reach": 839197,
+      "avg_freq": 1.24,
+      "accounts": {
+        "gds_brand": {
+          "spend": 183.31,
+          "reach": 66483,
+          "qe": 15,
+          "cpe": 12.22,
+          "er": 0.0226,
+          "avg_freq": 1.53
+        },
+        "pty_branding_sgd": {
+          "spend": 225.62,
+          "reach": 233046,
+          "qe": 144,
+          "cpe": 1.57,
+          "er": 0.0618,
+          "avg_freq": 1.18
+        },
+        "veh_brand": {
+          "spend": 148.08,
+          "reach": 215699,
+          "qe": 97,
+          "cpe": 1.53,
+          "er": 0.045,
+          "avg_freq": 1.29
+        },
+        "job_branding_sgd": {
+          "spend": 231.81,
+          "reach": 323969,
+          "qe": 131,
+          "cpe": 1.77,
+          "er": 0.0404,
+          "avg_freq": 1.18
+        }
+      },
+      "qe": 387,
+      "cpe": 2.04,
+      "er": 0.0461
+    },
+    "GROWTH": {
+      "spend": 1239.26,
+      "reach": 294810,
+      "avg_freq": 3.9,
+      "accounts": {
+        "growth_sgd": {
+          "spend": 569.85,
+          "reach": 113685,
+          "link_clicks": 13885,
+          "avg_freq": 3.78
+        },
+        "job_sgd": {
+          "spend": 469.97,
+          "reach": 71556,
+          "link_clicks": 29883,
+          "avg_freq": 4.89
+        },
+        "gds_elt_sgd": {
+          "spend": 199.44,
+          "reach": 109569,
+          "link_clicks": 9574,
+          "avg_freq": 3.38
+        }
+      },
+      "link_clicks": 53342
+    },
+    "VERTICAL": {
+      "spend": 316.66,
+      "reach": 98402,
+      "avg_freq": 3.4,
+      "accounts": {
+        "job_trade_sgd": {
+          "spend": 159.22,
+          "reach": 71587,
+          "qe": 874,
+          "cpe": 0.18,
+          "er": 1.2209,
+          "avg_freq": 2.79
+        },
+        "pty_sgd": {
+          "spend": 157.44,
+          "reach": 26815,
+          "link_clicks": 3116,
+          "avg_freq": 5.03
+        }
+      },
+      "qe": 3990,
+      "cpe": 0.08,
+      "er": 4.0548
+    }
+  },
+  "watch_list": []
+}

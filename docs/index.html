@@ -7,410 +7,506 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #f1f5f9;
+      --bg: #f8f9fc;
       --surface: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --muted: #64748b;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --faint: #9ca3af;
       --brand: #2563eb;
+      --brand-bg: #eff6ff;
       --growth: #059669;
-      --vertical: #d97706;
+      --growth-bg: #ecfdf5;
+      --vert: #d97706;
+      --vert-bg: #fffbeb;
       --red: #dc2626;
-      --yellow: #ca8a04;
+      --red-bg: #fef2f2;
+      --yel: #ca8a04;
+      --yel-bg: #fefce8;
+      --purple: #7c3aed;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.5; }
 
+    /* ── Header ── */
     header {
-      padding: 18px 32px;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; background: var(--bg); z-index: 10;
+      padding: 12px 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      position: sticky; top: 0; z-index: 20;
     }
-    header h1 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
-    .updated { color: var(--muted); font-size: 12px; }
+    .hd-left { display: flex; align-items: center; gap: 14px; }
+    header h1 { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+    .week-pick {
+      appearance: none;
+      background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 6px 30px 6px 11px; font-size: 13px; color: var(--text); cursor: pointer; min-width: 175px;
+    }
+    .week-pick:focus { outline: none; border-color: var(--brand); }
+    .hd-right { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
-    main { max-width: 1200px; margin: 0 auto; padding: 28px 32px; }
+    /* ── Layout ── */
+    main { max-width: 1080px; margin: 0 auto; padding: 24px 28px 60px; }
 
-    /* ── Cards ── */
-    .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 24px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-    .card .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-    .card .value { font-size: 20px; font-weight: 700; line-height: 1; }
-    .card .sub { color: var(--muted); font-size: 11px; margin-top: 6px; }
-    .wow-pos { color: var(--growth); }
-    .wow-neg { color: var(--red); }
+    /* ── Panel ── */
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 18px; overflow: hidden; }
+    .ph { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .ph-title { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+    .ph-sub { color: var(--muted); font-size: 12px; }
+    .pb { padding: 16px 18px; }
+
+    /* ── Summary cards grid ── */
+    .sc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 18px; }
+    .sc { background: var(--surface); padding: 15px 18px; }
+    .sc-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; }
+    .sc-val { font-size: 21px; font-weight: 700; line-height: 1; }
+    .sc-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .c-purple { color: var(--purple); }
+    .c-brand  { color: var(--brand); }
+    .c-growth { color: var(--growth); }
+    .c-vert   { color: var(--vert); }
+    .c-red    { color: var(--red); }
+    .wow-up   { color: var(--growth); }
+    .wow-dn   { color: var(--red); }
+
+    /* ── Group pill ── */
+    .pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+    .pill-b  { background: var(--brand-bg);  color: var(--brand); }
+    .pill-g  { background: var(--growth-bg); color: var(--growth); }
+    .pill-v  { background: var(--vert-bg);   color: var(--vert); }
+
+    /* ── Group summary table ── */
+    .gs-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .gs-table th { padding: 10px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; text-align: right; background: var(--bg); border-bottom: 2px solid var(--border); }
+    .gs-table th:first-child { text-align: left; width: 150px; }
+    .th-b { color: var(--brand); } .th-g { color: var(--growth); } .th-v { color: var(--vert); }
+    .gs-table td { padding: 9px 16px; text-align: right; border-bottom: 1px solid var(--border); }
+    .gs-table td:first-child { text-align: left; color: var(--muted); font-size: 12px; font-weight: 500; }
+    .gs-table tr:last-child td { border-bottom: none; }
+    .gs-table tr:hover td { background: var(--bg); }
+    .gs-divider td { background: var(--bg) !important; color: var(--faint) !important; font-size: 11px !important; font-weight: 600 !important; text-transform: uppercase !important; letter-spacing: .06em !important; padding: 6px 16px !important; border-top: 1px solid var(--border); }
+
+    /* ── Data table (per-account) ── */
+    .ov { overflow-x: auto; }
+    .dt { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .dt th { padding: 7px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .dt th:first-child { text-align: left; }
+    .dt td { padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+    .dt td:first-child { text-align: left; font-weight: 600; }
+    .dt tr:last-child td { border-bottom: none; }
+    .dt tr:hover td { background: var(--bg); }
+
+    /* ── Freq badge ── */
+    .badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+    .b-red { background: var(--red-bg); color: var(--red); }
+    .b-yel { background: var(--yel-bg); color: var(--yel); }
+    .b-grn { background: var(--growth-bg); color: var(--growth); }
 
     /* ── Chart ── */
-    .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 18px; }
-    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-    .section-header h2 { font-size: 13px; font-weight: 600; color: var(--text); }
+    .chart-wrap { height: 210px; position: relative; }
     .btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
-    .btn {
-      background: transparent; border: 1px solid var(--border); color: var(--muted);
-      padding: 4px 12px; border-radius: 5px; cursor: pointer; font-size: 12px;
-      transition: all 0.12s;
+    .mbtn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: all .1s; }
+    .mbtn:hover { border-color: var(--brand); color: var(--brand); }
+    .mbtn.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+    /* ── Misc ── */
+    .note { color: var(--muted); font-size: 13px; padding: 10px 0; }
+    .loading { text-align: center; color: var(--muted); padding: 64px 0; font-size: 14px; }
+
+    @media (max-width: 840px) {
+      header, main { padding: 12px 14px; }
+      .sc-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    .btn:hover { border-color: var(--brand); color: var(--brand); }
-    .btn.active-spend  { background: var(--brand);    border-color: var(--brand);    color: #fff; }
-    .btn.active-qe     { background: #8b5cf6;         border-color: #8b5cf6;         color: #fff; }
-    .btn.active-er     { background: var(--vertical);  border-color: var(--vertical);  color: #fff; }
-    .btn.active-installs{ background: var(--growth);   border-color: var(--growth);   color: #fff; }
-    canvas { max-height: 260px; }
-
-    /* ── Table ── */
-    .overflow { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th {
-      color: var(--muted); font-weight: 500; font-size: 11px;
-      text-transform: uppercase; letter-spacing: 0.05em;
-      padding: 8px 12px; text-align: right;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    th:first-child, th:nth-child(2) { text-align: left; }
-    td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--border); }
-    td:first-child { text-align: left; color: var(--muted); font-size: 12px; }
-    td:nth-child(2) { text-align: left; font-weight: 500; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,0.025); }
-    .g-brand    { color: var(--brand); }
-    .g-growth   { color: var(--growth); }
-    .g-vertical { color: var(--vertical); }
-
-    /* ── Freq ── */
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-    .badge-red    { background: rgba(239,68,68,.15);  color: var(--red); }
-    .badge-yellow { background: rgba(234,179,8,.15);  color: var(--yellow); }
-
-    /* ── Loading / Empty ── */
-    .empty { text-align: center; color: var(--muted); padding: 48px 0; font-size: 14px; }
-
-    @media (max-width: 860px) {
-      header, main { padding: 16px; }
-      .cards { grid-template-columns: repeat(2, 1fr); }
-      .cards .card:last-child { grid-column: 1 / -1; }
-    }
-    @media (max-width: 500px) {
-      .cards { grid-template-columns: 1fr; }
-      .cards .card:last-child { grid-column: auto; }
+    @media (max-width: 520px) {
+      .sc-grid { grid-template-columns: 1fr; }
+      header { flex-wrap: wrap; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>📈 Chotot Meta Ads Dashboard</h1>
-  <span class="updated" id="updated-at">Loading…</span>
+  <div class="hd-left">
+    <h1>📈 Chotot Meta Ads</h1>
+    <select class="week-pick" id="week-pick"></select>
+  </div>
+  <div class="hd-right" id="updated-at">Đang tải…</div>
 </header>
 
 <main>
-  <div class="empty" id="loading">Đang tải dữ liệu…</div>
+  <div class="loading" id="loading">Đang tải dữ liệu…</div>
   <div id="content" style="display:none">
 
-    <!-- Summary cards -->
-    <div class="cards" id="cards"></div>
+    <!-- 1. Summary Cards -->
+    <div class="sc-grid" id="sc-grid"></div>
 
-    <!-- Trend chart -->
-    <div class="section">
-      <div class="section-header">
-        <h2>Trend theo tuần</h2>
+    <!-- 2. Group Summary Table -->
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📊 Group Summary</div><div class="ph-sub" id="gs-week"></div></div>
+      <div class="ov"><table class="gs-table" id="gs-table"></table></div>
+    </div>
+
+    <!-- 3. Trend Chart -->
+    <div class="panel">
+      <div class="ph">
+        <div class="ph-title">📈 Trend theo tuần</div>
         <div class="btn-row" id="metric-btns">
-          <button class="btn active-spend" data-metric="spend">Spend</button>
-          <button class="btn" data-metric="qe">QE</button>
-          <button class="btn" data-metric="er">ER%</button>
-          <button class="btn" data-metric="installs">Installs</button>
+          <button class="mbtn on" data-m="spend">Spend</button>
+          <button class="mbtn" data-m="qe">QE / Clicks</button>
+          <button class="mbtn" data-m="er">ER%</button>
         </div>
       </div>
-      <canvas id="trendChart"></canvas>
+      <div class="pb"><div class="chart-wrap"><canvas id="tc"></canvas></div></div>
     </div>
 
-    <!-- History table -->
-    <div class="section">
-      <div class="section-header">
-        <h2>📋 Lịch sử báo cáo</h2>
-        <div class="btn-row" id="group-filter">
-          <button class="btn" data-group="ALL" style="border-color:var(--brand);color:var(--brand)">All</button>
-          <button class="btn" data-group="BRAND">Brand</button>
-          <button class="btn" data-group="GROWTH">Growth</button>
-          <button class="btn" data-group="VERTICAL">Vertical</button>
-        </div>
+    <!-- 4. BRAND Group -->
+    <div class="panel">
+      <div class="ph">
+        <div class="ph-title"><span class="pill pill-b">BRAND</span> Brand Group</div>
+        <div class="ph-sub" id="brand-spend"></div>
       </div>
-      <div class="overflow">
-        <table>
-          <thead>
-            <tr>
-              <th>Tuần</th>
-              <th>Group</th>
-              <th>Spend (SGD)</th>
-              <th>QE</th>
-              <th>ER%</th>
-              <th>CPE</th>
-              <th>Installs</th>
-              <th>CPI</th>
-            </tr>
-          </thead>
-          <tbody id="history-body"></tbody>
-        </table>
-      </div>
+      <div class="pb" id="brand-body"></div>
     </div>
 
-    <!-- Freq watch list -->
-    <div class="section">
-      <div class="section-header">
-        <h2>🚨 Frequency Watch List — tuần gần nhất</h2>
+    <!-- 5. GROWTH Group -->
+    <div class="panel">
+      <div class="ph">
+        <div class="ph-title"><span class="pill pill-g">GROWTH</span> Growth Group</div>
+        <div class="ph-sub" id="growth-spend"></div>
       </div>
-      <div id="freq-content"></div>
+      <div class="pb" id="growth-body"></div>
     </div>
 
-  </div><!-- #content -->
+    <!-- 6. VERTICAL Group -->
+    <div class="panel">
+      <div class="ph">
+        <div class="ph-title"><span class="pill pill-v">VERTICAL</span> Vertical Group</div>
+        <div class="ph-sub" id="vert-spend"></div>
+      </div>
+      <div class="pb" id="vert-body"></div>
+    </div>
+
+    <!-- 7. Freq Watch List -->
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🚨 Frequency Watch List</div></div>
+      <div class="pb" id="freq-body"></div>
+    </div>
+
+  </div>
 </main>
 
 <script>
-const GROUPS   = ['BRAND', 'GROWTH', 'VERTICAL'];
-const G_LABEL  = { BRAND: 'Brand', GROWTH: 'Growth', VERTICAL: 'Vertical' };
-const G_COLOR  = { BRAND: '#3b82f6', GROWTH: '#10b981', VERTICAL: '#f59e0b' };
-const M_LABEL  = { spend: 'Spend (SGD)', qe: 'QE', er: 'ER%', installs: 'Installs' };
+/* ── Constants ─────────────────────────────────────────── */
+const G_COLOR = { BRAND: '#3b82f6', GROWTH: '#10b981', VERTICAL: '#f59e0b' };
+const ACCT_LBL = {
+  gds_brand: 'GDS Brand', pty_branding_sgd: 'PTY Branding',
+  veh_brand: 'VEH Brand', job_branding_sgd: 'Job Branding',
+  growth_sgd: 'Growth SGD', job_sgd: 'Job SGD', gds_elt_sgd: 'GDS ELT',
+  job_trade_sgd: 'Job Trade', pty_sgd: 'PTY SGD',
+};
+const B_ACCTS = ['gds_brand','pty_branding_sgd','veh_brand','job_branding_sgd'];
+const G_ACCTS = ['growth_sgd','job_sgd','gds_elt_sgd'];
+const V_ACCTS = ['job_trade_sgd','pty_sgd'];
 
-let allData    = [];
-let chart      = null;
-let activeMetric = 'spend';
-let activeGroup  = 'ALL';
+let allData = [];
+let cur = null;
+let chart = null;
+let metric = 'spend';
 
-/* ── Formatters ── */
-function fMoney(v) {
-  if (!v && v !== 0) return '—';
-  return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+/* ── Formatters ─────────────────────────────────────────── */
+const fm = v => (v == null) ? '—' : v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fi = v => { if (v == null || v === 0) return '—'; if (v >= 1e6) return (v/1e6).toFixed(1)+'M'; if (v >= 1e3) return (v/1e3).toFixed(1)+'K'; return Math.round(v).toLocaleString(); };
+const fp = v => (v == null || v === 0) ? '—' : (v < 0.001 ? '<0.01%' : v.toFixed(2)+'%');
+const ff = v => (v == null || v === 0) ? '—' : v.toFixed(2)+'×';
+const pct = (n,d) => d ? (n/d*100).toFixed(1)+'%' : '—';
+
+function wow(curr, prev) {
+  if (!prev || prev === 0) return '';
+  const p = (curr - prev) / prev * 100;
+  return `<span class="${p>=0?'wow-up':'wow-dn'}">${p>=0?'+':''}${p.toFixed(1)}%</span>`;
 }
-function fInt(v) {
-  if (!v && v !== 0) return '—';
-  if (v >= 1e6) return (v / 1e6).toFixed(1) + 'M';
-  if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K';
-  return Math.round(v).toLocaleString();
-}
-function fPct(v) { return (v == null ? '—' : v.toFixed(2) + '%'); }
 
-function wowHtml(curr, prev, isPp) {
-  if (!prev) return '';
-  const d   = isPp ? curr - prev : (curr - prev) / prev * 100;
-  const cls = d >= 0 ? 'wow-pos' : 'wow-neg';
-  const str = isPp ? `${d >= 0 ? '+' : ''}${d.toFixed(2)}pp` : `${d >= 0 ? '+' : ''}${d.toFixed(1)}%`;
-  return ` <span class="${cls}">${str}</span>`;
-}
+/* ── Summary Cards ─────────────────────────────────────────── */
+function renderCards(c, p) {
+  const b = c.groups.BRAND, g = c.groups.GROWTH, v = c.groups.VERTICAL;
+  const total  = c.total_spend || (b.spend + g.spend + v.spend);
+  const gClick = g.link_clicks ?? g.qe ?? 0;
+  const freqRed = (c.watch_list||[]).filter(w=>w.frequency>=7).length;
 
-/* ── Cards ── */
-function renderCards(latest, prev) {
-  const totalSpend  = GROUPS.reduce((s, g) => s + latest.groups[g].spend, 0);
-  const totalQe     = GROUPS.reduce((s, g) => s + latest.groups[g].qe, 0);
-  const avgEr       = GROUPS.reduce((s, g) => s + latest.groups[g].er, 0) / 3;
-  const installs    = latest.groups.GROWTH.installs || 0;
-  const cpi         = latest.groups.GROWTH.cpi || 0;
-  const freqAlerts  = (latest.watch_list || []).filter(w => w.frequency >= 7).length;
-  const prevSpend   = prev ? GROUPS.reduce((s, g) => s + prev.groups[g].spend, 0) : 0;
+  const pb = p?.groups?.BRAND, pg = p?.groups?.GROWTH, pv = p?.groups?.VERTICAL;
+  const pTotal = p ? (p.total_spend || ((pb?.spend||0)+(pg?.spend||0)+(pv?.spend||0))) : null;
+  const pgClick = pg ? (pg.link_clicks ?? pg.qe ?? 0) : null;
 
-  document.getElementById('cards').innerHTML = `
-    <div class="card">
-      <div class="label">Total Spend</div>
-      <div class="value">SGD ${fMoney(totalSpend)}</div>
-      <div class="sub">${prev ? wowHtml(totalSpend, prevSpend, false) + ' WoW' : latest.week_label}</div>
-    </div>
-    <div class="card">
-      <div class="label">Quality Engagement</div>
-      <div class="value">${fInt(totalQe)}</div>
-      <div class="sub">${latest.week_label}</div>
-    </div>
-    <div class="card">
-      <div class="label">Avg ER%</div>
-      <div class="value">${fPct(avgEr)}</div>
-      <div class="sub">across 3 groups</div>
-    </div>
-    <div class="card">
-      <div class="label">App Installs</div>
-      <div class="value">${fInt(installs)}</div>
-      <div class="sub">CPI: SGD ${fMoney(cpi)}</div>
-    </div>
-    <div class="card">
-      <div class="label">Freq Alerts 🔴</div>
-      <div class="value">${freqAlerts}</div>
-      <div class="sub">campaigns ≥ 7×</div>
-    </div>
+  document.getElementById('sc-grid').innerHTML = `
+    <div class="sc"><div class="sc-lbl">Total Spend</div><div class="sc-val c-purple">SGD ${fm(total)}</div><div class="sc-sub">${pTotal ? wow(total,pTotal)+' vs tuần trước' : c.week_label}</div></div>
+    <div class="sc"><div class="sc-lbl">Brand — QE</div><div class="sc-val c-brand">${fi(b.qe||0)}</div><div class="sc-sub">${pb ? wow(b.qe||0,pb.qe||0)+' vs tuần trước' : 'comment+share+save+click'}</div></div>
+    <div class="sc"><div class="sc-lbl">Growth — Clicks</div><div class="sc-val c-growth">${fi(gClick)}</div><div class="sc-sub">${pgClick!=null ? wow(gClick,pgClick)+' vs tuần trước' : '3 accounts'}</div></div>
+    <div class="sc"><div class="sc-lbl">Vertical — Spend</div><div class="sc-val c-vert">SGD ${fm(v.spend||0)}</div><div class="sc-sub">${pv ? wow(v.spend||0,pv.spend||0)+' vs tuần trước' : '2 accounts'}</div></div>
+    <div class="sc"><div class="sc-lbl">Brand CPE / ER</div><div class="sc-val">SGD ${fm(b.cpe)}</div><div class="sc-sub">ER ${fp(b.er)}</div></div>
+    <div class="sc"><div class="sc-lbl">Freq Alerts 🔴</div><div class="sc-val ${freqRed?'c-red':''}">${freqRed || '—'}</div><div class="sc-sub">campaigns ≥ 7×</div></div>
   `;
 }
 
-/* ── Chart ── */
-function buildChart() {
-  const reversed = [...allData].reverse();
-  const labels   = reversed.map(d => d.week_label.split(',')[0]);
+/* ── Group Summary Table ─────────────────────────────────── */
+function renderGSTable(c) {
+  const b = c.groups.BRAND, g = c.groups.GROWTH, v = c.groups.VERTICAL;
+  const gClick = g.link_clicks ?? g.qe ?? 0;
+  const tot = (b.spend||0)+(g.spend||0)+(v.spend||0);
 
-  const datasets = GROUPS
-    .filter(g => activeGroup === 'ALL' || g === activeGroup)
-    .map(g => ({
-      label:           G_LABEL[g],
-      data:            reversed.map(d => {
-        if (activeMetric === 'installs') return g === 'GROWTH' ? (d.groups[g].installs || 0) : null;
-        return d.groups[g][activeMetric] ?? null;
-      }),
-      borderColor:     G_COLOR[g],
-      backgroundColor: G_COLOR[g] + '20',
-      borderWidth:     2,
-      pointRadius:     4,
-      pointHoverRadius: 6,
-      tension:         0.35,
-      fill:            false,
-      spanGaps:        true,
-    }));
+  document.getElementById('gs-week').textContent = c.week_label;
+
+  const rows = [
+    {label:'Spend (SGD)', bv:fm(b.spend), gv:fm(g.spend), vv:fm(v.spend)},
+    {label:'Budget share', bv:pct(b.spend,tot), gv:pct(g.spend,tot), vv:pct(v.spend,tot)},
+    {label:'Reach', bv:fi(b.reach), gv:fi(g.reach), vv:fi(v.reach)},
+    {label:'Avg Frequency', bv:ff(b.avg_freq), gv:ff(g.avg_freq), vv:ff(v.avg_freq)},
+    {div:'ENGAGEMENT'},
+    {label:'QE / Clicks', bv:fi(b.qe), gv:fi(gClick), vv:fi(v.qe)},
+    {label:'CPE (SGD)', bv:fm(b.cpe), gv:'—', vv:fm(v.cpe)},
+    {label:'ER%', bv:fp(b.er), gv: g.er ? fp(g.er) : '—', vv:fp(v.er)},
+    {div:'OVERVIEW'},
+    {label:'No. of Accounts', bv:'4', gv:'3', vv:'2'},
+  ];
+
+  const thead = `<thead><tr><th></th><th class="th-b">BRAND</th><th class="th-g">GROWTH</th><th class="th-v">VERTICAL</th></tr></thead>`;
+  const tbody = '<tbody>'+rows.map(r => r.div
+    ? `<tr class="gs-divider"><td colspan="4">${r.div}</td></tr>`
+    : `<tr><td>${r.label}</td><td>${r.bv}</td><td>${r.gv}</td><td>${r.vv}</td></tr>`
+  ).join('')+'</tbody>';
+
+  document.getElementById('gs-table').innerHTML = thead + tbody;
+}
+
+/* ── Trend Chart ─────────────────────────────────────────── */
+function buildChart(selWeek) {
+  const rev = [...allData].reverse();
+  const labels = rev.map(d => {
+    const s = d.week_label || d.week_start;
+    return s.replace(/,.*$/,'').replace(/– /,'–').trim();
+  });
+
+  const getV = (d, grp) => {
+    const m = d.groups[grp];
+    if (!m) return null;
+    if (metric === 'spend') return m.spend || 0;
+    if (metric === 'qe')    return (m.link_clicks ?? m.qe) || 0;
+    if (metric === 'er')    return m.er || 0;
+    return null;
+  };
+
+  const ds = ['BRAND','GROWTH','VERTICAL'].map(grp => ({
+    label: grp === 'BRAND' ? 'Brand' : grp === 'GROWTH' ? 'Growth' : 'Vertical',
+    data: rev.map(d => getV(d, grp)),
+    borderColor: G_COLOR[grp],
+    backgroundColor: G_COLOR[grp]+'1a',
+    borderWidth: 2,
+    pointRadius: 4,
+    pointHoverRadius: 6,
+    tension: 0.35,
+    fill: false,
+    spanGaps: true,
+  }));
 
   if (chart) chart.destroy();
-  chart = new Chart(document.getElementById('trendChart'), {
+  chart = new Chart(document.getElementById('tc'), {
     type: 'line',
-    data: { labels, datasets },
+    data: { labels, datasets: ds },
     options: {
-      responsive: true,
+      responsive: true, maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { labels: { color: '#64748b', boxWidth: 10, font: { size: 12 } } },
+        legend: { labels: { color:'#6b7280', boxWidth:10, font:{size:12} } },
         tooltip: {
-          backgroundColor: '#ffffff',
-          borderColor: '#e2e8f0',
-          borderWidth: 1,
-          titleColor: '#0f172a',
-          bodyColor: '#64748b',
+          backgroundColor:'#fff', borderColor:'#e5e7eb', borderWidth:1,
+          titleColor:'#111827', bodyColor:'#6b7280',
           callbacks: {
             label: ctx => {
               const v = ctx.parsed.y;
-              if (v === null) return null;
-              if (activeMetric === 'spend')    return ` ${ctx.dataset.label}: SGD ${fMoney(v)}`;
-              if (activeMetric === 'er')       return ` ${ctx.dataset.label}: ${fPct(v)}`;
-              if (activeMetric === 'installs') return ` ${ctx.dataset.label}: ${fInt(v)}`;
-              return ` ${ctx.dataset.label}: ${fInt(v)}`;
+              if (v===null) return null;
+              if (metric==='spend') return ` ${ctx.dataset.label}: SGD ${fm(v)}`;
+              if (metric==='er')    return ` ${ctx.dataset.label}: ${fp(v)}`;
+              return ` ${ctx.dataset.label}: ${fi(v)}`;
             }
           }
         }
       },
       scales: {
-        x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#f1f5f9' } },
-        y: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#f1f5f9' } }
+        x: { ticks:{color:'#6b7280',font:{size:11}}, grid:{color:'#f3f4f6'} },
+        y: { ticks:{color:'#6b7280',font:{size:11}}, grid:{color:'#f3f4f6'} }
       }
     }
   });
 }
 
-/* ── History table ── */
-function renderTable() {
-  const showGroups = activeGroup === 'ALL' ? GROUPS : [activeGroup];
-  const rows = [];
-
-  for (const d of allData) {
-    const groups = showGroups;
-    for (let i = 0; i < groups.length; i++) {
-      const g = groups[i];
-      const m = d.groups[g];
-      rows.push(`
-        <tr>
-          ${i === 0 ? `<td rowspan="${groups.length}" style="border-bottom:1px solid var(--border);vertical-align:middle">${d.week_label}</td>` : ''}
-          <td class="g-${g.toLowerCase()}">${G_LABEL[g]}</td>
-          <td>${fMoney(m.spend)}</td>
-          <td>${fInt(m.qe)}</td>
-          <td>${fPct(m.er)}</td>
-          <td>${m.cpe ? fMoney(m.cpe) : '—'}</td>
-          <td>${g === 'GROWTH' && m.installs ? fInt(m.installs) : '—'}</td>
-          <td>${g === 'GROWTH' && m.cpi ? fMoney(m.cpi) : '—'}</td>
-        </tr>
-      `);
-    }
-  }
-
-  document.getElementById('history-body').innerHTML = rows.join('') || `<tr><td colspan="8" class="empty">Chưa có dữ liệu</td></tr>`;
-}
-
-/* ── Freq list ── */
-function renderFreq(latest) {
-  const items = latest.watch_list || [];
-  if (!items.length) {
-    document.getElementById('freq-content').innerHTML = '<p style="color:var(--muted)">Tất cả campaigns trong ngưỡng an toàn ✅</p>';
+/* ── BRAND section ─────────────────────────────────────────── */
+function renderBrand(c) {
+  const b = c.groups.BRAND;
+  document.getElementById('brand-spend').textContent = `SGD ${fm(b.spend)}`;
+  if (!b.accounts) {
+    document.getElementById('brand-body').innerHTML = simpleMetrics([
+      ['Spend','SGD '+fm(b.spend)], ['QE',fi(b.qe)], ['CPE','SGD '+fm(b.cpe)], ['ER%',fp(b.er)]
+    ]);
     return;
   }
-  document.getElementById('freq-content').innerHTML = `
-    <div class="overflow">
-      <table>
-        <thead><tr>
-          <th>Campaign</th>
-          <th>Account</th>
-          <th>Frequency</th>
-          <th>Spend (SGD)</th>
-        </tr></thead>
-        <tbody>
-          ${items.map(it => `
-            <tr>
-              <td style="text-align:left;color:var(--text)">${it.name}</td>
-              <td style="text-align:left">${it.account}</td>
-              <td style="text-align:right">
-                <span class="badge ${it.frequency >= 7 ? 'badge-red' : 'badge-yellow'}">${it.frequency.toFixed(1)}×</span>
-              </td>
-              <td>${fMoney(it.spend)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
+  const rows = B_ACCTS.map(a => {
+    const m = b.accounts[a]; if (!m) return '';
+    return `<tr><td>${ACCT_LBL[a]}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${ff(m.avg_freq)}</td><td>${fi(m.qe)}</td><td>${fm(m.cpe)}</td><td>${fp(m.er)}</td></tr>`;
+  }).join('');
+  document.getElementById('brand-body').innerHTML = `
+    <div class="ov"><table class="dt">
+      <thead><tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
 }
 
-/* ── Controls ── */
-function setupMetricBtns() {
+/* ── GROWTH section ─────────────────────────────────────────── */
+function renderGrowth(c) {
+  const g = c.groups.GROWTH;
+  const totClick = g.link_clicks ?? g.qe ?? 0;
+  document.getElementById('growth-spend').textContent = `SGD ${fm(g.spend)}`;
+  if (!g.accounts) {
+    document.getElementById('growth-body').innerHTML = simpleMetrics([
+      ['Spend','SGD '+fm(g.spend)], ['Link Clicks',fi(totClick)], ['Avg CPC','SGD '+fm(totClick?g.spend/totClick:0)]
+    ]);
+    return;
+  }
+  const rows = G_ACCTS.map(a => {
+    const m = g.accounts[a]; if (!m) return '';
+    const lc = m.link_clicks ?? m.qe ?? 0;
+    return `<tr><td>${ACCT_LBL[a]}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${ff(m.avg_freq)}</td><td>${fi(lc)}</td><td>${lc&&m.spend ? fm(m.spend/lc) : '—'}</td></tr>`;
+  }).join('');
+  document.getElementById('growth-body').innerHTML = `
+    <div class="ov"><table class="dt">
+      <thead><tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>Link Clicks</th><th>CPC (SGD)</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+}
+
+/* ── VERTICAL section ─────────────────────────────────────────── */
+function renderVertical(c) {
+  const v = c.groups.VERTICAL;
+  document.getElementById('vert-spend').textContent = `SGD ${fm(v.spend||0)}`;
+  if (!v.accounts) {
+    if (!v.spend) {
+      document.getElementById('vert-body').innerHTML = '<p class="note">Không có dữ liệu. Tài khoản VERTICAL bị hạn chế quyền truy cập trong tuần này.</p>';
+    } else {
+      document.getElementById('vert-body').innerHTML = simpleMetrics([
+        ['Spend','SGD '+fm(v.spend)], ['QE',fi(v.qe)], ['CPE','SGD '+fm(v.cpe)], ['ER%',fp(v.er)]
+      ]);
+    }
+    return;
+  }
+  const rows = V_ACCTS.map(a => {
+    const m = v.accounts[a]; if (!m || !m.spend) return '';
+    return `<tr><td>${ACCT_LBL[a]}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${ff(m.avg_freq)}</td><td>${m.qe ? fi(m.qe) : '—'}</td><td>${m.link_clicks ? fi(m.link_clicks) : '—'}</td></tr>`;
+  }).join('');
+  document.getElementById('vert-body').innerHTML = rows ? `
+    <div class="ov"><table class="dt">
+      <thead><tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>QE</th><th>Link Clicks</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>` : '<p class="note">Tất cả tài khoản không phát sinh chi phí trong tuần này.</p>';
+}
+
+/* ── Freq Watch List ─────────────────────────────────────────── */
+function renderFreq(c) {
+  const items = c.watch_list || [];
+  if (!items.length) {
+    document.getElementById('freq-body').innerHTML =
+      '<p class="note">Không có dữ liệu frequency chi tiết cho tuần này.<br>Freq watch list khả dụng từ tuần Jun 16–22 trở đi (khi chạy reporter tự động).</p>';
+    return;
+  }
+  const rows = [...items].sort((a,b)=>b.frequency-a.frequency).map(it => {
+    const cls = it.frequency>=7 ? 'b-red' : 'b-yel';
+    const act = it.frequency>=7 ? 'Tạm dừng / refresh creative ngay' : 'Theo dõi — cân nhắc refresh';
+    return `<tr>
+      <td>${it.account||'—'}</td>
+      <td style="text-align:left;color:var(--text);font-weight:500">${it.name}</td>
+      <td><span class="badge ${cls}">${it.frequency.toFixed(2)}×</span></td>
+      <td>${fi(it.reach||0)}</td>
+      <td>${fm(it.spend)}</td>
+      <td style="text-align:left;color:var(--muted);font-size:12px">${act}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('freq-body').innerHTML = `
+    <div class="ov"><table class="dt">
+      <thead><tr><th>Account</th><th style="text-align:left">Campaign</th><th>Freq</th><th>Reach</th><th>Spend (SGD)</th><th style="text-align:left">Action</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+}
+
+/* ── Helpers ─────────────────────────────────────────────── */
+function simpleMetrics(pairs) {
+  return `<div class="ov"><table class="dt">
+    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+    <tbody>${pairs.map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+/* ── Render selected week ─────────────────────────────────── */
+function renderWeek(data) {
+  cur = data;
+  const idx = allData.findIndex(d=>d.week_start===data.week_start);
+  const prev = allData[idx+1] || null;
+
+  try {
+    const ts = new Date(data.generated_at).toLocaleString('vi-VN', {timeZone:'Asia/Saigon'});
+    document.getElementById('updated-at').textContent = 'Cập nhật: ' + ts;
+  } catch(e) { document.getElementById('updated-at').textContent = data.week_label; }
+
+  renderCards(data, prev);
+  renderGSTable(data);
+  buildChart(data.week_start);
+  renderBrand(data);
+  renderGrowth(data);
+  renderVertical(data);
+  renderFreq(data);
+}
+
+/* ── Week picker setup ─────────────────────────────────────── */
+function setupPicker() {
+  const sel = document.getElementById('week-pick');
+  allData.forEach((d,i) => {
+    const o = document.createElement('option');
+    o.value = d.week_start;
+    o.textContent = d.week_label;
+    if (i===0) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', () => {
+    const found = allData.find(d=>d.week_start===sel.value);
+    if (found) renderWeek(found);
+  });
+}
+
+/* ── Metric buttons ────────────────────────────────────────── */
+function setupMetric() {
   document.getElementById('metric-btns').addEventListener('click', e => {
-    const btn = e.target.closest('.btn');
+    const btn = e.target.closest('.mbtn');
     if (!btn) return;
-    document.querySelectorAll('#metric-btns .btn').forEach(b => {
-      b.className = 'btn';
-    });
-    activeMetric = btn.dataset.metric;
-    btn.classList.add('active-' + activeMetric);
-    buildChart();
+    document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    metric = btn.dataset.m;
+    buildChart(cur?.week_start);
   });
 }
 
-function setupGroupFilter() {
-  document.getElementById('group-filter').addEventListener('click', e => {
-    const btn = e.target.closest('.btn');
-    if (!btn) return;
-    document.querySelectorAll('#group-filter .btn').forEach(b => {
-      b.style.borderColor = ''; b.style.color = ''; b.style.background = '';
-    });
-    activeGroup = btn.dataset.group;
-    const c = activeGroup === 'ALL' ? 'var(--brand)' : G_COLOR[activeGroup];
-    btn.style.borderColor = c;
-    btn.style.color = c;
-    buildChart();
-    renderTable();
-  });
-}
-
-/* ── Bootstrap ── */
+/* ── Bootstrap ─────────────────────────────────────────────── */
 async function load() {
   try {
-    const idx   = await fetch('data/index.json').then(r => r.json());
-    allData     = await Promise.all(idx.map(w => fetch(`data/${w}.json`).then(r => r.json())));
+    const idx = await fetch('data/index.json').then(r=>r.json());
+    const sorted = [...idx].sort((a,b)=>b.localeCompare(a));
+    allData = await Promise.all(sorted.map(w=>fetch(`data/${w}.json`).then(r=>r.json())));
 
-    const latest = allData[0];
-    const prev   = allData[1] || null;
-
-    const ts = new Date(latest.generated_at).toLocaleString('vi-VN', { timeZone: 'Asia/Saigon' });
-    document.getElementById('updated-at').textContent = `Updated: ${ts}`;
-
-    renderCards(latest, prev);
-    buildChart();
-    renderTable();
-    renderFreq(latest);
+    setupPicker();
+    setupMetric();
+    renderWeek(allData[0]);
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
-
-    setupMetricBtns();
-    setupGroupFilter();
-  } catch (err) {
-    document.getElementById('loading').textContent =
-      'Chưa có dữ liệu. Báo cáo đầu tiên sẽ chạy vào thứ Hai 29/6.';
+  } catch(err) {
+    document.getElementById('loading').textContent = 'Lỗi tải dữ liệu: ' + err.message;
     console.error(err);
   }
 }
