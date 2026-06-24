@@ -101,7 +101,24 @@
             "Reach 169K với avg freq 1.58 ✅ còn nhiều headroom — có thể mở rộng audience hoặc layer lookalike để tăng scale mà không bị saturation.",
             "Đặt weekly QE floor target cho gds_brand; pace hiện tại 54 QE/tuần quá thấp để đo lường brand signal có ý nghĩa."
           ],
-          "objective": "Engagement / Reach"
+          "objective": "Engagement / Reach",
+          "demographics": {
+            "age": {
+              "18-24": 79959,
+              "25-34": 51733,
+              "35-44": 16635,
+              "45-54": 9302,
+              "55-64": 5820,
+              "65+": 2948
+            },
+            "gender": {
+              "female": 63440,
+              "male": 100179
+            },
+            "location": {
+              "Ho Chi Minh City": 167508
+            }
+          }
         },
         "pty_branding_sgd": {
           "spend": 956.19,
@@ -206,7 +223,29 @@
             "brand_eng_sale_pty_b2c_0626 tạo 46K+ clicks với CTR 15.86% — message property sale đang resonant mạnh với audience; cân nhắc tăng budget cho campaign này.",
             "Reallocate 40% ngân sách của brand_eng_pty_b2b_0626 về market_index b2b engagement campaign để cải thiện account CPE tổng thể."
           ],
-          "objective": "Engagement / Reach"
+          "objective": "Engagement / Reach",
+          "demographics": {
+            "age": {
+              "18-24": 58238,
+              "25-34": 606064,
+              "35-44": 448471,
+              "45-54": 27733,
+              "55-64": 10940,
+              "65+": 7808
+            },
+            "gender": {
+              "female": 393096,
+              "male": 774015
+            },
+            "location": {
+              "Ho Chi Minh City": 1117878,
+              "Bình Dương": 65362,
+              "Hanoi": 12814,
+              "Bà Rịa–Vũng Tàu": 7848,
+              "Đồng Nai": 3095,
+              "Long An": 1906
+            }
+          }
         },
         "veh_brand": {
           "spend": 156.35,
@@ -247,7 +286,29 @@
             "CTR 4.60% cao nhất trong Brand accounts — audience đang click nhưng không engage sâu; cải thiện landing experience hoặc thêm save/share incentive trong ad.",
             "Test thêm creative variant (B2B dealer-facing hoặc seasonal) để segment messaging và cải thiện QE depth."
           ],
-          "objective": "Engagement / Reach"
+          "objective": "Engagement / Reach",
+          "demographics": {
+            "age": {
+              "18-24": 16730,
+              "25-34": 53389,
+              "35-44": 37639,
+              "45-54": 2864
+            },
+            "gender": {
+              "female": 10925,
+              "male": 96867
+            },
+            "location": {
+              "Ho Chi Minh City": 100349,
+              "Hanoi": 4171,
+              "Bình Dương": 454,
+              "Đồng Nai": 353,
+              "Long An": 166,
+              "Đắk Lắk": 160,
+              "Cần Thơ": 159,
+              "Bà Rịa–Vũng Tàu": 155
+            }
+          }
         },
         "job_branding_sgd": {
           "spend": 376.65,
@@ -304,7 +365,49 @@
             "Cả 2 campaigns đều ở ✅ frequency với audience pool rộng — account có thể hấp thụ thêm ngân sách đáng kể trước khi saturation.",
             "Build lookalike audience từ B2C engaged users (556 QE interactions = strong intent signal) để mở rộng prospecting pool."
           ],
-          "objective": "Engagement / Reach"
+          "objective": "Engagement / Reach",
+          "demographics": {
+            "age": {
+              "18-24": 97280,
+              "25-34": 156483,
+              "35-44": 20156,
+              "45-54": 34160,
+              "55-64": 14976,
+              "65+": 7369
+            },
+            "gender": {
+              "female": 97848,
+              "male": 224635
+            },
+            "location": {
+              "Ho Chi Minh City": 302553,
+              "Bình Dương": 26615
+            }
+          }
+        }
+      },
+      "demographics": {
+        "age": {
+          "18-24": 252207,
+          "25-34": 867669,
+          "35-44": 522901,
+          "45-54": 74059,
+          "55-64": 31736,
+          "65+": 18125
+        },
+        "gender": {
+          "female": 565309,
+          "male": 1195696
+        },
+        "location": {
+          "Ho Chi Minh City": 1688288,
+          "Bình Dương": 92431,
+          "Hanoi": 16985,
+          "Bà Rịa–Vũng Tàu": 8003,
+          "Đồng Nai": 3448,
+          "Long An": 2072,
+          "Đắk Lắk": 160,
+          "Cần Thơ": 159
         }
       }
     },
@@ -323,7 +426,7 @@
       "active_camps": 28,
       "red_freq_camps": 2,
       "objective": "Traffic / App Events",
-      "installs": 0,
+      "installs": 4,
       "cpi": 0,
       "per_account_insights": [
         "growth_sgd: 16 campaigns nhưng chỉ 2 có meaningful spend. Không có Mobile App Installs — verify pixel và campaign objective. CPM cao (SGD 3–4) do narrow retargeting audiences.",
@@ -360,7 +463,8 @@
               "freq_flag": "✅",
               "qe": 590,
               "cpe": 0.3,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 4
             },
             {
               "name": "digital_gds_appinstall_fb_atc_web_visitor_l180d_040626",
@@ -376,7 +480,8 @@
               "freq_flag": "✅",
               "qe": 315,
               "cpe": 0.55,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut15_110626",
@@ -392,7 +497,8 @@
               "freq_flag": "✅",
               "qe": 102,
               "cpe": 0.19,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut13_110626",
@@ -408,7 +514,8 @@
               "freq_flag": "✅",
               "qe": 53,
               "cpe": 0.38,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut12_110626",
@@ -424,7 +531,8 @@
               "freq_flag": "✅",
               "qe": 7,
               "cpe": 2.76,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut21",
@@ -440,7 +548,8 @@
               "freq_flag": "✅",
               "qe": 40,
               "cpe": 0.25,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut20",
@@ -456,7 +565,8 @@
               "freq_flag": "✅",
               "qe": 34,
               "cpe": 0.3,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut19",
@@ -472,7 +582,8 @@
               "freq_flag": "✅",
               "qe": 20,
               "cpe": 0.52,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut18",
@@ -488,7 +599,8 @@
               "freq_flag": "✅",
               "qe": 26,
               "cpe": 0.4,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut17",
@@ -504,7 +616,8 @@
               "freq_flag": "✅",
               "qe": 10,
               "cpe": 1.03,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live_shortcut16_110626",
@@ -520,7 +633,8 @@
               "freq_flag": "✅",
               "qe": 9,
               "cpe": 0.36,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live10s_shortcut19",
@@ -536,7 +650,8 @@
               "freq_flag": "✅",
               "qe": 4,
               "cpe": 1.27,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live10s_shortcut21",
@@ -552,7 +667,8 @@
               "freq_flag": "✅",
               "qe": 17,
               "cpe": 0.22,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live10s_shortcut20",
@@ -568,7 +684,8 @@
               "freq_flag": "✅",
               "qe": 5,
               "cpe": 0.61,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live10s_shortcut17",
@@ -584,7 +701,8 @@
               "freq_flag": "✅",
               "qe": 10,
               "cpe": 0.57,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             },
             {
               "name": "digital_gds_appinstall_fb_test_retar_live10s_shortcut18",
@@ -600,7 +718,8 @@
               "freq_flag": "✅",
               "qe": 7,
               "cpe": 0.45,
-              "er": 0.0
+              "er": 0.0,
+              "installs": 0
             }
           ],
           "recommendations": [
@@ -610,7 +729,31 @@
             "Pause 14 small test campaigns (SGD 0–20, CTR và install thấp) và consolidate ngân sách vào một prospecting App Install campaign mới với broader audience.",
             "shortcut15 test (102 QE, CPE SGD 0.19) có potential nhưng cần scale để validate — test với budget lớn hơn trong 1 tuần trước khi quyết định."
           ],
-          "objective": "Traffic / App Events"
+          "objective": "Traffic / App Events",
+          "demographics": {
+            "age": {
+              "18-24": 10707,
+              "25-34": 19632,
+              "35-44": 18750,
+              "45-54": 7006,
+              "55-64": 3311,
+              "65+": 1709
+            },
+            "gender": {
+              "female": 22188,
+              "male": 38514
+            },
+            "location": {
+              "Ho Chi Minh City": 22611,
+              "Hanoi": 5351,
+              "Bình Dương": 2968,
+              "Đồng Nai": 2405,
+              "Đà Nẵng": 1537,
+              "Long An": 1159,
+              "Cần Thơ": 1078,
+              "Khánh Hòa": 1016
+            }
+          }
         },
         "job_sgd": {
           "spend": 295.21,
@@ -763,7 +906,31 @@
             "digital_fb_job_baove (SGD 57.65, 3,019 QE, freq 4.15 🟡) có engagement potential mạnh; mở rộng audience trước khi frequency leo thang thêm.",
             "Redistribute ngân sách của nvkd (SGD 78.07) sang taixe và nvkv — frequency headroom tốt và message relevance đã được chứng minh."
           ],
-          "objective": "Traffic / App Events"
+          "objective": "Traffic / App Events",
+          "demographics": {
+            "age": {
+              "18-24": 8605,
+              "25-34": 11983,
+              "35-44": 8801,
+              "45-54": 5093,
+              "55-64": 3469,
+              "65+": 1074
+            },
+            "gender": {
+              "female": 14265,
+              "male": 23257
+            },
+            "location": {
+              "Ho Chi Minh City": 22349,
+              "Bình Dương": 2509,
+              "Đồng Nai": 1782,
+              "Hanoi": 1171,
+              "Long An": 1168,
+              "Bà Rịa–Vũng Tàu": 843,
+              "Đà Nẵng": 681,
+              "Cần Thơ": 646
+            }
+          }
         },
         "gds_elt_sgd": {
           "spend": 423.54,
@@ -852,7 +1019,57 @@
             "Build custom audience từ video viewers của digital_elt_bl_tf_engage_video_sănĐT (91K viewers, freq 1.34) làm warm retargeting pool để cải thiện funnel progression.",
             "Rebalance: cap bl_mf_clicklink_web ở ≤25% account spend và redirect vào 2 campaigns ✅ engagement đang hiệu quả."
           ],
-          "objective": "Traffic / App Events"
+          "objective": "Traffic / App Events",
+          "demographics": {
+            "age": {
+              "18-24": 97414,
+              "25-34": 78455,
+              "35-44": 39938,
+              "45-54": 23949,
+              "55-64": 12598,
+              "65+": 6471
+            },
+            "gender": {
+              "female": 70677,
+              "male": 176966
+            },
+            "location": {
+              "Ho Chi Minh City": 69776,
+              "Hanoi": 34032,
+              "Bình Dương": 10805,
+              "Đồng Nai": 10560,
+              "Đà Nẵng": 7620,
+              "Cần Thơ": 5906,
+              "Hải Phòng": 5421,
+              "Bà Rịa–Vũng Tàu": 4227
+            }
+          }
+        }
+      },
+      "demographics": {
+        "age": {
+          "18-24": 116726,
+          "25-34": 110070,
+          "35-44": 67489,
+          "45-54": 36048,
+          "55-64": 19378,
+          "65+": 9254
+        },
+        "gender": {
+          "female": 107130,
+          "male": 238737
+        },
+        "location": {
+          "Ho Chi Minh City": 114736,
+          "Hanoi": 40554,
+          "Bình Dương": 16282,
+          "Đồng Nai": 14747,
+          "Đà Nẵng": 9838,
+          "Cần Thơ": 7630,
+          "Hải Phòng": 5421,
+          "Bà Rịa–Vũng Tàu": 5070,
+          "Long An": 2327,
+          "Khánh Hòa": 1016
         }
       }
     },
@@ -1024,11 +1241,59 @@
             "webinarAI_leadform - Copy chạy song song (SGD 76.67, CTR 0.68%). A/B test creative và kill bản yếu hơn sau 2 tuần để tránh self-competition.",
             "AWO_reach là nền tảng tốt nhất về scale (119K reach, CPC SGD 0.15, freq 1.50 ✅). Tăng budget và dùng custom audience từ converters làm exclusion.",
             "Reallocate ngân sách từ 3 campaigns 🔴 (~SGD 114) vào 2 webinarAI campaigns và AWO_reach để cải thiện overall efficiency."
-          ]
+          ],
+          "demographics": {
+            "age": {
+              "18-24": 26128,
+              "25-34": 95737,
+              "35-44": 68442,
+              "45-54": 18034,
+              "55-64": 6240,
+              "65+": 3925
+            },
+            "gender": {
+              "female": 71160,
+              "male": 147250
+            },
+            "location": {
+              "Ho Chi Minh City": 140875,
+              "Hanoi": 29855,
+              "Bình Dương": 14136,
+              "Đà Nẵng": 8850,
+              "Đồng Nai": 3776,
+              "Long An": 3669,
+              "Bà Rịa–Vũng Tàu": 3616,
+              "Cần Thơ": 3333
+            }
+          }
         },
         "pty_sgd": {
           "spend": 0,
           "note": "Không có active campaigns tuần này. Kiểm tra campaign schedule và budget allocation."
+        }
+      },
+      "demographics": {
+        "age": {
+          "18-24": 26128,
+          "25-34": 95737,
+          "35-44": 68442,
+          "45-54": 18034,
+          "55-64": 6240,
+          "65+": 3925
+        },
+        "gender": {
+          "female": 71160,
+          "male": 147250
+        },
+        "location": {
+          "Ho Chi Minh City": 140875,
+          "Hanoi": 29855,
+          "Bình Dương": 14136,
+          "Đà Nẵng": 8850,
+          "Đồng Nai": 3776,
+          "Long An": 3669,
+          "Bà Rịa–Vũng Tàu": 3616,
+          "Cần Thơ": 3333
         }
       }
     }

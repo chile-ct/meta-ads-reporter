@@ -81,11 +81,12 @@
     .tab-pane.on{display:block}
 
     /* ── Account block ─────────────────────────── */
-    .acct-block{border-bottom:1px solid var(--border)}
-    .acct-block:last-child{border-bottom:none}
-    .acct-head{padding:11px 18px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;border-bottom:1px solid var(--border)}
-    .acct-spend{color:var(--muted);font-size:12px;font-weight:500}
-    .acct-content{padding:0 18px 12px}
+    .acct-block{border:1px solid var(--border);border-radius:8px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+    .acct-block:last-child{margin-bottom:0}
+    .acct-head{padding:10px 16px;background:var(--bg);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;border-bottom:2px solid var(--border);flex-wrap:wrap}
+    .acct-head strong{font-size:14px}
+    .acct-spend{color:var(--muted);font-size:12px;font-weight:500;margin-left:auto}
+    .acct-content{padding:0 12px 12px}
 
     /* ── Campaign table ────────────────────────── */
     .ov{overflow-x:auto}
@@ -100,9 +101,9 @@
     .camp-aud{color:var(--muted);font-size:11px;font-style:italic}
 
     /* ── Reco list ─────────────────────────────── */
-    .reco-list{list-style:none;padding:0;margin-top:10px}
-    .reco-list li{padding:4px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;gap:7px}
-    .reco-list li:last-child{border-bottom:none}
+    .reco-list{list-style:none;padding:0;margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:5px}
+    .reco-list li{padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:5px;font-size:12px;display:flex;gap:6px;align-items:flex-start;line-height:1.4}
+    .reco-list li:nth-child(1):nth-last-child(1){grid-column:1/-1}
 
     /* ── Highlight callout ─────────────────────── */
     .highlight{background:#f0fdf4;border-left:3px solid var(--growth);border-radius:4px;padding:9px 13px;font-size:13px;margin:12px 0 0}
@@ -120,6 +121,28 @@
     .pai-block{background:var(--bg);border-top:1px solid var(--border);padding:12px 18px}
     .pai-block ul{list-style:disc;padding-left:18px;margin-top:6px}
     .pai-block li{padding:3px 0;font-size:13px}
+
+    /* ── Demographics chart ───────────────────── */
+    .demog-wrap{background:var(--bg);border-top:1px solid var(--border);padding:14px 18px}
+    .demog-acct-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+    .demog-cols{display:flex;gap:24px}
+    .demog-col{flex:1;min-width:0}
+    .demog-col-sm{flex:0 0 170px}
+    .demog-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+    .age-row{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+    .age-lbl{font-size:11px;color:#6b7280;width:40px;flex-shrink:0}
+    .age-bar-wrap{flex:1;display:flex;align-items:center;gap:6px}
+    .age-bar{height:11px;border-radius:2px;min-width:2px;transition:width .3s}
+    .age-pct{font-size:11px;color:#9ca3af;white-space:nowrap}
+    .gender-stack{display:flex;height:22px;border-radius:4px;overflow:hidden;margin-bottom:8px}
+    .gender-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+    .gender-seg.gf{background:#ec4899}
+    .gender-seg.gm{background:#3b82f6}
+    .gender-leg{font-size:11px;color:#6b7280;display:flex;flex-direction:column;gap:4px}
+    .gender-leg span{display:flex;align-items:center;gap:4px}
+    .gdot{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .gdot.f{background:#ec4899}.gdot.m{background:#3b82f6}
+    @media(max-width:600px){.demog-cols{flex-direction:column}.demog-col-sm{flex:auto}}
 
     /* ── Freq Watch List ───────────────────────── */
     .wl-sum{font-size:13px;font-weight:700;color:var(--red);padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:10px}
@@ -257,10 +280,10 @@ function renderCards(c,p){
     <div class="card">
       <div class="card-lbl">Digital — Clicks</div>
       <div class="card-val c-growth">${fi(gClk)}</div>
-      <div class="card-sub">${pgClk!=null&&pgClk>0?wt(gClk,pgClk)+' vs tuần trước':''} Spend SGD ${fm(g.spend)}</div>
+      <div class="card-sub">${pgClk!=null&&pgClk>0?wt(gClk,pgClk)+' vs tuần trước':''} CPC SGD ${fm(g.cpc||(gClk?g.spend/gClk:0))}</div>
     </div>
     <div class="card">
-      <div class="card-lbl">Vertical — Reach</div>
+      <div class="card-lbl">Vertical — Lead Gen</div>
       <div class="card-val c-vert">${fi(v.reach||0)}</div>
       <div class="card-sub">${pv?.reach>0?wt(v.reach||0,pv.reach)+' vs tuần trước':''} Spend SGD ${fm(v.spend||0)}</div>
     </div>
@@ -275,7 +298,25 @@ function renderGSTable(c,p){
   const gClk=g.link_clicks??g.clicks??g.qe??0;
   const pgClk=pg?(pg.link_clicks??pg.clicks??pg.qe??0):null;
 
+  // Digital ER% = clicks / reach
+  const gER = g.reach ? (gClk / g.reach * 100) : (g.er||0);
+  const pgER = pg?.reach ? ((pgClk||0) / pg.reach * 100) : (pg?.er||null);
+
   const rows=[
+    {div:'OVERVIEW'},
+    {l:'Objective',
+     bv:b.objective||'Engagement/Reach',
+     gv:g.objective||'Traffic/Install',
+     vv:v.objective||'Traffic/Lead'},
+    {l:'# Active Camps',
+     bv:b.active_camps!=null?cw(b.active_camps,pb?.active_camps,b.active_camps):'—',
+     gv:g.active_camps!=null?cw(g.active_camps,pg?.active_camps,g.active_camps):'—',
+     vv:v.active_camps!=null?cw(v.active_camps,pv?.active_camps,v.active_camps):'—'},
+    {l:'🔴 Freq≥7 Camps',
+     bv:b.red_freq_camps!=null?b.red_freq_camps:'—',
+     gv:g.red_freq_camps!=null?g.red_freq_camps:'—',
+     vv:v.red_freq_camps!=null?v.red_freq_camps:'—'},
+    {div:'SPEND'},
     {l:'Spend (SGD)',
      bv:cw(b.spend,pb?.spend,`SGD ${fm(b.spend)}`),
      gv:cw(g.spend,pg?.spend,`SGD ${fm(g.spend)}`),
@@ -284,6 +325,7 @@ function renderGSTable(c,p){
      bv:tot?((b.spend/tot*100).toFixed(1)+'%'):'—',
      gv:tot?((g.spend/tot*100).toFixed(1)+'%'):'—',
      vv:tot?(((v.spend||0)/tot*100).toFixed(1)+'%'):'—'},
+    {div:'PERFORMANCE'},
     {l:'Impressions',
      bv:b.impressions?cw(b.impressions,pb?.impressions,fi(b.impressions)):'—',
      gv:g.impressions?cw(g.impressions,pg?.impressions,fi(g.impressions)):'—',
@@ -313,14 +355,17 @@ function renderGSTable(c,p){
      gv:g.avg_freq?cw(g.avg_freq,pg?.avg_freq,ff(g.avg_freq)+(g.freq_flag?' '+g.freq_flag:'')):'—',
      vv:v.avg_freq?cw(v.avg_freq,pv?.avg_freq,ff(v.avg_freq)+(v.freq_flag?' '+v.freq_flag:'')):'—'},
     {div:'ENGAGEMENT'},
-    {l:'QE',
-     bv:b.qe!=null?cw(b.qe,pb?.qe,fi(b.qe)):'—',gv:'—',
+    {l:'QE / Clicks',
+     bv:b.qe!=null?cw(b.qe,pb?.qe,fi(b.qe)):'—',
+     gv:gClk?cw(gClk,pgClk,fi(gClk)):'—',
      vv:(v.qe||0)>0?cw(v.qe,pv?.qe,fi(v.qe)):'—'},
-    {l:'Avg CPE (SGD)',
-     bv:b.cpe?cw(b.cpe,pb?.cpe,fm(b.cpe)):'—',gv:'—',
+    {l:'Avg CPE / CPC (SGD)',
+     bv:b.cpe?cw(b.cpe,pb?.cpe,fm(b.cpe)):'—',
+     gv:(()=>{const c=gClk?g.spend/gClk:(g.cpc||0);const pc=pgClk?pg?.spend/pgClk:(pg?.cpc||null);return c?cw(c,pc,fm(c)):'—';})(),
      vv:v.cpe?cw(v.cpe,pv?.cpe,fm(v.cpe)):'—'},
-    {l:'Avg ER%',
-     bv:b.er?cw(b.er,pb?.er,fp(b.er)):'—',gv:'—',
+    {l:'Avg ER% (÷Reach)',
+     bv:b.er?cw(b.er,pb?.er,fp(b.er)):'—',
+     gv:gER?cw(gER,pgER,fp(gER)):'—',
      vv:v.er?cw(v.er,pv?.er,fp(v.er)):'—'},
     {l:'App Installs',
      bv:b.installs?cw(b.installs,pb?.installs,fi(b.installs)):'—',
@@ -330,19 +375,6 @@ function renderGSTable(c,p){
      bv:b.cpi&&b.cpi>0?fm(b.cpi):'—',
      gv:g.cpi&&g.cpi>0?fm(g.cpi):'—',
      vv:'—'},
-    {div:'OVERVIEW'},
-    {l:'Objective',
-     bv:b.objective||'Engagement/Reach',
-     gv:g.objective||'Traffic/Install',
-     vv:v.objective||'Traffic/Lead'},
-    {l:'# Active Camps',
-     bv:b.active_camps!=null?cw(b.active_camps,pb?.active_camps,b.active_camps):'—',
-     gv:g.active_camps!=null?cw(g.active_camps,pg?.active_camps,g.active_camps):'—',
-     vv:v.active_camps!=null?cw(v.active_camps,pv?.active_camps,v.active_camps):'—'},
-    {l:'🔴 Freq≥7 Camps',
-     bv:b.red_freq_camps!=null?b.red_freq_camps:'—',
-     gv:g.red_freq_camps!=null?g.red_freq_camps:'—',
-     vv:v.red_freq_camps!=null?v.red_freq_camps:'—'},
   ];
   const thead=`<thead><tr>
     <th></th>
@@ -361,26 +393,36 @@ function renderGSTable(c,p){
 }
 
 /* ── Campaign table ─────────────────────────────────────── */
-function campTable(camps,type){
-  const isBrand=type==='BRAND';
+function campTable(camps,type,acctName=''){
+  const isBrand=type==='BRAND'||type==='VERTICAL';
+  const isVert=type==='VERTICAL';
+  const showInstall=type==='GROWTH'&&acctName==='growth_sgd';
+  const reachLbl=isVert?'Lead Gen (Reach)':'Reach';
   const th=isBrand
-    ?`<tr><th>Campaign</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th></tr>`
-    :`<tr><th>Campaign</th><th>Spend (SGD)</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>CPC (SGD)</th><th>Freq</th></tr>`;
+    ?`<tr><th>Campaign</th><th>Spend (SGD)</th><th>${reachLbl}</th><th>Freq</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th></tr>`
+    :showInstall
+      ?`<tr><th>Campaign</th><th>Spend (SGD)</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>CPC (SGD)</th><th>Freq</th><th>Installs (ATC)</th><th>CPI (SGD)</th></tr>`
+      :`<tr><th>Campaign</th><th>Spend (SGD)</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>CPC (SGD)</th><th>Freq</th></tr>`;
   const rows=camps.map(camp=>{
     const nm=`<td><span class="camp-name">${camp.name}</span>${camp.audience?`<span class="camp-aud">${camp.audience}</span>`:''}</td>`;
     if(isBrand)return`<tr>${nm}<td>${fm(camp.spend)}</td><td>${fi(camp.reach)}</td><td>${freq_badge(camp.freq||camp.frequency)}</td><td>${fi(camp.qe)}</td><td>${fm(camp.cpe)}</td><td>${fp(camp.er)}</td></tr>`;
     const clk=camp.clicks??camp.qe??0;
-    return`<tr>${nm}<td>${fm(camp.spend)}</td><td>${fi(camp.reach)}</td><td>${fi(clk)}</td><td>${camp.ctr?fp(camp.ctr):'—'}</td><td>${fm(camp.cpc)}</td><td>${freq_badge(camp.freq||camp.frequency)}</td></tr>`;
+    const base=`${nm}<td>${fm(camp.spend)}</td><td>${fi(camp.reach)}</td><td>${fi(clk)}</td><td>${camp.ctr?fp(camp.ctr):'—'}</td><td>${fm(camp.cpc)}</td><td>${freq_badge(camp.freq||camp.frequency)}</td>`;
+    if(showInstall){const inst=camp.installs??null;return`<tr>${base}<td>${inst!=null?fi(inst):'—'}</td><td>${inst>0?fm(camp.spend/inst):'—'}</td></tr>`;}
+    return`<tr>${base}</tr>`;
   }).join('');
   const ts=camps.reduce((s,c)=>s+c.spend,0);
   const tr=camps.reduce((s,c)=>s+(c.reach||0),0);
   const tc=camps.reduce((s,c)=>s+(c.clicks??c.qe??0),0);
   const tq=camps.reduce((s,c)=>s+(c.qe||0),0);
   const ti=camps.reduce((s,c)=>s+(c.impressions||0),0);
+  const tInst=camps.reduce((s,c)=>s+(c.installs||0),0);
   const af=ti&&tr?ti/tr:0;
   const totalRow=isBrand
     ?`<tr><td><strong>TOTAL</strong></td><td>${fm(ts)}</td><td>${fi(tr)}</td><td>${freq_badge(af)}</td><td>${fi(tq)}</td><td>${fm(tq?ts/tq:0)}</td><td>${fp(tr?tq/tr*100:0)}</td></tr>`
-    :`<tr><td><strong>TOTAL</strong></td><td>${fm(ts)}</td><td>${fi(tr)}</td><td>${fi(tc)}</td><td>${fp(ti&&tc?tc/ti*100:0)}</td><td>${fm(tc?ts/tc:0)}</td><td>${freq_badge(af)}</td></tr>`;
+    :showInstall
+      ?`<tr><td><strong>TOTAL</strong></td><td>${fm(ts)}</td><td>${fi(tr)}</td><td>${fi(tc)}</td><td>${fp(ti&&tc?tc/ti*100:0)}</td><td>${fm(tc?ts/tc:0)}</td><td>${freq_badge(af)}</td><td>${tInst?fi(tInst):'—'}</td><td>${tInst?fm(ts/tInst):'—'}</td></tr>`
+      :`<tr><td><strong>TOTAL</strong></td><td>${fm(ts)}</td><td>${fi(tr)}</td><td>${fi(tc)}</td><td>${fp(ti&&tc?tc/ti*100:0)}</td><td>${fm(tc?ts/tc:0)}</td><td>${freq_badge(af)}</td></tr>`;
   return`<div class="ov"><table class="ct"><thead>${th}</thead><tbody>${rows}${totalRow}</tbody></table></div>`;
 }
 
@@ -393,16 +435,18 @@ function recoList(recos){
 
 /* ── Account summary table ──────────────────────────────── */
 function acctSumTable(accounts,acctList,type){
-  const isBrand=type==='BRAND';
+  const isBrand=type==='BRAND'||type==='VERTICAL';
+  const isVert=type==='VERTICAL';
+  const reachLbl=isVert?'Lead Gen (Reach)':'Reach';
   const th=isBrand
-    ?`<tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th><th>Avg Freq</th></tr>`
-    :`<tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Clicks/QE</th><th>CTR</th><th>CPC (SGD)</th><th>Avg Freq</th></tr>`;
+    ?`<tr><th>Account</th><th>Spend (SGD)</th><th>${reachLbl}</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th><th>Avg Freq</th></tr>`
+    :`<tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>CPC (SGD)</th><th>Avg Freq</th></tr>`;
   let ts=0,tr=0,tq=0,tc=0,ti=0;
   const rows=acctList.map(a=>{
     const m=accounts[a];if(!m)return'';
     ts+=m.spend||0;tr+=m.reach||0;
     const lc=m.link_clicks??m.clicks??m.qe??0;tc+=lc;
-    tq+=m.qe||0;ti+=m.impressions||0;
+    tq+=m.qe||0;ti+=m.impressions||(m.avg_freq?m.avg_freq*(m.reach||0):0);
     const fr=m.avg_freq||0;
     if(isBrand)return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(m.qe)}</td><td>${fm(m.cpe)}</td><td>${fp(m.er)}</td><td>${freq_badge(fr)}</td></tr>`;
     return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(lc)}</td><td>${m.ctr?fp(m.ctr):'—'}</td><td>${fm(m.cpc||0)}</td><td>${freq_badge(fr)}</td></tr>`;
@@ -414,11 +458,107 @@ function acctSumTable(accounts,acctList,type){
   return`<div class="ov"><table class="ast"><thead>${th}</thead><tbody>${rows}${totalRow}</tbody></table></div>`;
 }
 
+/* ── Demographics chart (pure CSS bars) ─────────────────── */
+function renderDemoChart(demog, color, title=''){
+  if(!demog)return'';
+  const age=demog.age||{};
+  const gender=demog.gender||{};
+  const AGE_BANDS=['18-24','25-34','35-44','45-54','55-64','65+'];
+  const ageTotal=AGE_BANDS.reduce((s,k)=>s+(age[k]||0),0);
+  if(!ageTotal)return'';
+
+  const ageBars=AGE_BANDS.filter(k=>(age[k]||0)>0).map(k=>{
+    const pct=ageTotal?(age[k]/ageTotal*100):0;
+    return`<div class="age-row">
+      <span class="age-lbl">${k}</span>
+      <div class="age-bar-wrap">
+        <div class="age-bar" style="width:${Math.max(pct,1).toFixed(1)}%;background:${color}"></div>
+        <span class="age-pct">${pct.toFixed(1)}%</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  const gTotal=(gender.female||0)+(gender.male||0);
+  const fPct=gTotal?gender.female/gTotal*100:50;
+  const mPct=100-fPct;
+  const genderHtml=gTotal?`
+    <div class="gender-stack">
+      <div class="gender-seg gf" style="width:${fPct.toFixed(1)}%">${fPct<15?'':fPct.toFixed(0)+'%'}</div>
+      <div class="gender-seg gm" style="width:${mPct.toFixed(1)}%">${mPct<15?'':mPct.toFixed(0)+'%'}</div>
+    </div>
+    <div class="gender-leg">
+      <span><span class="gdot f"></span>Female ${fPct.toFixed(1)}%</span>
+      <span><span class="gdot m"></span>Male ${mPct.toFixed(1)}%</span>
+    </div>`:''
+
+  // Location bars
+  const loc=demog.location||{};
+  const locEntries=Object.entries(loc).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const locTotal=locEntries.reduce((s,[,v])=>s+v,0);
+  const locBars=locEntries.map(([city,reach])=>{
+    const pct=locTotal?(reach/locTotal*100):0;
+    const short=city.replace(' Province','').replace('Ho Chi Minh City','HCM').replace('Hanoi','Hà Nội');
+    return`<div class="age-row"><span class="age-lbl" style="width:72px;font-size:10px">${short}</span><div class="age-bar-wrap"><div class="age-bar" style="width:${Math.max(pct,1).toFixed(1)}%;background:${color};opacity:.7"></div><span class="age-pct">${pct.toFixed(0)}%</span></div></div>`;
+  }).join('');
+
+  return`<div class="demog-wrap">
+    ${title?`<div class="demog-acct-title">${title}</div>`:''}
+    <div class="demog-cols">
+      <div class="demog-col"><div class="demog-title">Age Distribution (Reach %)</div>${ageBars}</div>
+      ${locBars?`<div class="demog-col"><div class="demog-title">Top Cities (Reach %)</div>${locBars}</div>`:''}
+      <div class="demog-col demog-col-sm"><div class="demog-title">Gender Split</div>${genderHtml}</div>
+    </div>
+  </div>`;
+}
+
+/* ── Auto WoW highlight for historical weeks ────────────── */
+function autoGroupHighlight(grp,prev,name){
+  if(!prev||!grp)return'';
+  const lines=[];
+  if(prev.spend>0){
+    const pct=(grp.spend-prev.spend)/prev.spend*100;
+    if(Math.abs(pct)>=5)lines.push(`Spend ${pct>0?'tăng':'giảm'} ${Math.abs(pct).toFixed(1)}% WoW (SGD ${fm(grp.spend)} vs ${fm(prev.spend)})`);
+  }
+  if(name==='GROWTH'){
+    const clk=grp.link_clicks??grp.clicks??grp.qe??0;
+    const pClk=prev.link_clicks??prev.clicks??prev.qe??0;
+    if(pClk>0){const pct=(clk-pClk)/pClk*100;if(Math.abs(pct)>=5)lines.push(`Clicks ${pct>0?'tăng':'giảm'} ${Math.abs(pct).toFixed(1)}% (${fi(clk)} vs ${fi(pClk)})`);}
+  }else{
+    if((prev.qe||0)>0){const pct=((grp.qe||0)-(prev.qe||0))/(prev.qe||0)*100;if(Math.abs(pct)>=5)lines.push(`QE ${pct>0?'tăng':'giảm'} ${Math.abs(pct).toFixed(1)}% (${fi(grp.qe||0)} vs ${fi(prev.qe||0)})`);}
+    if(prev.er>0&&grp.er!=null){const pp=grp.er-prev.er;if(Math.abs(pp)>=0.01)lines.push(`ER% ${pp>0?'cải thiện':'giảm'} (${fp(grp.er)} → ${fp(prev.er)})`);}
+  }
+  if(prev.reach>0){const pct=((grp.reach||0)-prev.reach)/prev.reach*100;if(Math.abs(pct)>=10)lines.push(`Reach ${pct>0?'tăng':'giảm'} ${Math.abs(pct).toFixed(1)}% (${fi(grp.reach||0)} vs ${fi(prev.reach)})`);}
+  if(grp.avg_freq&&prev.avg_freq){const d=grp.avg_freq-prev.avg_freq;if(Math.abs(d)>=0.2)lines.push(`Avg Freq ${d>0?'tăng':'giảm'}: ${ff(grp.avg_freq)} vs ${ff(prev.avg_freq)}`);}
+  if(!lines.length)return'';
+  return`<div class="pb"><div class="highlight">${lines.join(' · ')}</div></div>`;
+}
+
 /* ── BRAND tab ──────────────────────────────────────────── */
-function renderBrandTab(c){
+function renderBrandTab(c,prev){
   const b=c.groups.BRAND;
+  const pb=prev?.groups?.BRAND;
   const detail=c.detail_available&&b.accounts;
   let html='';
+  // 1. Group highlight at top
+  if(b.key_highlight){
+    html+=`<div class="pb"><div class="highlight">${b.key_highlight}</div></div>`;
+  }else{
+    html+=autoGroupHighlight(b,pb,'BRAND');
+  }
+  // 2. Account summary table + demographics
+  if(b.accounts){
+    html+=`<div class="pb">${acctSumTable(b.accounts,B_ACCTS,'BRAND')}</div>`;
+    // Per-account demographics (GDS / PTY / VEH / JOB)
+    const acctDemos=B_ACCTS.filter(a=>b.accounts[a]?.demographics);
+    if(acctDemos.length){
+      acctDemos.forEach(a=>{html+=renderDemoChart(b.accounts[a].demographics,G_COLOR.BRAND,ACCT_LBL[a]||a);});
+    }else{
+      html+=renderDemoChart(b.demographics,G_COLOR.BRAND);
+    }
+  }else{
+    html+=`<div class="vert-note">Không có dữ liệu account-level.</div>`;
+  }
+  // 3. Per-account campaign detail
   if(detail){
     B_ACCTS.forEach(a=>{
       const m=b.accounts[a];if(!m)return;
@@ -427,53 +567,82 @@ function renderBrandTab(c){
         <div class="acct-content">${m.campaigns?.length?campTable(m.campaigns,'BRAND'):''}${recoList(m.recommendations)}</div>
       </div>`;
     });
-    if(b.key_highlight)html+=`<div class="pb"><div class="highlight">${b.key_highlight}</div></div>`;
-  }else{
-    html+=b.accounts?`<div class="pb">${acctSumTable(b.accounts,B_ACCTS,'BRAND')}</div>`:`<div class="vert-note">Không có dữ liệu account-level.</div>`;
   }
   return html;
 }
 
 /* ── DIGITAL tab ────────────────────────────────────────── */
-function renderDigitalTab(c){
+function renderDigitalTab(c,prev){
   const g=c.groups.GROWTH;
+  const pg=prev?.groups?.GROWTH;
   const detail=c.detail_available&&g.accounts;
   let html='';
+  // 1. Group highlight at top (per-account insights if rich data, else auto WoW)
+  if(g.key_highlight){
+    html+=`<div class="pb"><div class="highlight">${g.key_highlight}</div></div>`;
+  }else if(g.per_account_insights?.length){
+    html+=`<div class="pb"><div class="highlight"><strong>Per-account insights:</strong><ul style="margin:6px 0 0 0;padding-left:18px">
+      ${g.per_account_insights.map(t=>`<li>${t}</li>`).join('')}</ul></div></div>`;
+  }else{
+    html+=autoGroupHighlight(g,pg,'GROWTH');
+  }
+  // 2. Account summary table + demographics
+  if(g.accounts){
+    html+=`<div class="pb">${acctSumTable(g.accounts,G_ACCTS,'GROWTH')}</div>`;
+    html+=renderDemoChart(g.demographics,G_COLOR.GROWTH);
+  }else{
+    html+=`<div class="vert-note">Spend SGD ${fm(g.spend)}, Clicks ${fi(g.link_clicks??g.clicks??g.qe??0)}</div>`;
+  }
+  // 3. Per-account campaign detail
   if(detail){
     G_ACCTS.forEach(a=>{
       const m=g.accounts[a];if(!m)return;
       html+=`<div class="acct-block">
         <div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m.spend)}</span></div>
-        <div class="acct-content">${m.campaigns?.length?campTable(m.campaigns,'GROWTH'):''}${recoList(m.recommendations)}</div>
+        <div class="acct-content">${m.campaigns?.length?campTable(m.campaigns,'GROWTH',a):''}${recoList(m.recommendations)}</div>
       </div>`;
     });
-    if(g.per_account_insights?.length){
-      html+=`<div class="pai-block"><strong style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Per-account insights:</strong><ul>
-        ${g.per_account_insights.map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
-    }
-  }else{
-    html+=g.accounts?`<div class="pb">${acctSumTable(g.accounts,G_ACCTS,'GROWTH')}</div>`:`<div class="vert-note">Spend SGD ${fm(g.spend)}, Clicks ${fi(g.link_clicks??g.clicks??g.qe??0)}</div>`;
   }
   return html;
 }
 
 /* ── VERTICAL tab ───────────────────────────────────────── */
-function renderVertTab(c){
+function renderVertTab(c,prev){
   const v=c.groups.VERTICAL;
+  const pv=prev?.groups?.VERTICAL;
+  const detail=c.detail_available&&v.accounts;
   let html='';
-  const renderAccts=(accts)=>{
-    accts.forEach(a=>{
-      const m=v.accounts[a];
-      html+=`<div class="acct-block">
-        <div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m?.spend||0)}</span></div>
-        ${m?.note?`<div class="vert-note">${m.note}</div>`:m?.recommendations?.length?`<div class="acct-content">${recoList(m.recommendations)}</div>`:`<div class="vert-note">Không có dữ liệu chi tiết.</div>`}
-      </div>`;
-    });
-  };
+  // 1. Group highlight at top
+  if(v.key_highlight){
+    html+=`<div class="pb"><div class="highlight">${v.key_highlight}</div></div>`;
+  }else{
+    html+=autoGroupHighlight(v,pv,'VERTICAL');
+  }
   if(v.accounts){
     const active=V_ACCTS.filter(a=>v.accounts[a]?.spend>0);
-    if(active.length)html+=`<div class="pb">${acctSumTable(v.accounts,active,'BRAND')}</div>`;
-    renderAccts(V_ACCTS);
+    // 2. Account summary table + demographics
+    if(active.length){
+      html+=`<div class="pb">${acctSumTable(v.accounts,active,'VERTICAL')}</div>`;
+      html+=renderDemoChart(v.demographics,G_COLOR.VERTICAL);
+    }
+    // 3. Per-account campaign detail
+    if(detail){
+      active.forEach(a=>{
+        const m=v.accounts[a];if(!m)return;
+        html+=`<div class="acct-block">
+          <div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m.spend||0)}</span></div>
+          <div class="acct-content">${m.campaigns?.length?campTable(m.campaigns,'VERTICAL'):''}${recoList(m.recommendations)}</div>
+        </div>`;
+      });
+    }else{
+      V_ACCTS.forEach(a=>{
+        const m=v.accounts[a];if(!m||!(m.spend>0))return;
+        html+=`<div class="acct-block">
+          <div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m?.spend||0)}</span></div>
+          ${m?.note?`<div class="vert-note">${m.note}</div>`:m?.recommendations?.length?`<div class="acct-content">${recoList(m.recommendations)}</div>`:''}
+        </div>`;
+      });
+    }
     if(v.notes)html+=`<div class="vert-note">${v.notes}</div>`;
   }else{
     html+=`<div class="vert-note">${v.spend?`Spend: SGD ${fm(v.spend)}`:'Không phát sinh spend tuần này (API access-denied).'}</div>`;
@@ -510,17 +679,41 @@ function renderFreqList(c){
 function buildChart(){
   const rev=[...allData].reverse();
   const labels=rev.map(d=>(d.week_label||d.week_start).replace(/,.*$/,''));
+
+  // Per-group value logic
   const getV=(d,grp)=>{
     const m=d.groups[grp];if(!m)return null;
     if(metric==='spend')return m.spend||0;
-    if(metric==='qe')return(m.link_clicks??m.clicks??m.qe)??0;
-    if(metric==='er')return m.er||0;
+    if(metric==='qe'){
+      // Brand: QE; Digital: Clicks; Vertical: Reach (lead gen audience size)
+      if(grp==='BRAND')return m.qe??0;
+      if(grp==='VERTICAL')return m.reach??0;
+      return m.link_clicks??m.clicks??m.qe??0;
+    }
+    if(metric==='er'){
+      // Each group: metric / reach (so scales are comparable)
+      const r=m.reach||0;if(!r)return 0;
+      if(grp==='BRAND')return m.er||0;  // already = QE/reach*100
+      if(grp==='VERTICAL'){
+        const q=m.qe||m.clicks||0;
+        return m.er||(r?q/r*100:0);
+      }
+      // Digital: clicks/reach
+      const clk=m.link_clicks??m.clicks??m.qe??0;
+      return m.er||(r?clk/r*100:0);
+    }
     return null;
   };
+
+  // Dynamic labels per metric
+  const lblB = metric==='qe'?'Brand QE':metric==='er'?'Brand ER% (QE/Reach)':'Brand';
+  const lblG = metric==='qe'?'Digital Clicks':metric==='er'?'Digital ER% (Clicks/Reach)':'Digital';
+  const lblV = metric==='qe'?'Lead Gen (Reach)':metric==='er'?'Lead Gen ER% (QE/Reach)':'Vertical';
+
   const ds=[
-    {label:'Brand',data:rev.map(d=>getV(d,'BRAND')),borderColor:G_COLOR.BRAND,backgroundColor:G_COLOR.BRAND+'22',borderWidth:2,pointRadius:3,tension:0.35,fill:false,spanGaps:true},
-    {label:'Digital',data:rev.map(d=>getV(d,'GROWTH')),borderColor:G_COLOR.GROWTH,backgroundColor:G_COLOR.GROWTH+'22',borderWidth:2,pointRadius:3,tension:0.35,fill:false,spanGaps:true},
-    {label:'Vertical',data:rev.map(d=>getV(d,'VERTICAL')),borderColor:G_COLOR.VERTICAL,backgroundColor:G_COLOR.VERTICAL+'22',borderWidth:2,pointRadius:3,tension:0.35,fill:false,spanGaps:true},
+    {label:lblB,data:rev.map(d=>getV(d,'BRAND')),borderColor:G_COLOR.BRAND,backgroundColor:G_COLOR.BRAND+'22',borderWidth:2,pointRadius:3,tension:0.35,fill:false,spanGaps:true},
+    {label:lblG,data:rev.map(d=>getV(d,'GROWTH')),borderColor:G_COLOR.GROWTH,backgroundColor:G_COLOR.GROWTH+'22',borderWidth:2,pointRadius:3,tension:0.35,fill:false,spanGaps:true},
+    {label:lblV,data:rev.map(d=>getV(d,'VERTICAL')),borderColor:G_COLOR.VERTICAL,backgroundColor:G_COLOR.VERTICAL+'22',borderWidth:2,pointRadius:3,tension:0.35,fill:false,spanGaps:true},
   ];
   if(chart)chart.destroy();
   chart=new Chart(document.getElementById('tc'),{
@@ -533,7 +726,9 @@ function buildChart(){
         tooltip:{backgroundColor:'#fff',borderColor:'#e5e7eb',borderWidth:1,titleColor:'#111827',bodyColor:'#6b7280',
           callbacks:{label:ctx=>{
             const v=ctx.parsed.y;if(v===null)return null;
-            return metric==='spend'?` ${ctx.dataset.label}: SGD ${fm(v)}`:metric==='er'?` ${ctx.dataset.label}: ${fp(v)}`:` ${ctx.dataset.label}: ${fi(v)}`;
+            return metric==='spend'?` ${ctx.dataset.label}: SGD ${fm(v)}`:
+                   metric==='er'?` ${ctx.dataset.label}: ${v.toFixed(2)}%`:
+                   ` ${ctx.dataset.label}: ${fi(v)}`;
           }}}
       },
       scales:{x:{ticks:{color:'#6b7280',font:{size:11}},grid:{color:'#f3f4f6'}},y:{ticks:{color:'#6b7280',font:{size:11}},grid:{color:'#f3f4f6'}}}
@@ -570,9 +765,9 @@ function renderWeek(data){
       <button class="tab-btn" data-tab="digital-pane">💻 Digital</button>
       <button class="tab-btn" data-tab="vert-pane">🏢 Vertical</button>
     </div>
-    <div id="brand-pane" class="tab-pane on">${renderBrandTab(data)}</div>
-    <div id="digital-pane" class="tab-pane">${renderDigitalTab(data)}</div>
-    <div id="vert-pane" class="tab-pane">${renderVertTab(data)}</div>
+    <div id="brand-pane" class="tab-pane on">${renderBrandTab(data,prev)}</div>
+    <div id="digital-pane" class="tab-pane">${renderDigitalTab(data,prev)}</div>
+    <div id="vert-pane" class="tab-pane">${renderVertTab(data,prev)}</div>
   </div>`;
   html+=renderFreqList(data);
 
