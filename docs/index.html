@@ -285,7 +285,7 @@ function renderCards(c,p){
     <div class="card">
       <div class="card-lbl">Vertical — Lead Gen</div>
       <div class="card-val c-vert">${fi(v.reach||0)}</div>
-      <div class="card-sub">${pv?.reach>0?wt(v.reach||0,pv.reach)+' vs tuần trước':''} Spend SGD ${fm(v.spend||0)}</div>
+      <div class="card-sub">${pv?.cpe>0?wt(v.cpe||0,pv.cpe)+' vs tuần trước':''} CPL SGD ${fm(v.cpe)}</div>
     </div>
   </div>`;
 }
@@ -449,7 +449,7 @@ function acctSumTable(accounts,acctList,type){
     tq+=m.qe||0;ti+=m.impressions||(m.avg_freq?m.avg_freq*(m.reach||0):0);
     const fr=m.avg_freq||0;
     if(isBrand)return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(m.qe)}</td><td>${fm(m.cpe)}</td><td>${fp(m.er)}</td><td>${freq_badge(fr)}</td></tr>`;
-    return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(lc)}</td><td>${m.ctr?fp(m.ctr):'—'}</td><td>${fm(m.cpc||0)}</td><td>${freq_badge(fr)}</td></tr>`;
+    return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(lc)}</td><td>${m.ctr?fp(m.ctr):'—'}</td><td>${m.cpc?fm(m.cpc):'—'}</td><td>${freq_badge(fr)}</td></tr>`;
   }).join('');
   const af=ti&&tr?ti/tr:0;
   const totalRow=isBrand
@@ -587,9 +587,15 @@ function renderDigitalTab(c,prev){
     html+=autoGroupHighlight(g,pg,'GROWTH');
   }
   // 2. Account summary table + demographics
+  const G_DEMO_LBL={growth_sgd:'Common Chợ Tốt',job_sgd:'JOB',gds_elt_sgd:'GDS'};
   if(g.accounts){
     html+=`<div class="pb">${acctSumTable(g.accounts,G_ACCTS,'GROWTH')}</div>`;
-    html+=renderDemoChart(g.demographics,G_COLOR.GROWTH);
+    const acctDemos=G_ACCTS.filter(a=>g.accounts[a]?.demographics);
+    if(acctDemos.length){
+      acctDemos.forEach(a=>{html+=renderDemoChart(g.accounts[a].demographics,G_COLOR.GROWTH,G_DEMO_LBL[a]||a);});
+    }else if(g.demographics){
+      html+=renderDemoChart(g.demographics,G_COLOR.GROWTH);
+    }
   }else{
     html+=`<div class="vert-note">Spend SGD ${fm(g.spend)}, Clicks ${fi(g.link_clicks??g.clicks??g.qe??0)}</div>`;
   }
