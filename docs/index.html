@@ -7,506 +7,638 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #f8f9fc;
-      --surface: #ffffff;
-      --border: #e5e7eb;
-      --text: #111827;
-      --muted: #6b7280;
-      --faint: #9ca3af;
-      --brand: #2563eb;
-      --brand-bg: #eff6ff;
-      --growth: #059669;
-      --growth-bg: #ecfdf5;
-      --vert: #d97706;
-      --vert-bg: #fffbeb;
-      --red: #dc2626;
-      --red-bg: #fef2f2;
-      --yel: #ca8a04;
-      --yel-bg: #fefce8;
-      --purple: #7c3aed;
+      --bg:#f8f9fc; --surface:#fff; --border:#e5e7eb;
+      --text:#111827; --muted:#6b7280; --faint:#9ca3af;
+      --brand:#2563eb; --brand-bg:#eff6ff;
+      --growth:#059669; --growth-bg:#ecfdf5;
+      --vert:#d97706; --vert-bg:#fffbeb;
+      --red:#dc2626; --red-bg:#fef2f2;
+      --yel:#ca8a04; --yel-bg:#fefce8;
+      --purple:#7c3aed; --purple-bg:#f5f3ff;
+      --blue-note:#1d4ed8; --blue-note-bg:#eff6ff;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.5; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.6}
 
-    /* ── Header ── */
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 28px;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      position: sticky; top: 0; z-index: 20;
-    }
-    .hd-left { display: flex; align-items: center; gap: 14px; }
-    header h1 { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
-    .week-pick {
-      appearance: none;
-      background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
-      border: 1px solid var(--border); border-radius: 6px;
-      padding: 6px 30px 6px 11px; font-size: 13px; color: var(--text); cursor: pointer; min-width: 175px;
-    }
-    .week-pick:focus { outline: none; border-color: var(--brand); }
-    .hd-right { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    /* Header */
+    header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:20}
+    .hd-left{display:flex;align-items:center;gap:14px}
+    header h1{font-size:15px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+    .wpick{appearance:none;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid var(--border);border-radius:6px;padding:6px 30px 6px 11px;font-size:13px;color:var(--text);cursor:pointer;min-width:180px}
+    .wpick:focus{outline:none;border-color:var(--brand)}
+    .hd-right{color:var(--muted);font-size:12px;white-space:nowrap}
 
-    /* ── Layout ── */
-    main { max-width: 1080px; margin: 0 auto; padding: 24px 28px 60px; }
+    /* Layout */
+    main{max-width:1080px;margin:0 auto;padding:22px 28px 60px}
 
-    /* ── Panel ── */
-    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 18px; overflow: hidden; }
-    .ph { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .ph-title { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
-    .ph-sub { color: var(--muted); font-size: 12px; }
-    .pb { padding: 16px 18px; }
+    /* Panel */
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden}
+    .ph{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .ph-title{font-size:13px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+    .ph-sub{color:var(--muted);font-size:12px}
+    .pb{padding:16px 18px}
 
-    /* ── Summary cards grid ── */
-    .sc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 18px; }
-    .sc { background: var(--surface); padding: 15px 18px; }
-    .sc-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; }
-    .sc-val { font-size: 21px; font-weight: 700; line-height: 1; }
-    .sc-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .c-purple { color: var(--purple); }
-    .c-brand  { color: var(--brand); }
-    .c-growth { color: var(--growth); }
-    .c-vert   { color: var(--vert); }
-    .c-red    { color: var(--red); }
-    .wow-up   { color: var(--growth); }
-    .wow-dn   { color: var(--red); }
+    /* Pill */
+    .pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.04em}
+    .pill-b{background:var(--brand-bg);color:var(--brand)}
+    .pill-g{background:var(--growth-bg);color:var(--growth)}
+    .pill-v{background:var(--vert-bg);color:var(--vert)}
 
-    /* ── Group pill ── */
-    .pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
-    .pill-b  { background: var(--brand-bg);  color: var(--brand); }
-    .pill-g  { background: var(--growth-bg); color: var(--growth); }
-    .pill-v  { background: var(--vert-bg);   color: var(--vert); }
+    /* Header note */
+    .hnote{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:16px}
 
-    /* ── Group summary table ── */
-    .gs-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .gs-table th { padding: 10px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; text-align: right; background: var(--bg); border-bottom: 2px solid var(--border); }
-    .gs-table th:first-child { text-align: left; width: 150px; }
-    .th-b { color: var(--brand); } .th-g { color: var(--growth); } .th-v { color: var(--vert); }
-    .gs-table td { padding: 9px 16px; text-align: right; border-bottom: 1px solid var(--border); }
-    .gs-table td:first-child { text-align: left; color: var(--muted); font-size: 12px; font-weight: 500; }
-    .gs-table tr:last-child td { border-bottom: none; }
-    .gs-table tr:hover td { background: var(--bg); }
-    .gs-divider td { background: var(--bg) !important; color: var(--faint) !important; font-size: 11px !important; font-weight: 600 !important; text-transform: uppercase !important; letter-spacing: .06em !important; padding: 6px 16px !important; border-top: 1px solid var(--border); }
+    /* Key insights */
+    .ki-panel{background:var(--blue-note-bg);border:1px solid #bfdbfe;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+    .ki-title{font-size:12px;font-weight:700;color:var(--blue-note);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+    .ki-list{list-style:none}
+    .ki-list li{padding:5px 0;font-size:13px;color:var(--text);border-bottom:1px solid #dbeafe;display:flex;gap:8px}
+    .ki-list li:last-child{border-bottom:none}
 
-    /* ── Data table (per-account) ── */
-    .ov { overflow-x: auto; }
-    .dt { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .dt th { padding: 7px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
-    .dt th:first-child { text-align: left; }
-    .dt td { padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--border); }
-    .dt td:first-child { text-align: left; font-weight: 600; }
-    .dt tr:last-child td { border-bottom: none; }
-    .dt tr:hover td { background: var(--bg); }
+    /* Group summary table */
+    .gs-wrap{overflow-x:auto}
+    .gs-table{width:100%;border-collapse:collapse;font-size:13px}
+    .gs-table th{padding:10px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-align:right;background:var(--bg);border-bottom:2px solid var(--border)}
+    .gs-table th:first-child{text-align:left;width:160px}
+    .th-b{color:var(--brand)}.th-g{color:var(--growth)}.th-v{color:var(--vert)}.th-t{color:var(--purple)}
+    .gs-table td{padding:8px 16px;text-align:right;border-bottom:1px solid var(--border)}
+    .gs-table td:first-child{text-align:left;color:var(--muted);font-size:12px;font-weight:500}
+    .gs-table tr:last-child td{border-bottom:none}
+    .gs-table tr:hover td{background:var(--bg)}
+    .gs-div td{background:var(--bg)!important;color:var(--faint)!important;font-size:10px!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.07em!important;padding:5px 16px!important;border-top:1px solid var(--border)}
 
-    /* ── Freq badge ── */
-    .badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; }
-    .b-red { background: var(--red-bg); color: var(--red); }
-    .b-yel { background: var(--yel-bg); color: var(--yel); }
-    .b-grn { background: var(--growth-bg); color: var(--growth); }
+    /* Group section */
+    .g-section{margin-bottom:16px}
+    .g-header{background:var(--surface);border:1px solid var(--border);border-radius:10px 10px 0 0;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+    .g-header h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .g-spend{color:var(--muted);font-size:13px;font-weight:600}
+    .g-body{background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;overflow:hidden}
 
-    /* ── Chart ── */
-    .chart-wrap { height: 210px; position: relative; }
-    .btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
-    .mbtn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: all .1s; }
-    .mbtn:hover { border-color: var(--brand); color: var(--brand); }
-    .mbtn.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+    /* Account subsection */
+    .acct-block{border-bottom:1px solid var(--border)}
+    .acct-block:last-child{border-bottom:none}
+    .acct-head{padding:13px 18px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;border-bottom:1px solid var(--border)}
+    .acct-spend{color:var(--muted);font-size:12px;font-weight:500}
+    .acct-content{padding:0 18px 14px}
 
-    /* ── Misc ── */
-    .note { color: var(--muted); font-size: 13px; padding: 10px 0; }
-    .loading { text-align: center; color: var(--muted); padding: 64px 0; font-size: 14px; }
+    /* Campaign table */
+    .ov{overflow-x:auto}
+    .ct{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px}
+    .ct th{padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:right;border-bottom:1px solid var(--border);white-space:nowrap}
+    .ct th:first-child{text-align:left}
+    .ct td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--border);vertical-align:middle}
+    .ct td:first-child{text-align:left}
+    .ct tr:last-child td{border-bottom:none;font-weight:700;background:var(--bg)}
+    .ct tr:hover:not(:last-child) td{background:#fafafa}
+    .camp-name{font-weight:600;display:block}
+    .camp-aud{color:var(--muted);font-size:11px;font-style:italic}
 
-    @media (max-width: 840px) {
-      header, main { padding: 12px 14px; }
-      .sc-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 520px) {
-      .sc-grid { grid-template-columns: 1fr; }
-      header { flex-wrap: wrap; }
-    }
+    /* Recommendations */
+    .reco-list{list-style:none;padding:0;margin-top:12px}
+    .reco-list li{padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;gap:8px}
+    .reco-list li:last-child{border-bottom:none}
+    .reco-icon{flex-shrink:0;width:16px}
+
+    /* Key highlight callout */
+    .highlight{background:#f0fdf4;border-left:3px solid var(--growth);border-radius:4px;padding:10px 14px;font-size:13px;margin:14px 0}
+    .highlight-warn{background:var(--red-bg);border-left:3px solid var(--red)}
+
+    /* Group summary table (account level) */
+    .acct-sum-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+    .acct-sum-table th{padding:7px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--bg)}
+    .acct-sum-table th:first-child{text-align:left}
+    .acct-sum-table td{padding:7px 12px;text-align:right;border-bottom:1px solid var(--border)}
+    .acct-sum-table td:first-child{text-align:left;font-weight:600}
+    .acct-sum-table tr:last-child td{font-weight:700;background:var(--bg)}
+    .acct-sum-table tr:hover:not(:last-child) td{background:#fafafa}
+
+    /* Per-account insights */
+    .pai-block{background:var(--bg);border-top:1px solid var(--border);padding:14px 18px}
+    .pai-block ul{list-style:disc;padding-left:18px}
+    .pai-block li{padding:3px 0;font-size:13px}
+    .pai-block strong{color:var(--text)}
+
+    /* Vertical notes */
+    .vert-note{padding:14px 18px;font-size:13px;color:var(--muted)}
+    .vert-note strong{color:var(--text)}
+
+    /* Freq watch list */
+    .wl-summary{font-size:13px;font-weight:700;color:var(--red);padding:6px 0 12px;border-bottom:1px solid var(--border);margin-bottom:12px}
+
+    /* Badge */
+    .badge{display:inline-flex;align-items:center;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700}
+    .b-red{background:var(--red-bg);color:var(--red)}
+    .b-yel{background:var(--yel-bg);color:var(--yel)}
+    .b-grn{background:var(--growth-bg);color:var(--growth)}
+
+    /* Trend chart */
+    .chart-wrap{height:200px;position:relative}
+    .btn-row{display:flex;gap:6px;flex-wrap:wrap}
+    .mbtn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:5px;cursor:pointer;font-size:12px;transition:all .1s}
+    .mbtn:hover{border-color:var(--brand);color:var(--brand)}
+    .mbtn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+
+    /* Summary cards */
+    .sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px}
+    .sc{background:var(--surface);padding:14px 18px}
+    .sc-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+    .sc-val{font-size:20px;font-weight:700;line-height:1}
+    .sc-sub{font-size:11px;color:var(--muted);margin-top:4px}
+    .c-purple{color:var(--purple)}.c-brand{color:var(--brand)}.c-growth{color:var(--growth)}.c-vert{color:var(--vert)}.c-red{color:var(--red)}
+    .wow-up{color:var(--growth)}.wow-dn{color:var(--red)}
+
+    /* Misc */
+    .note{color:var(--muted);font-size:13px;padding:10px 0}
+    .loading{text-align:center;color:var(--muted);padding:64px 0;font-size:14px}
+    .divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+    @media(max-width:840px){header,main{padding:12px 14px}.sc-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:520px){.sc-grid{grid-template-columns:1fr};header{flex-wrap:wrap}}
   </style>
 </head>
 <body>
-
 <header>
   <div class="hd-left">
     <h1>📈 Chotot Meta Ads</h1>
-    <select class="week-pick" id="week-pick"></select>
+    <select class="wpick" id="wpick"></select>
   </div>
   <div class="hd-right" id="updated-at">Đang tải…</div>
 </header>
-
 <main>
   <div class="loading" id="loading">Đang tải dữ liệu…</div>
-  <div id="content" style="display:none">
-
-    <!-- 1. Summary Cards -->
-    <div class="sc-grid" id="sc-grid"></div>
-
-    <!-- 2. Group Summary Table -->
-    <div class="panel">
-      <div class="ph"><div class="ph-title">📊 Group Summary</div><div class="ph-sub" id="gs-week"></div></div>
-      <div class="ov"><table class="gs-table" id="gs-table"></table></div>
-    </div>
-
-    <!-- 3. Trend Chart -->
-    <div class="panel">
-      <div class="ph">
-        <div class="ph-title">📈 Trend theo tuần</div>
-        <div class="btn-row" id="metric-btns">
-          <button class="mbtn on" data-m="spend">Spend</button>
-          <button class="mbtn" data-m="qe">QE / Clicks</button>
-          <button class="mbtn" data-m="er">ER%</button>
-        </div>
-      </div>
-      <div class="pb"><div class="chart-wrap"><canvas id="tc"></canvas></div></div>
-    </div>
-
-    <!-- 4. BRAND Group -->
-    <div class="panel">
-      <div class="ph">
-        <div class="ph-title"><span class="pill pill-b">BRAND</span> Brand Group</div>
-        <div class="ph-sub" id="brand-spend"></div>
-      </div>
-      <div class="pb" id="brand-body"></div>
-    </div>
-
-    <!-- 5. GROWTH Group -->
-    <div class="panel">
-      <div class="ph">
-        <div class="ph-title"><span class="pill pill-g">GROWTH</span> Growth Group</div>
-        <div class="ph-sub" id="growth-spend"></div>
-      </div>
-      <div class="pb" id="growth-body"></div>
-    </div>
-
-    <!-- 6. VERTICAL Group -->
-    <div class="panel">
-      <div class="ph">
-        <div class="ph-title"><span class="pill pill-v">VERTICAL</span> Vertical Group</div>
-        <div class="ph-sub" id="vert-spend"></div>
-      </div>
-      <div class="pb" id="vert-body"></div>
-    </div>
-
-    <!-- 7. Freq Watch List -->
-    <div class="panel">
-      <div class="ph"><div class="ph-title">🚨 Frequency Watch List</div></div>
-      <div class="pb" id="freq-body"></div>
-    </div>
-
-  </div>
+  <div id="content" style="display:none"></div>
 </main>
 
 <script>
-/* ── Constants ─────────────────────────────────────────── */
-const G_COLOR = { BRAND: '#3b82f6', GROWTH: '#10b981', VERTICAL: '#f59e0b' };
+/* ── Constants ─────────────────────────────────────────────── */
 const ACCT_LBL = {
-  gds_brand: 'GDS Brand', pty_branding_sgd: 'PTY Branding',
-  veh_brand: 'VEH Brand', job_branding_sgd: 'Job Branding',
-  growth_sgd: 'Growth SGD', job_sgd: 'Job SGD', gds_elt_sgd: 'GDS ELT',
-  job_trade_sgd: 'Job Trade', pty_sgd: 'PTY SGD',
+  gds_brand:'GDS Brand', pty_branding_sgd:'PTY Branding',
+  veh_brand:'VEH Brand', job_branding_sgd:'Job Branding',
+  growth_sgd:'Growth SGD', job_sgd:'Job SGD', gds_elt_sgd:'GDS ELT',
+  job_trade_sgd:'Job Trade', pty_sgd:'PTY SGD',
 };
-const B_ACCTS = ['gds_brand','pty_branding_sgd','veh_brand','job_branding_sgd'];
-const G_ACCTS = ['growth_sgd','job_sgd','gds_elt_sgd'];
-const V_ACCTS = ['job_trade_sgd','pty_sgd'];
+const B_ACCTS  = ['gds_brand','pty_branding_sgd','veh_brand','job_branding_sgd'];
+const G_ACCTS  = ['growth_sgd','job_sgd','gds_elt_sgd'];
+const V_ACCTS  = ['job_trade_sgd','pty_sgd'];
+const G_COLOR  = {BRAND:'#3b82f6',GROWTH:'#10b981',VERTICAL:'#f59e0b'};
 
-let allData = [];
-let cur = null;
-let chart = null;
-let metric = 'spend';
+let allData=[], cur=null, chart=null, metric='spend';
 
-/* ── Formatters ─────────────────────────────────────────── */
-const fm = v => (v == null) ? '—' : v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fi = v => { if (v == null || v === 0) return '—'; if (v >= 1e6) return (v/1e6).toFixed(1)+'M'; if (v >= 1e3) return (v/1e3).toFixed(1)+'K'; return Math.round(v).toLocaleString(); };
-const fp = v => (v == null || v === 0) ? '—' : (v < 0.001 ? '<0.01%' : v.toFixed(2)+'%');
-const ff = v => (v == null || v === 0) ? '—' : v.toFixed(2)+'×';
-const pct = (n,d) => d ? (n/d*100).toFixed(1)+'%' : '—';
-
-function wow(curr, prev) {
-  if (!prev || prev === 0) return '';
-  const p = (curr - prev) / prev * 100;
+/* ── Formatters ─────────────────────────────────────────────── */
+const fm = v => v==null?'—':v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fi = v => { if(!v&&v!==0)return'—'; if(v>=1e6)return(v/1e6).toFixed(1)+'M'; if(v>=1e3)return(v/1e3).toFixed(1)+'K'; return Math.round(v).toLocaleString(); };
+const fp = v => v==null||v===0?'—':(v<0.001?'<0.01%':v.toFixed(2)+'%');
+const ff = v => v==null||v===0?'—':v.toFixed(2)+'×';
+const pct=(n,d)=>d?(n/d*100).toFixed(1)+'%':'—';
+const freq_badge = f => {
+  if(!f)return'—';
+  const cls=f>=7?'b-red':f>=3?'b-yel':'b-grn';
+  return `<span class="badge ${cls}">${f.toFixed(2)}×</span>`;
+};
+function wow(curr,prev){
+  if(!prev||prev===0)return'';
+  const p=(curr-prev)/prev*100;
   return `<span class="${p>=0?'wow-up':'wow-dn'}">${p>=0?'+':''}${p.toFixed(1)}%</span>`;
 }
 
 /* ── Summary Cards ─────────────────────────────────────────── */
 function renderCards(c, p) {
-  const b = c.groups.BRAND, g = c.groups.GROWTH, v = c.groups.VERTICAL;
-  const total  = c.total_spend || (b.spend + g.spend + v.spend);
-  const gClick = g.link_clicks ?? g.qe ?? 0;
-  const freqRed = (c.watch_list||[]).filter(w=>w.frequency>=7).length;
+  const b=c.groups.BRAND, g=c.groups.GROWTH, v=c.groups.VERTICAL;
+  const total=c.total_spend||(b.spend+g.spend+(v.spend||0));
+  const gClick=g.link_clicks??g.clicks??g.qe??0;
+  const freqRed=(c.watch_list||[]).filter(w=>w.frequency>=7||w.freq>=7).length;
+  const pb=p?.groups?.BRAND, pg=p?.groups?.GROWTH, pv=p?.groups?.VERTICAL;
+  const pTotal=p?(p.total_spend||((pb?.spend||0)+(pg?.spend||0)+(pv?.spend||0))):null;
+  const pgC=pg?(pg.link_clicks??pg.clicks??pg.qe??0):null;
 
-  const pb = p?.groups?.BRAND, pg = p?.groups?.GROWTH, pv = p?.groups?.VERTICAL;
-  const pTotal = p ? (p.total_spend || ((pb?.spend||0)+(pg?.spend||0)+(pv?.spend||0))) : null;
-  const pgClick = pg ? (pg.link_clicks ?? pg.qe ?? 0) : null;
-
-  document.getElementById('sc-grid').innerHTML = `
-    <div class="sc"><div class="sc-lbl">Total Spend</div><div class="sc-val c-purple">SGD ${fm(total)}</div><div class="sc-sub">${pTotal ? wow(total,pTotal)+' vs tuần trước' : c.week_label}</div></div>
-    <div class="sc"><div class="sc-lbl">Brand — QE</div><div class="sc-val c-brand">${fi(b.qe||0)}</div><div class="sc-sub">${pb ? wow(b.qe||0,pb.qe||0)+' vs tuần trước' : 'comment+share+save+click'}</div></div>
-    <div class="sc"><div class="sc-lbl">Growth — Clicks</div><div class="sc-val c-growth">${fi(gClick)}</div><div class="sc-sub">${pgClick!=null ? wow(gClick,pgClick)+' vs tuần trước' : '3 accounts'}</div></div>
-    <div class="sc"><div class="sc-lbl">Vertical — Spend</div><div class="sc-val c-vert">SGD ${fm(v.spend||0)}</div><div class="sc-sub">${pv ? wow(v.spend||0,pv.spend||0)+' vs tuần trước' : '2 accounts'}</div></div>
-    <div class="sc"><div class="sc-lbl">Brand CPE / ER</div><div class="sc-val">SGD ${fm(b.cpe)}</div><div class="sc-sub">ER ${fp(b.er)}</div></div>
-    <div class="sc"><div class="sc-lbl">Freq Alerts 🔴</div><div class="sc-val ${freqRed?'c-red':''}">${freqRed || '—'}</div><div class="sc-sub">campaigns ≥ 7×</div></div>
-  `;
+  return `
+    <div class="sc-grid">
+      <div class="sc"><div class="sc-lbl">Total Spend</div><div class="sc-val c-purple">SGD ${fm(total)}</div><div class="sc-sub">${pTotal?wow(total,pTotal)+' vs tuần trước':c.week_label}</div></div>
+      <div class="sc"><div class="sc-lbl">Brand — QE</div><div class="sc-val c-brand">${fi(b.qe||0)}</div><div class="sc-sub">${pb?wow(b.qe||0,pb.qe||0)+' vs tuần trước':'comment+share+save+click'}</div></div>
+      <div class="sc"><div class="sc-lbl">Growth — Clicks</div><div class="sc-val c-growth">${fi(gClick)}</div><div class="sc-sub">${pgC!=null?wow(gClick,pgC)+' vs tuần trước':'3 accounts'}</div></div>
+      <div class="sc"><div class="sc-lbl">Vertical — Spend</div><div class="sc-val c-vert">SGD ${fm(v.spend||0)}</div><div class="sc-sub">${pv?wow(v.spend||0,pv.spend||0)+' vs tuần trước':'2 accounts'}</div></div>
+      <div class="sc"><div class="sc-lbl">Brand CPE / ER</div><div class="sc-val">SGD ${fm(b.cpe)}</div><div class="sc-sub">ER ${fp(b.er)}</div></div>
+      <div class="sc"><div class="sc-lbl">Freq Alerts 🔴</div><div class="sc-val ${freqRed?'c-red':''}">${freqRed||'—'}</div><div class="sc-sub">campaigns ≥ 7×</div></div>
+    </div>`;
 }
 
-/* ── Group Summary Table ─────────────────────────────────── */
+/* ── Group Summary Table ─────────────────────────────────────── */
 function renderGSTable(c) {
-  const b = c.groups.BRAND, g = c.groups.GROWTH, v = c.groups.VERTICAL;
-  const gClick = g.link_clicks ?? g.qe ?? 0;
-  const tot = (b.spend||0)+(g.spend||0)+(v.spend||0);
+  const b=c.groups.BRAND, g=c.groups.GROWTH, v=c.groups.VERTICAL;
+  const tot=(b.spend||0)+(g.spend||0)+(v.spend||0);
+  const gClick=g.link_clicks??g.clicks??g.qe??0;
+  const gCTR=g.ctr||(gClick&&g.impressions?gClick/g.impressions*100:null);
 
-  document.getElementById('gs-week').textContent = c.week_label;
-
-  const rows = [
-    {label:'Spend (SGD)', bv:fm(b.spend), gv:fm(g.spend), vv:fm(v.spend)},
-    {label:'Budget share', bv:pct(b.spend,tot), gv:pct(g.spend,tot), vv:pct(v.spend,tot)},
-    {label:'Reach', bv:fi(b.reach), gv:fi(g.reach), vv:fi(v.reach)},
-    {label:'Avg Frequency', bv:ff(b.avg_freq), gv:ff(g.avg_freq), vv:ff(v.avg_freq)},
+  const rows=[
+    {l:'Spend (SGD)', bv:fm(b.spend), gv:fm(g.spend), vv:fm(v.spend||0)},
+    {l:'% of Total',  bv:pct(b.spend,tot), gv:pct(g.spend,tot), vv:pct(v.spend||0,tot)},
+    {l:'Impressions', bv:fi(b.impressions), gv:fi(g.impressions), vv:fi(v.impressions||0)},
+    {l:'Reach',       bv:fi(b.reach), gv:fi(g.reach), vv:fi(v.reach||0)},
+    {l:'Clicks',      bv:fi(b.clicks), gv:fi(gClick), vv:fi(v.clicks||0)},
+    {l:'Avg CPM (SGD)',bv:fm(b.cpm), gv:fm(g.cpm), vv:fm(v.cpm||0)},
+    {l:'Avg CPC (SGD)',bv:fm(b.cpc), gv:fm(g.cpc), vv:fm(v.cpc||0)},
+    {l:'Avg CTR',     bv:b.ctr?fp(b.ctr):'—', gv:gCTR?fp(gCTR):'—', vv:v.ctr?fp(v.ctr):'—'},
+    {l:'Avg Frequency',bv:b.avg_freq?ff(b.avg_freq)+(b.freq_flag?' '+(b.freq_flag):''):'—',
+                       gv:g.avg_freq?ff(g.avg_freq)+(g.freq_flag?' '+(g.freq_flag):''):'—',
+                       vv:v.avg_freq?ff(v.avg_freq)+(v.freq_flag?' '+(v.freq_flag):''):'—'},
     {div:'ENGAGEMENT'},
-    {label:'QE / Clicks', bv:fi(b.qe), gv:fi(gClick), vv:fi(v.qe)},
-    {label:'CPE (SGD)', bv:fm(b.cpe), gv:'—', vv:fm(v.cpe)},
-    {label:'ER%', bv:fp(b.er), gv: g.er ? fp(g.er) : '—', vv:fp(v.er)},
+    {l:'QE',          bv:fi(b.qe), gv:'—', vv:fi(v.qe||0)},
+    {l:'Avg CPE (SGD)',bv:fm(b.cpe), gv:'—', vv:fm(v.cpe||0)},
+    {l:'Avg ER%',     bv:fp(b.er), gv:'—', vv:fp(v.er||0)},
+    {l:'App Installs', bv:fi(b.installs||0)||'—', gv:fi(g.installs||0)||'—', vv:'—'},
+    {l:'Blended CPI (SGD)',bv:(b.cpi&&b.cpi>0)?fm(b.cpi):'—', gv:(g.cpi&&g.cpi>0)?fm(g.cpi):'—', vv:'—'},
     {div:'OVERVIEW'},
-    {label:'No. of Accounts', bv:'4', gv:'3', vv:'2'},
+    {l:'Objective chính', bv:b.objective||'Engagement/Reach', gv:g.objective||'Traffic/Events', vv:v.objective||'Traffic/Lead gen'},
+    {l:'# Active Camps',  bv:b.active_camps??'—', gv:g.active_camps??'—', vv:v.active_camps??'—'},
+    {l:'🔴 Freq≥7 Camps', bv:b.red_freq_camps??'—', gv:g.red_freq_camps??'—', vv:v.red_freq_camps??'—'},
   ];
 
-  const thead = `<thead><tr><th></th><th class="th-b">BRAND</th><th class="th-g">GROWTH</th><th class="th-v">VERTICAL</th></tr></thead>`;
-  const tbody = '<tbody>'+rows.map(r => r.div
-    ? `<tr class="gs-divider"><td colspan="4">${r.div}</td></tr>`
-    : `<tr><td>${r.label}</td><td>${r.bv}</td><td>${r.gv}</td><td>${r.vv}</td></tr>`
+  const thead=`<thead><tr><th></th><th class="th-b">🏷 BRAND</th><th class="th-g">🚀 GROWTH</th><th class="th-v">🏢 VERTICAL</th></tr></thead>`;
+  const tbody='<tbody>'+rows.map(r=>r.div
+    ?`<tr class="gs-div"><td colspan="4">${r.div}</td></tr>`
+    :`<tr><td>${r.l}</td><td>${r.bv}</td><td>${r.gv}</td><td>${r.vv}</td></tr>`
   ).join('')+'</tbody>';
 
-  document.getElementById('gs-table').innerHTML = thead + tbody;
+  return `<div class="panel"><div class="ph"><div class="ph-title">🗂 Group Summary</div><div class="ph-sub">${c.week_label}</div></div><div class="gs-wrap"><table class="gs-table">${thead}${tbody}</table></div></div>`;
 }
 
-/* ── Trend Chart ─────────────────────────────────────────── */
+/* ── Campaign table ─────────────────────────────────────────── */
+function campTable(camps, type) {
+  const isBrand = type==='BRAND';
+  const th = isBrand
+    ? `<tr><th>Campaign</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th></tr>`
+    : `<tr><th>Campaign</th><th>Spend (SGD)</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>CPC (SGD)</th><th>Freq</th></tr>`;
+
+  const rows = camps.map(c=>{
+    const nm=`<td><span class="camp-name">${c.name}</span>${c.audience?`<span class="camp-aud">${c.audience}</span>`:''}</td>`;
+    if(isBrand){
+      return `<tr>${nm}<td>${fm(c.spend)}</td><td>${fi(c.reach)}</td><td>${freq_badge(c.freq||c.frequency)}</td><td>${fi(c.qe)}</td><td>${fm(c.cpe)}</td><td>${fp(c.er)}</td></tr>`;
+    }else{
+      const clk=c.clicks??c.qe??0;
+      return `<tr>${nm}<td>${fm(c.spend)}</td><td>${fi(c.reach)}</td><td>${fi(clk)}</td><td>${c.ctr?fp(c.ctr):'—'}</td><td>${fm(c.cpc)}</td><td>${freq_badge(c.freq||c.frequency)}</td></tr>`;
+    }
+  }).join('');
+
+  // Total row
+  const tot_spend=camps.reduce((s,c)=>s+c.spend,0);
+  const tot_reach=camps.reduce((s,c)=>s+(c.reach||0),0);
+  const tot_clk  =camps.reduce((s,c)=>s+(c.clicks??c.qe??0),0);
+  const tot_qe   =camps.reduce((s,c)=>s+(c.qe||0),0);
+  const tot_impr =camps.reduce((s,c)=>s+(c.impressions||0),0);
+  const avg_freq =tot_impr&&tot_reach?tot_impr/tot_reach:0;
+  const blend_cpe=tot_qe?tot_spend/tot_qe:0;
+  const blend_er =tot_reach?tot_qe/tot_reach*100:0;
+  const blend_ctr=tot_impr&&tot_clk?tot_clk/tot_impr*100:0;
+  const blend_cpc=tot_clk?tot_spend/tot_clk:0;
+
+  const totalRow=isBrand
+    ?`<tr><td><strong>TOTAL</strong></td><td>${fm(tot_spend)}</td><td>${fi(tot_reach)}</td><td>${freq_badge(avg_freq)} </td><td>${fi(tot_qe)}</td><td>${fm(blend_cpe)}</td><td>${fp(blend_er)}</td></tr>`
+    :`<tr><td><strong>TOTAL</strong></td><td>${fm(tot_spend)}</td><td>${fi(tot_reach)}</td><td>${fi(tot_clk)}</td><td>${fp(blend_ctr)}</td><td>${fm(blend_cpc)}</td><td>${freq_badge(avg_freq)} </td></tr>`;
+
+  return `<div class="ov"><table class="ct"><thead>${th}</thead><tbody>${rows}${totalRow}</tbody></table></div>`;
+}
+
+/* ── Recommendations ─────────────────────────────────────────── */
+function recoList(recos) {
+  if(!recos||!recos.length) return '';
+  const icons=['💡','🔎','📈','🎯','⚡'];
+  return '<ul class="reco-list">'+recos.map((r,i)=>`<li><span class="reco-icon">${icons[i]||'•'}</span><span>${r}</span></li>`).join('')+'</ul>';
+}
+
+/* ── Account summary table (per-group rollup) ─────────────────── */
+function acctSumTable(accounts, acctList, type) {
+  const isBrand = type==='BRAND';
+  const th = isBrand
+    ? `<tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th><th>Avg Freq</th></tr>`
+    : `<tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>CTR</th><th>Installs</th><th>CPI (SGD)</th><th>Avg Freq</th></tr>`;
+
+  let tot_spend=0,tot_reach=0,tot_qe=0,tot_clk=0,tot_inst=0,tot_impr=0;
+  const rows=acctList.map(a=>{
+    const m=accounts[a]; if(!m)return '';
+    tot_spend+=m.spend||0; tot_reach+=m.reach||0; tot_qe+=m.qe||0;
+    const lc=m.link_clicks??m.clicks??m.qe??0; tot_clk+=lc;
+    tot_inst+=m.installs||0; tot_impr+=m.impressions||0;
+    const fr=m.avg_freq||0;
+    if(isBrand){
+      return `<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(m.qe)}</td><td>${fm(m.cpe)}</td><td>${fp(m.er)}</td><td>${freq_badge(fr)}</td></tr>`;
+    }else{
+      return `<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${m.ctr?fp(m.ctr):'—'}</td><td>${fi(m.installs)||'—'}</td><td>${m.cpi&&m.cpi>0?fm(m.cpi):'—'}</td><td>${freq_badge(fr)}</td></tr>`;
+    }
+  }).join('');
+
+  const avg_fr_tot=tot_impr&&tot_reach?tot_impr/tot_reach:0;
+  const tot_cpe=tot_qe?tot_spend/tot_qe:0;
+  const tot_er=tot_reach?tot_qe/tot_reach*100:0;
+  const tot_ctr=tot_impr&&tot_clk?tot_clk/tot_impr*100:0;
+  const totalRow=isBrand
+    ?`<tr><td><strong>TOTAL</strong></td><td>${fm(tot_spend)}</td><td>${fi(tot_reach)}</td><td>${fi(tot_qe)}</td><td>${fm(tot_cpe)}</td><td>${fp(tot_er)}</td><td>${freq_badge(avg_fr_tot)}</td></tr>`
+    :`<tr><td><strong>TOTAL</strong></td><td>${fm(tot_spend)}</td><td>${fi(tot_reach)}</td><td>${fp(tot_ctr)}</td><td>${fi(tot_inst)||'—'}</td><td>—</td><td>${freq_badge(avg_fr_tot)}</td></tr>`;
+
+  return `<div class="ov"><table class="acct-sum-table"><thead>${th}</thead><tbody>${rows}${totalRow}</tbody></table></div>`;
+}
+
+/* ── BRAND GROUP ─────────────────────────────────────────────── */
+function renderBrandGroup(c) {
+  const b = c.groups.BRAND;
+  const detail = c.detail_available && b.accounts;
+
+  let html = `<div class="g-section"><div class="g-header"><h2><span class="pill pill-b">BRAND</span> Brand Group</h2><span class="g-spend">SGD ${fm(b.spend)}</span></div><div class="g-body">`;
+
+  if (detail) {
+    // Per-account sections
+    B_ACCTS.forEach(a => {
+      const m = b.accounts[a]; if(!m) return;
+      html += `<div class="acct-block">
+        <div class="acct-head"><span>${(a===0?'1. ':'')}<strong>${ACCT_LBL[a]||a}</strong></span><span class="acct-spend">SGD ${fm(m.spend)}</span></div>
+        <div class="acct-content">
+          ${m.campaigns?.length ? campTable(m.campaigns,'BRAND') : ''}
+          ${recoList(m.recommendations)}
+        </div>
+      </div>`;
+    });
+
+    // Group summary table
+    html += `<div class="acct-block">
+      <div class="acct-head"><strong>Brand Group Summary</strong></div>
+      <div class="acct-content">${acctSumTable(b.accounts, B_ACCTS, 'BRAND')}</div>
+    </div>`;
+
+    // Key highlight
+    if (b.key_highlight) {
+      html += `<div class="acct-block"><div class="pb"><div class="highlight">${b.key_highlight}</div></div></div>`;
+    }
+  } else {
+    // Simplified account-level table
+    if (b.accounts) {
+      html += `<div class="pb">${acctSumTable(b.accounts, B_ACCTS, 'BRAND')}</div>`;
+    } else {
+      html += `<div class="pb"><p class="note">Dữ liệu account-level không khả dụng cho tuần này.</p></div>`;
+    }
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+/* ── GROWTH GROUP ─────────────────────────────────────────────── */
+function renderGrowthGroup(c) {
+  const g = c.groups.GROWTH;
+  const detail = c.detail_available && g.accounts;
+
+  let html = `<div class="g-section"><div class="g-header"><h2><span class="pill pill-g">GROWTH</span> Growth Group</h2><span class="g-spend">SGD ${fm(g.spend)}</span></div><div class="g-body">`;
+
+  if (detail) {
+    G_ACCTS.forEach(a => {
+      const m = g.accounts[a]; if(!m) return;
+      html += `<div class="acct-block">
+        <div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m.spend)}</span></div>
+        <div class="acct-content">
+          ${m.campaigns?.length ? campTable(m.campaigns,'GROWTH') : ''}
+          ${recoList(m.recommendations)}
+        </div>
+      </div>`;
+    });
+
+    // Group summary table
+    html += `<div class="acct-block">
+      <div class="acct-head"><strong>Growth Group Summary</strong></div>
+      <div class="acct-content">${acctSumTable(g.accounts, G_ACCTS, 'GROWTH')}</div>
+    </div>`;
+
+    // Per-account insights
+    if (g.per_account_insights?.length) {
+      html += `<div class="pai-block"><strong style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Per-account insights:</strong><ul style="margin-top:8px;list-style:disc;padding-left:18px">`
+        + g.per_account_insights.map(t=>`<li style="padding:3px 0;font-size:13px">${t}</li>`).join('')
+        + '</ul></div>';
+    }
+  } else {
+    if (g.accounts) {
+      html += `<div class="pb">${acctSumTable(g.accounts, G_ACCTS, 'GROWTH')}</div>`;
+    } else {
+      const gClk=g.link_clicks??g.clicks??g.qe??0;
+      html += `<div class="pb"><p class="note">Spend: SGD ${fm(g.spend)} · Clicks: ${fi(gClk)} · Reach: ${fi(g.reach)}</p></div>`;
+    }
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+/* ── VERTICAL GROUP ─────────────────────────────────────────── */
+function renderVertGroup(c) {
+  const v = c.groups.VERTICAL;
+  let html = `<div class="g-section"><div class="g-header"><h2><span class="pill pill-v">VERTICAL</span> Vertical Group</h2><span class="g-spend">SGD ${fm(v.spend||0)}</span></div><div class="g-body">`;
+
+  if (c.detail_available && v.accounts) {
+    // Account summary table (skip zero-spend)
+    const activeVAccts = V_ACCTS.filter(a => v.accounts[a]?.spend > 0);
+    if (activeVAccts.length) {
+      html += `<div class="pb">${acctSumTable(v.accounts, activeVAccts, 'BRAND')}</div>`;
+    }
+    // Notes per account
+    V_ACCTS.forEach(a => {
+      const m = v.accounts[a];
+      html += `<div class="acct-block"><div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m?.spend||0)}</span></div>`;
+      if (m?.note) {
+        html += `<div class="vert-note">${m.note}</div>`;
+      } else if (m?.recommendations?.length) {
+        html += `<div class="acct-content">${recoList(m.recommendations)}</div>`;
+      }
+      html += '</div>';
+    });
+    if (v.notes) {
+      html += `<div class="vert-note">${v.notes}</div>`;
+    }
+  } else if (v.accounts) {
+    const activeVAccts = V_ACCTS.filter(a => v.accounts[a]?.spend > 0);
+    if (activeVAccts.length) {
+      html += `<div class="pb">${acctSumTable(v.accounts, activeVAccts, 'BRAND')}</div>`;
+    } else {
+      html += `<div class="vert-note">Tất cả tài khoản Vertical không phát sinh chi phí trong tuần này${v.spend===0?' (API access-denied cho tuần hiện tại)':''}.</div>`;
+    }
+  } else {
+    html += `<div class="vert-note">${v.spend?`Spend: SGD ${fm(v.spend)}`:'Không có dữ liệu.'}</div>`;
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+/* ── Freq Watch List ─────────────────────────────────────────── */
+function renderFreqList(c) {
+  const items = c.watch_list||[];
+  let html = `<div class="panel"><div class="ph"><div class="ph-title">🚨 Frequency Watch List</div></div><div class="pb">`;
+
+  if (!items.length) {
+    html += '<p class="note">Không có dữ liệu frequency chi tiết cho tuần này.</p>';
+  } else {
+    if (c.watch_list_summary) {
+      html += `<div class="wl-summary">${c.watch_list_summary}</div>`;
+    }
+    const sorted = [...items].sort((a,b)=>(b.frequency||b.freq||0)-(a.frequency||a.freq||0));
+    const rows = sorted.map(it=>{
+      const fr=it.frequency||it.freq||0;
+      const grp=it.group?` (${it.group})`:'';
+      return `<tr>
+        <td style="text-align:left;font-weight:600">${it.account||'—'}${grp}</td>
+        <td style="text-align:left;color:var(--text)">${it.name}</td>
+        <td>${freq_badge(fr)}</td>
+        <td>${fi(it.reach||0)}</td>
+        <td>${it.action||'—'}</td>
+      </tr>`;
+    }).join('');
+    html += `<div class="ov"><table class="ct">
+      <thead><tr><th>Account</th><th style="text-align:left">Campaign</th><th>Freq</th><th>Reach</th><th style="text-align:left">Action</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+/* ── Trend Chart ─────────────────────────────────────────────── */
 function buildChart(selWeek) {
-  const rev = [...allData].reverse();
-  const labels = rev.map(d => {
-    const s = d.week_label || d.week_start;
-    return s.replace(/,.*$/,'').replace(/– /,'–').trim();
+  const rev=[...allData].reverse();
+  const labels=rev.map(d=>{
+    const s=d.week_label||d.week_start;
+    return s.replace(/,.*$/,'').replace('–',' – ').trim();
   });
 
-  const getV = (d, grp) => {
-    const m = d.groups[grp];
-    if (!m) return null;
-    if (metric === 'spend') return m.spend || 0;
-    if (metric === 'qe')    return (m.link_clicks ?? m.qe) || 0;
-    if (metric === 'er')    return m.er || 0;
+  const getV=(d,grp)=>{
+    const m=d.groups[grp];
+    if(!m)return null;
+    if(metric==='spend')return m.spend||0;
+    if(metric==='qe')return(m.link_clicks??m.clicks??m.qe)??0;
+    if(metric==='er')return m.er||0;
     return null;
   };
 
-  const ds = ['BRAND','GROWTH','VERTICAL'].map(grp => ({
-    label: grp === 'BRAND' ? 'Brand' : grp === 'GROWTH' ? 'Growth' : 'Vertical',
-    data: rev.map(d => getV(d, grp)),
-    borderColor: G_COLOR[grp],
-    backgroundColor: G_COLOR[grp]+'1a',
-    borderWidth: 2,
-    pointRadius: 4,
-    pointHoverRadius: 6,
-    tension: 0.35,
-    fill: false,
-    spanGaps: true,
+  const ds=['BRAND','GROWTH','VERTICAL'].map(grp=>({
+    label:grp==='BRAND'?'Brand':grp==='GROWTH'?'Growth':'Vertical',
+    data:rev.map(d=>getV(d,grp)),
+    borderColor:G_COLOR[grp],
+    backgroundColor:G_COLOR[grp]+'1a',
+    borderWidth:2,pointRadius:4,pointHoverRadius:6,tension:0.35,fill:false,spanGaps:true,
   }));
 
-  if (chart) chart.destroy();
-  chart = new Chart(document.getElementById('tc'), {
-    type: 'line',
-    data: { labels, datasets: ds },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { labels: { color:'#6b7280', boxWidth:10, font:{size:12} } },
-        tooltip: {
-          backgroundColor:'#fff', borderColor:'#e5e7eb', borderWidth:1,
-          titleColor:'#111827', bodyColor:'#6b7280',
-          callbacks: {
-            label: ctx => {
-              const v = ctx.parsed.y;
-              if (v===null) return null;
-              if (metric==='spend') return ` ${ctx.dataset.label}: SGD ${fm(v)}`;
-              if (metric==='er')    return ` ${ctx.dataset.label}: ${fp(v)}`;
-              return ` ${ctx.dataset.label}: ${fi(v)}`;
-            }
-          }
+  if(chart)chart.destroy();
+  chart=new Chart(document.getElementById('tc'),{
+    type:'line',data:{labels,datasets:ds},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{labels:{color:'#6b7280',boxWidth:10,font:{size:12}}},
+        tooltip:{
+          backgroundColor:'#fff',borderColor:'#e5e7eb',borderWidth:1,
+          titleColor:'#111827',bodyColor:'#6b7280',
+          callbacks:{label:ctx=>{
+            const v=ctx.parsed.y;
+            if(v===null)return null;
+            return metric==='spend'?` ${ctx.dataset.label}: SGD ${fm(v)}`:
+                   metric==='er'?` ${ctx.dataset.label}: ${fp(v)}`:
+                   ` ${ctx.dataset.label}: ${fi(v)}`;
+          }}
         }
       },
-      scales: {
-        x: { ticks:{color:'#6b7280',font:{size:11}}, grid:{color:'#f3f4f6'} },
-        y: { ticks:{color:'#6b7280',font:{size:11}}, grid:{color:'#f3f4f6'} }
+      scales:{
+        x:{ticks:{color:'#6b7280',font:{size:11}},grid:{color:'#f3f4f6'}},
+        y:{ticks:{color:'#6b7280',font:{size:11}},grid:{color:'#f3f4f6'}},
       }
     }
   });
 }
 
-/* ── BRAND section ─────────────────────────────────────────── */
-function renderBrand(c) {
-  const b = c.groups.BRAND;
-  document.getElementById('brand-spend').textContent = `SGD ${fm(b.spend)}`;
-  if (!b.accounts) {
-    document.getElementById('brand-body').innerHTML = simpleMetrics([
-      ['Spend','SGD '+fm(b.spend)], ['QE',fi(b.qe)], ['CPE','SGD '+fm(b.cpe)], ['ER%',fp(b.er)]
-    ]);
-    return;
-  }
-  const rows = B_ACCTS.map(a => {
-    const m = b.accounts[a]; if (!m) return '';
-    return `<tr><td>${ACCT_LBL[a]}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${ff(m.avg_freq)}</td><td>${fi(m.qe)}</td><td>${fm(m.cpe)}</td><td>${fp(m.er)}</td></tr>`;
-  }).join('');
-  document.getElementById('brand-body').innerHTML = `
-    <div class="ov"><table class="dt">
-      <thead><tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>QE</th><th>CPE (SGD)</th><th>ER%</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table></div>`;
-}
-
-/* ── GROWTH section ─────────────────────────────────────────── */
-function renderGrowth(c) {
-  const g = c.groups.GROWTH;
-  const totClick = g.link_clicks ?? g.qe ?? 0;
-  document.getElementById('growth-spend').textContent = `SGD ${fm(g.spend)}`;
-  if (!g.accounts) {
-    document.getElementById('growth-body').innerHTML = simpleMetrics([
-      ['Spend','SGD '+fm(g.spend)], ['Link Clicks',fi(totClick)], ['Avg CPC','SGD '+fm(totClick?g.spend/totClick:0)]
-    ]);
-    return;
-  }
-  const rows = G_ACCTS.map(a => {
-    const m = g.accounts[a]; if (!m) return '';
-    const lc = m.link_clicks ?? m.qe ?? 0;
-    return `<tr><td>${ACCT_LBL[a]}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${ff(m.avg_freq)}</td><td>${fi(lc)}</td><td>${lc&&m.spend ? fm(m.spend/lc) : '—'}</td></tr>`;
-  }).join('');
-  document.getElementById('growth-body').innerHTML = `
-    <div class="ov"><table class="dt">
-      <thead><tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>Link Clicks</th><th>CPC (SGD)</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table></div>`;
-}
-
-/* ── VERTICAL section ─────────────────────────────────────────── */
-function renderVertical(c) {
-  const v = c.groups.VERTICAL;
-  document.getElementById('vert-spend').textContent = `SGD ${fm(v.spend||0)}`;
-  if (!v.accounts) {
-    if (!v.spend) {
-      document.getElementById('vert-body').innerHTML = '<p class="note">Không có dữ liệu. Tài khoản VERTICAL bị hạn chế quyền truy cập trong tuần này.</p>';
-    } else {
-      document.getElementById('vert-body').innerHTML = simpleMetrics([
-        ['Spend','SGD '+fm(v.spend)], ['QE',fi(v.qe)], ['CPE','SGD '+fm(v.cpe)], ['ER%',fp(v.er)]
-      ]);
-    }
-    return;
-  }
-  const rows = V_ACCTS.map(a => {
-    const m = v.accounts[a]; if (!m || !m.spend) return '';
-    return `<tr><td>${ACCT_LBL[a]}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${ff(m.avg_freq)}</td><td>${m.qe ? fi(m.qe) : '—'}</td><td>${m.link_clicks ? fi(m.link_clicks) : '—'}</td></tr>`;
-  }).join('');
-  document.getElementById('vert-body').innerHTML = rows ? `
-    <div class="ov"><table class="dt">
-      <thead><tr><th>Account</th><th>Spend (SGD)</th><th>Reach</th><th>Freq</th><th>QE</th><th>Link Clicks</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table></div>` : '<p class="note">Tất cả tài khoản không phát sinh chi phí trong tuần này.</p>';
-}
-
-/* ── Freq Watch List ─────────────────────────────────────────── */
-function renderFreq(c) {
-  const items = c.watch_list || [];
-  if (!items.length) {
-    document.getElementById('freq-body').innerHTML =
-      '<p class="note">Không có dữ liệu frequency chi tiết cho tuần này.<br>Freq watch list khả dụng từ tuần Jun 16–22 trở đi (khi chạy reporter tự động).</p>';
-    return;
-  }
-  const rows = [...items].sort((a,b)=>b.frequency-a.frequency).map(it => {
-    const cls = it.frequency>=7 ? 'b-red' : 'b-yel';
-    const act = it.frequency>=7 ? 'Tạm dừng / refresh creative ngay' : 'Theo dõi — cân nhắc refresh';
-    return `<tr>
-      <td>${it.account||'—'}</td>
-      <td style="text-align:left;color:var(--text);font-weight:500">${it.name}</td>
-      <td><span class="badge ${cls}">${it.frequency.toFixed(2)}×</span></td>
-      <td>${fi(it.reach||0)}</td>
-      <td>${fm(it.spend)}</td>
-      <td style="text-align:left;color:var(--muted);font-size:12px">${act}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('freq-body').innerHTML = `
-    <div class="ov"><table class="dt">
-      <thead><tr><th>Account</th><th style="text-align:left">Campaign</th><th>Freq</th><th>Reach</th><th>Spend (SGD)</th><th style="text-align:left">Action</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table></div>`;
-}
-
-/* ── Helpers ─────────────────────────────────────────────── */
-function simpleMetrics(pairs) {
-  return `<div class="ov"><table class="dt">
-    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
-    <tbody>${pairs.map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</tbody>
-  </table></div>`;
-}
-
-/* ── Render selected week ─────────────────────────────────── */
+/* ── Render selected week ─────────────────────────────────────── */
 function renderWeek(data) {
   cur = data;
-  const idx = allData.findIndex(d=>d.week_start===data.week_start);
-  const prev = allData[idx+1] || null;
+  const idx=allData.findIndex(d=>d.week_start===data.week_start);
+  const prev=allData[idx+1]||null;
 
-  try {
-    const ts = new Date(data.generated_at).toLocaleString('vi-VN', {timeZone:'Asia/Saigon'});
-    document.getElementById('updated-at').textContent = 'Cập nhật: ' + ts;
-  } catch(e) { document.getElementById('updated-at').textContent = data.week_label; }
+  try{
+    const ts=new Date(data.generated_at).toLocaleString('vi-VN',{timeZone:'Asia/Saigon'});
+    document.getElementById('updated-at').textContent='Cập nhật: '+ts;
+  }catch(e){document.getElementById('updated-at').textContent=data.week_label}
 
-  renderCards(data, prev);
-  renderGSTable(data);
-  buildChart(data.week_start);
-  renderBrand(data);
-  renderGrowth(data);
-  renderVertical(data);
-  renderFreq(data);
-}
+  let html='';
 
-/* ── Week picker setup ─────────────────────────────────────── */
-function setupPicker() {
-  const sel = document.getElementById('week-pick');
-  allData.forEach((d,i) => {
-    const o = document.createElement('option');
-    o.value = d.week_start;
-    o.textContent = d.week_label;
-    if (i===0) o.selected = true;
-    sel.appendChild(o);
-  });
-  sel.addEventListener('change', () => {
-    const found = allData.find(d=>d.week_start===sel.value);
-    if (found) renderWeek(found);
-  });
-}
+  // Header note
+  if(data.header_note){
+    html+=`<div class="hnote">${data.header_note}</div>`;
+  }
 
-/* ── Metric buttons ────────────────────────────────────────── */
-function setupMetric() {
-  document.getElementById('metric-btns').addEventListener('click', e => {
-    const btn = e.target.closest('.mbtn');
-    if (!btn) return;
+  // Summary cards
+  html+=renderCards(data,prev);
+
+  // Key insights (detail only)
+  if(data.key_insights?.length){
+    html+=`<div class="ki-panel"><div class="ki-title">💡 Key Insights</div><ul class="ki-list">
+      ${data.key_insights.map(t=>`<li><span>→</span><span>${t}</span></li>`).join('')}
+    </ul></div>`;
+  }
+
+  // Group summary
+  html+=renderGSTable(data);
+
+  // Trend chart panel
+  html+=`<div class="panel"><div class="ph"><div class="ph-title">📈 Trend theo tuần</div><div class="btn-row" id="metric-btns">
+    <button class="mbtn${metric==='spend'?' on':''}" data-m="spend">Spend</button>
+    <button class="mbtn${metric==='qe'?' on':''}" data-m="qe">QE / Clicks</button>
+    <button class="mbtn${metric==='er'?' on':''}" data-m="er">ER%</button>
+  </div></div><div class="pb"><div class="chart-wrap"><canvas id="tc"></canvas></div></div></div>`;
+
+  // Group sections
+  html+=renderBrandGroup(data);
+  html+=renderGrowthGroup(data);
+  html+=renderVertGroup(data);
+
+  // Freq watch list
+  html+=renderFreqList(data);
+
+  document.getElementById('content').innerHTML=html;
+
+  // Wire metric buttons
+  document.getElementById('metric-btns').addEventListener('click',e=>{
+    const btn=e.target.closest('.mbtn');
+    if(!btn)return;
     document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('on'));
     btn.classList.add('on');
-    metric = btn.dataset.m;
+    metric=btn.dataset.m;
     buildChart(cur?.week_start);
+  });
+
+  // Build chart after DOM is ready
+  requestAnimationFrame(()=>buildChart(data.week_start));
+}
+
+/* ── Week picker ─────────────────────────────────────────────── */
+function setupPicker(){
+  const sel=document.getElementById('wpick');
+  allData.forEach((d,i)=>{
+    const o=document.createElement('option');
+    o.value=d.week_start; o.textContent=d.week_label;
+    if(i===0)o.selected=true;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change',()=>{
+    const found=allData.find(d=>d.week_start===sel.value);
+    if(found)renderWeek(found);
   });
 }
 
-/* ── Bootstrap ─────────────────────────────────────────────── */
-async function load() {
-  try {
-    const idx = await fetch('data/index.json').then(r=>r.json());
-    const sorted = [...idx].sort((a,b)=>b.localeCompare(a));
-    allData = await Promise.all(sorted.map(w=>fetch(`data/${w}.json`).then(r=>r.json())));
+/* ── Bootstrap ─────────────────────────────────────────────────── */
+async function load(){
+  try{
+    const idx=await fetch('data/index.json').then(r=>r.json());
+    const sorted=[...idx].sort((a,b)=>b.localeCompare(a));
+    allData=await Promise.all(sorted.map(w=>fetch(`data/${w}.json`).then(r=>r.json())));
 
     setupPicker();
-    setupMetric();
     renderWeek(allData[0]);
 
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-  } catch(err) {
-    document.getElementById('loading').textContent = 'Lỗi tải dữ liệu: ' + err.message;
+    document.getElementById('loading').style.display='none';
+    document.getElementById('content').style.display='block';
+  }catch(err){
+    document.getElementById('loading').textContent='Lỗi tải dữ liệu: '+err.message;
     console.error(err);
   }
 }
