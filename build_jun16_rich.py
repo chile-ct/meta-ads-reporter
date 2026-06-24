@@ -241,35 +241,94 @@ def build_group_growth():
     g["accounts"] = accounts
     return g
 
+RAW_JOB_TRADE = [
+    {"name":"job_recruiter_growth_jun26_sales","audience":"sales · Traffic",
+     "spend":45.46,"reach":12250,"impressions":100641,"clicks":274,"ctr":0.27,"cpc":0.17,"cpm":0.45,"freq":8.22,"freq_flag":"🔴","qe":274,"cpe":0.17,"er":2.24},
+    {"name":"job_recruiter_growth_AWO_reach_new","audience":"broad · Reach",
+     "spend":40.89,"reach":31557,"impressions":67697,"clicks":248,"ctr":0.37,"cpc":0.16,"cpm":0.60,"freq":2.15,"freq_flag":"✅","qe":248,"cpe":0.16,"er":0.79},
+    {"name":"job_recruiter_webinarAI_engagement","audience":"biz · Engagement",
+     "spend":39.64,"reach":26334,"impressions":28996,"clicks":188,"ctr":0.65,"cpc":0.21,"cpm":1.37,"freq":1.10,"freq_flag":"✅","qe":188,"cpe":0.21,"er":0.71},
+    {"name":"job_recruiter_webinarAI_leadform","audience":"biz · Lead gen",
+     "spend":120.02,"reach":22573,"impressions":40998,"clicks":375,"ctr":0.91,"cpc":0.32,"cpm":2.93,"freq":1.82,"freq_flag":"✅","qe":375,"cpe":0.32,"er":1.66},
+    {"name":"job_recruiter_webinarAI_leadform - Copy","audience":"biz · Lead gen",
+     "spend":76.67,"reach":19011,"impressions":27836,"clicks":189,"ctr":0.68,"cpc":0.41,"cpm":2.75,"freq":1.46,"freq_flag":"✅","qe":189,"cpe":0.41,"er":0.99},
+    {"name":"job_recruiter_growth_referral_jun26","audience":"referral · Traffic",
+     "spend":34.51,"reach":5926,"impressions":58552,"clicks":157,"ctr":0.27,"cpc":0.22,"cpm":0.59,"freq":9.88,"freq_flag":"🔴","qe":157,"cpe":0.22,"er":2.65},
+    {"name":"job_recruiter_growth_may-jun26_sales","audience":"sales · Traffic",
+     "spend":34.12,"reach":9823,"impressions":94260,"clicks":188,"ctr":0.20,"cpc":0.18,"cpm":0.36,"freq":9.60,"freq_flag":"🔴","qe":188,"cpe":0.18,"er":1.91},
+    {"name":"job_recruiter_growth_AWO_reach","audience":"broad · Reach",
+     "spend":70.49,"reach":119903,"impressions":179632,"clicks":463,"ctr":0.26,"cpc":0.15,"cpm":0.39,"freq":1.50,"freq_flag":"✅","qe":463,"cpe":0.15,"er":0.39},
+]
+
 def build_group_vertical():
+    jt_camps = RAW_JOB_TRADE
+    tot_s  = sum(c["spend"] for c in jt_camps)
+    tot_r  = sum(c["reach"] for c in jt_camps)
+    tot_i  = sum(c["impressions"] for c in jt_camps)
+    tot_cl = sum(c["clicks"] for c in jt_camps)
+    tot_qe = sum(c["qe"] for c in jt_camps)
+    af     = round(tot_i / tot_r, 2) if tot_r else 0
+    red    = sum(1 for c in jt_camps if c["freq"] >= 7)
     return {
-        "spend": 0, "reach": 0, "impressions": 0, "clicks": 0,
-        "qe": 0, "cpe": 0, "er": 0, "avg_freq": 0, "freq_flag": "—",
-        "cpm": 0, "cpc": 0, "ctr": 0, "active_camps": 0, "red_freq_camps": 0,
+        "spend": round(tot_s, 2),
+        "reach": tot_r,
+        "impressions": tot_i,
+        "clicks": tot_cl,
+        "qe": tot_qe,
+        "cpe": round(tot_s / tot_qe, 2) if tot_qe else 0,
+        "er": round(tot_qe / tot_r * 100, 4) if tot_r else 0,
+        "avg_freq": af,
+        "freq_flag": "🟡",
+        "cpm": round(tot_s / tot_i * 1000, 2) if tot_i else 0,
+        "cpc": round(tot_s / tot_cl, 2) if tot_cl else 0,
+        "ctr": round(tot_cl / tot_i * 100, 2) if tot_i else 0,
+        "active_camps": len(jt_camps),
+        "red_freq_camps": red,
         "objective": "Traffic / Lead gen",
         "accounts": {
-            "job_trade_sgd": {"spend":0,"note":"API access-denied (MAPID policy). Dữ liệu lịch sử available, xem tuần Apr–Jun 14."},
-            "pty_sgd":       {"spend":0,"note":"Không có active campaigns tuần này."},
+            "job_trade_sgd": {
+                "spend": round(tot_s, 2), "reach": tot_r, "impressions": tot_i,
+                "clicks": tot_cl, "qe": tot_qe,
+                "cpe": round(tot_s / tot_qe, 2) if tot_qe else 0,
+                "er": round(tot_qe / tot_r * 100, 4) if tot_r else 0,
+                "avg_freq": af, "cpm": round(tot_s / tot_i * 1000, 2) if tot_i else 0,
+                "cpc": round(tot_s / tot_cl, 2) if tot_cl else 0,
+                "ctr": round(tot_cl / tot_i * 100, 2) if tot_i else 0,
+                "active_camps": len(jt_camps), "red_freq_camps": red,
+                "objective": "Traffic / Lead gen",
+                "campaigns": jt_camps,
+                "recommendations": [
+                    "3 campaigns ở freq 🔴 (≥7×): jun26_sales (8.22×), referral_jun26 (9.88×), may-jun26_sales (9.60×). Pause ngay — audience pool quá nhỏ (<13K reach). Rebuild với AWO hoặc Advantage+ audience mở rộng.",
+                    "webinarAI_leadform là top spender (SGD 120.02, freq 1.82 ✅, CTR 0.91%) — campaign đang perform tốt. Scale thêm 20–30% budget tuần tới.",
+                    "webinarAI_leadform - Copy chạy song song (SGD 76.67, CTR 0.68%). A/B test creative và kill bản yếu hơn sau 2 tuần để tránh self-competition.",
+                    "AWO_reach là nền tảng tốt nhất về scale (119K reach, CPC SGD 0.15, freq 1.50 ✅). Tăng budget và dùng custom audience từ converters làm exclusion.",
+                    "Reallocate ngân sách từ 3 campaigns 🔴 (~SGD 114) vào 2 webinarAI campaigns và AWO_reach để cải thiện overall efficiency.",
+                ],
+            },
+            "pty_sgd": {"spend": 0, "note": "Không có active campaigns tuần này. Kiểm tra campaign schedule và budget allocation."},
         },
-        "notes": "VERTICAL accounts (job_trade_sgd, pty_sgd) bị hạn chế quyền truy cập API cho tuần hiện tại. Kiểm tra MAPID permissions hoặc xem dữ liệu lịch sử trong dashboard.",
     }
 
 # ── Watch list ─────────────────────────────────────────────────────────────
 WATCH_LIST_ACTIONS = {
-    "digital_fb_job_nvkd":           "Pause ngay — rebuild với broader biz-dev audience",
-    "digital_elt_bl_mf_clicklink_web":"Expand audience hoặc giảm budget ngay lập tức",
-    "digital_fb_job_worker":         "Expand audience hoặc rotate creative",
-    "digital_fb_job_banhang":        "Theo dõi — expand audience trước khi breach 🔴",
-    "digital_fb_job_shipper":        "Theo dõi — expand audience trước khi breach 🔴",
-    "digital_fb_job_baove":          "Pre-emptive: refresh audience ngay tuần này",
-    "digital_elt_fb_web_rtg":        "Mở rộng retargeting lookback window",
+    "digital_fb_job_nvkd":                        "Pause ngay — rebuild với broader biz-dev audience",
+    "digital_elt_bl_mf_clicklink_web":             "Expand audience hoặc giảm budget ngay lập tức",
+    "digital_fb_job_worker":                       "Expand audience hoặc rotate creative",
+    "digital_fb_job_banhang":                      "Theo dõi — expand audience trước khi breach 🔴",
+    "digital_fb_job_shipper":                      "Theo dõi — expand audience trước khi breach 🔴",
+    "digital_fb_job_baove":                        "Pre-emptive: refresh audience ngay tuần này",
+    "digital_elt_fb_web_rtg":                      "Mở rộng retargeting lookback window",
+    "job_recruiter_growth_referral_jun26":         "Pause ngay — reach 5.9K, freq 9.88×. Rebuild audience pool",
+    "job_recruiter_growth_may-jun26_sales":        "Pause ngay — reach 9.8K, freq 9.60×. Mở rộng targeting",
+    "job_recruiter_growth_jun26_sales":            "Pause hoặc reset audience — reach 12.3K, freq 8.22×",
 }
 
 def build_watch_list():
     items = []
-    for acct_name in list(RAW.keys()):
-        group = ACCOUNT_GROUPS[acct_name]
-        for c in RAW[acct_name]:
+    all_sources = list(RAW.items()) + [("job_trade_sgd", RAW_JOB_TRADE)]
+    for acct_name, camps in all_sources:
+        group = ACCOUNT_GROUPS.get(acct_name, "VERTICAL")
+        for c in camps:
             if c["freq"] >= 3:
                 items.append({
                     "account": acct_name,
@@ -287,9 +346,9 @@ def build_watch_list():
 # ── Key insights ──────────────────────────────────────────────────────────
 KEY_INSIGHTS = [
     "Brand: Tất cả 11 campaigns ở ✅ frequency zone (avg 1.54). brand_eng_pty_b2b_0626 là outlier nghiêm trọng: SGD 352.50 cho 4 QE (CPE SGD 88.13). job_branding_sgd dẫn đầu efficiency (SGD 0.64 CPE); pty_branding_sgd dẫn đầu scale (1.2M unique reach).",
-    "Growth: job_sgd có digital_fb_job_nvkd ở freq 7.69 🔴 — cần pause ngay. gds_elt_sgd's bl_mf_clicklink_web (freq 7.35 🔴) chiếm 51% account budget với chỉ 23K audience pool. Không ghi nhận App Installs — verify pixel configuration.",
-    "Vertical: VERTICAL accounts (job_trade_sgd, pty_sgd) bị hạn chế quyền truy cập API tuần này. Kiểm tra MAPID permissions; dữ liệu lịch sử available trong dashboard từ Apr 6.",
-    "Overall: SGD 293.92 (24.5% GROWTH budget) đang exposed to audience saturation risk trên 2 campaigns 🔴. Prioritise immediate audience refresh cho job_sgd (nvkd) và gds_elt_sgd (bl_mf_clicklink_web).",
+    "Digital: job_sgd có digital_fb_job_nvkd ở freq 7.69 🔴 — cần pause ngay. gds_elt_sgd's bl_mf_clicklink_web (freq 7.35 🔴) chiếm 51% account budget với chỉ 23K audience pool. Không ghi nhận App Installs — verify pixel configuration.",
+    "Vertical: job_trade_sgd có SGD 461.80 spend, 8 campaigns, 3 ở freq 🔴 (≥7×: referral_jun26 9.88, may-jun26_sales 9.60, jun26_sales 8.22). Webinar campaigns đang perform tốt (CTR ~0.9%). pty_sgd không có spend tuần này.",
+    "Overall: 5 campaigns 🔴 cross 3 accounts (job_sgd, gds_elt_sgd, job_trade_sgd). Tổng spend ở risk: >SGD 400 (~12% tổng budget). Priority: pause 3 campaigns Vertical freq ≥7× và 2 campaigns Digital freq ≥7×.",
 ]
 
 # ── Build final JSON ──────────────────────────────────────────────────────
