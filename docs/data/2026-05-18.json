@@ -16,7 +16,45 @@
           "qe": 12,
           "cpe": 9.51,
           "er": 0.0275,
-          "avg_freq": 1.26
+          "avg_freq": 1.26,
+          "campaigns": [
+            {
+              "name": "brand_eng_gds_b2c_0526",
+              "spend": 23.44,
+              "reach": 7177,
+              "freq": 1.43,
+              "clicks": 200,
+              "cpc": 0.12,
+              "ctr": 1.95,
+              "qe": 2,
+              "cpe": 11.72,
+              "er": 0.0279
+            },
+            {
+              "name": "brand_view_livestream_0526_0626",
+              "spend": 61.64,
+              "reach": 28405,
+              "freq": 1.03,
+              "clicks": 57,
+              "cpc": 1.08,
+              "ctr": 0.19,
+              "qe": 1,
+              "cpe": 61.64,
+              "er": 0.0035
+            },
+            {
+              "name": "brand_eng_gds_reward_b2c_0526",
+              "spend": 53.24,
+              "reach": 14488,
+              "freq": 1.44,
+              "clicks": 198,
+              "cpc": 0.27,
+              "ctr": 0.95,
+              "qe": 8,
+              "cpe": 6.66,
+              "er": 0.0552
+            }
+          ]
         },
         "pty_branding_sgd": {
           "spend": 465.69,
@@ -24,7 +62,45 @@
           "qe": 512,
           "cpe": 0.91,
           "er": 0.1165,
-          "avg_freq": 1.47
+          "avg_freq": 1.47,
+          "campaigns": [
+            {
+              "name": "brand_eng_pty_b2b_0526",
+              "spend": 194.37,
+              "reach": 150552,
+              "freq": 1.92,
+              "clicks": 836,
+              "cpc": 0.23,
+              "ctr": 0.29,
+              "qe": 4,
+              "cpe": 48.59,
+              "er": 0.0027
+            },
+            {
+              "name": "brand_eng_sale_pty_b2c_0526",
+              "spend": 186.27,
+              "reach": 184267,
+              "freq": 1.35,
+              "clicks": 12124,
+              "cpc": 0.02,
+              "ctr": 4.86,
+              "qe": 201,
+              "cpe": 0.93,
+              "er": 0.1091
+            },
+            {
+              "name": "brand_eng_renter_pty_b2c_0526",
+              "spend": 85.05,
+              "reach": 104522,
+              "freq": 1.05,
+              "clicks": 4535,
+              "cpc": 0.02,
+              "ctr": 4.12,
+              "qe": 307,
+              "cpe": 0.28,
+              "er": 0.2937
+            }
+          ]
         },
         "veh_brand": {
           "spend": 137.24,
@@ -32,7 +108,21 @@
           "qe": 119,
           "cpe": 1.15,
           "er": 0.0739,
-          "avg_freq": 1.36
+          "avg_freq": 1.36,
+          "campaigns": [
+            {
+              "name": "brand_eng_veh_b2c_0526",
+              "spend": 137.24,
+              "reach": 160991,
+              "freq": 1.36,
+              "clicks": 5786,
+              "cpc": 0.02,
+              "ctr": 2.65,
+              "qe": 119,
+              "cpe": 1.15,
+              "er": 0.0739
+            }
+          ]
         },
         "job_branding_sgd": {
           "spend": 435.68,
@@ -40,7 +130,45 @@
           "qe": 425,
           "cpe": 1.03,
           "er": 0.1284,
-          "avg_freq": 1.43
+          "avg_freq": 1.43,
+          "campaigns": [
+            {
+              "name": "brand_job_eng_b2c_0526",
+              "spend": 202.79,
+              "reach": 232791,
+              "freq": 1.33,
+              "clicks": 11217,
+              "cpc": 0.02,
+              "ctr": 3.62,
+              "qe": 226,
+              "cpe": 0.9,
+              "er": 0.0971
+            },
+            {
+              "name": "brand_job_eng_b2b_0526",
+              "spend": 197.63,
+              "reach": 88449,
+              "freq": 1.66,
+              "clicks": 8452,
+              "cpc": 0.02,
+              "ctr": 5.76,
+              "qe": 169,
+              "cpe": 1.17,
+              "er": 0.1911
+            },
+            {
+              "name": "brand_job_eng_b2c_0526_minigame",
+              "spend": 35.26,
+              "reach": 9813,
+              "freq": 1.59,
+              "clicks": 833,
+              "cpc": 0.04,
+              "ctr": 5.33,
+              "qe": 30,
+              "cpe": 1.18,
+              "er": 0.3057
+            }
+          ]
         }
       },
       "qe": 1068,
@@ -56,19 +184,178 @@
           "spend": 738.7,
           "reach": 127000,
           "link_clicks": 13179,
-          "avg_freq": 3.7
+          "avg_freq": 3.7,
+          "campaigns": [
+            {
+              "name": "digital_activate_install7d_web",
+              "spend": 176.14,
+              "reach": 25400,
+              "freq": 4.81,
+              "clicks": 6504,
+              "cpc": 0.03,
+              "ctr": 5.33
+            },
+            {
+              "name": "digital_activate_install7d_web_reach",
+              "spend": 176.29,
+              "reach": 45150,
+              "freq": 3.32,
+              "clicks": 1152,
+              "cpc": 0.15,
+              "ctr": 0.77
+            },
+            {
+              "name": "digital_activate_install7d_app",
+              "spend": 178.57,
+              "reach": 17876,
+              "freq": 5.59,
+              "clicks": 5911,
+              "cpc": 0.03,
+              "ctr": 5.91
+            },
+            {
+              "name": "digital_activate_install7d_app_reach",
+              "spend": 172.29,
+              "reach": 30799,
+              "freq": 3.19,
+              "clicks": 1658,
+              "cpc": 0.1,
+              "ctr": 1.69
+            },
+            {
+              "name": "digital_job_appinstall_fb_addtocart_kiemdinhphim_asset",
+              "spend": 35.41,
+              "reach": 7775,
+              "freq": 2.08,
+              "clicks": 127,
+              "cpc": 0.28,
+              "ctr": 0.79
+            }
+          ]
         },
         "job_sgd": {
           "spend": 518.7,
           "reach": 77921,
           "link_clicks": 31712,
-          "avg_freq": 4.62
+          "avg_freq": 4.62,
+          "campaigns": [
+            {
+              "name": "digital_fb_job_worker",
+              "spend": 69.69,
+              "reach": 10173,
+              "freq": 4.2,
+              "clicks": 4791,
+              "cpc": 0.01,
+              "ctr": 11.22
+            },
+            {
+              "name": "digital_fb_job_baove",
+              "spend": 68.96,
+              "reach": 9947,
+              "freq": 4.32,
+              "clicks": 4866,
+              "cpc": 0.01,
+              "ctr": 11.33
+            },
+            {
+              "name": "digital_fb_job_nvkd",
+              "spend": 34.13,
+              "reach": 4970,
+              "freq": 5.25,
+              "clicks": 965,
+              "cpc": 0.04,
+              "ctr": 3.7
+            },
+            {
+              "name": "digital_fb_job_taixe",
+              "spend": 69.75,
+              "reach": 11844,
+              "freq": 5.09,
+              "clicks": 6383,
+              "cpc": 0.01,
+              "ctr": 10.6
+            },
+            {
+              "name": "digital_fb_job_nvkv",
+              "spend": 69.24,
+              "reach": 11158,
+              "freq": 4.47,
+              "clicks": 4275,
+              "cpc": 0.02,
+              "ctr": 8.57
+            },
+            {
+              "name": "digital_fb_job_nvpv",
+              "spend": 68.9,
+              "reach": 11946,
+              "freq": 4.07,
+              "clicks": 2575,
+              "cpc": 0.03,
+              "ctr": 5.3
+            },
+            {
+              "name": "digital_fb_job_shipper",
+              "spend": 69.16,
+              "reach": 8983,
+              "freq": 4.91,
+              "clicks": 3566,
+              "cpc": 0.02,
+              "ctr": 8.09
+            },
+            {
+              "name": "digital_fb_job_banhang",
+              "spend": 68.87,
+              "reach": 8900,
+              "freq": 4.37,
+              "clicks": 3226,
+              "cpc": 0.02,
+              "ctr": 8.29
+            }
+          ]
         },
         "gds_elt_sgd": {
           "spend": 427.01,
           "reach": 219706,
           "link_clicks": 16372,
-          "avg_freq": 3.19
+          "avg_freq": 3.19,
+          "campaigns": [
+            {
+              "name": "digital_elt_bl_mf_clicklink_web",
+              "spend": 218.31,
+              "reach": 22156,
+              "freq": 6.32,
+              "clicks": 13952,
+              "cpc": 0.02,
+              "ctr": 9.97
+            },
+            {
+              "name": "digital_elt_bl_tf_engagement_sănĐT",
+              "spend": 77.76,
+              "reach": 86292,
+              "freq": 1.21,
+              "clicks": 15937,
+              "cpc": 0.0,
+              "ctr": 15.32
+            },
+            {
+              "name": "digital_elt_fb_web_rtg",
+              "spend": 71.18,
+              "reach": 37029,
+              "freq": 3.19,
+              "clicks": 5419,
+              "cpc": 0.01,
+              "ctr": 4.59
+            },
+            {
+              "name": "digital_elt_bl_tf_engage_video_sănĐT",
+              "spend": 59.76,
+              "reach": 74229,
+              "freq": 1.46,
+              "clicks": 2164,
+              "cpc": 0.03,
+              "ctr": 2.0
+            }
+          ]
         }
       },
       "link_clicks": 61263
@@ -84,7 +371,54 @@
           "qe": 1049,
           "cpe": 0.24,
           "er": 0.8222,
-          "avg_freq": 2.35
+          "avg_freq": 2.35,
+          "campaigns": [
+            {
+              "name": "job_recruiter_index2026_leadform",
+              "spend": 136.62,
+              "reach": 23738,
+              "freq": 2.46,
+              "clicks": 1912,
+              "cpc": 0.07,
+              "ctr": 3.28
+            },
+            {
+              "name": "job_recruiter_growth_AWO_reach",
+              "spend": 46.63,
+              "reach": 87239,
+              "freq": 1.39,
+              "clicks": 332,
+              "cpc": 0.14,
+              "ctr": 0.27
+            },
+            {
+              "name": "job_recruiter_push-spending_may-jun26_sales",
+              "spend": 20.92,
+              "reach": 4093,
+              "freq": 4.29,
+              "clicks": 122,
+              "cpc": 0.17,
+              "ctr": 0.69
+            },
+            {
+              "name": "job_recruiter_growth_may-jun26_sales",
+              "spend": 30.06,
+              "reach": 8113,
+              "freq": 9.78,
+              "clicks": 247,
+              "cpc": 0.12,
+              "ctr": 0.31
+            },
+            {
+              "name": "job_recruiter_growth_may-jun26_sales-2",
+              "spend": 17.15,
+              "reach": 4402,
+              "freq": 2.94,
+              "clicks": 116,
+              "cpc": 0.15,
+              "ctr": 0.89
+            }
+          ]
         },
         "pty_sgd": {
           "spend": 0.0,
@@ -98,5 +432,119 @@
       "er": 0.8222
     }
   },
-  "watch_list": []
+  "watch_list": [
+    {
+      "account": "job_trade_sgd",
+      "group": "VERTICAL",
+      "campaign": "job_recruiter_growth_may-jun26_sales",
+      "freq": 9.78,
+      "spend": 30.06
+    },
+    {
+      "account": "gds_elt_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_elt_bl_mf_clicklink_web",
+      "freq": 6.32,
+      "spend": 218.31
+    },
+    {
+      "account": "growth_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_activate_install7d_app",
+      "freq": 5.59,
+      "spend": 178.57
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_nvkd",
+      "freq": 5.25,
+      "spend": 34.13
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_taixe",
+      "freq": 5.09,
+      "spend": 69.75
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_shipper",
+      "freq": 4.91,
+      "spend": 69.16
+    },
+    {
+      "account": "growth_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_activate_install7d_web",
+      "freq": 4.81,
+      "spend": 176.14
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_nvkv",
+      "freq": 4.47,
+      "spend": 69.24
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_banhang",
+      "freq": 4.37,
+      "spend": 68.87
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_baove",
+      "freq": 4.32,
+      "spend": 68.96
+    },
+    {
+      "account": "job_trade_sgd",
+      "group": "VERTICAL",
+      "campaign": "job_recruiter_push-spending_may-jun26_sales",
+      "freq": 4.29,
+      "spend": 20.92
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_worker",
+      "freq": 4.2,
+      "spend": 69.69
+    },
+    {
+      "account": "job_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_fb_job_nvpv",
+      "freq": 4.07,
+      "spend": 68.9
+    },
+    {
+      "account": "growth_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_activate_install7d_web_reach",
+      "freq": 3.32,
+      "spend": 176.29
+    },
+    {
+      "account": "growth_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_activate_install7d_app_reach",
+      "freq": 3.19,
+      "spend": 172.29
+    },
+    {
+      "account": "gds_elt_sgd",
+      "group": "GROWTH",
+      "campaign": "digital_elt_fb_web_rtg",
+      "freq": 3.19,
+      "spend": 71.18
+    }
+  ],
+  "detail_available": true
 }
