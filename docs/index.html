@@ -73,10 +73,10 @@
     .cw{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 
     /* ── Tabs ──────────────────────────────────── */
-    .tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto}
-    .tab-btn{background:transparent;border:none;border-bottom:2px solid transparent;padding:10px 18px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;margin-bottom:-1px}
-    .tab-btn:hover{color:var(--text)}
-    .tab-btn.on{color:var(--brand);border-bottom-color:var(--brand)}
+    .tab-bar{display:flex;gap:4px;border-bottom:2px solid var(--border);background:var(--surface);overflow-x:auto;padding:10px 16px 0}
+    .tab-btn{background:var(--bg);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;padding:10px 22px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;margin-bottom:-2px;transition:color .15s,background .15s}
+    .tab-btn:hover{color:var(--text);background:#f0f4ff}
+    .tab-btn.on{color:var(--brand);background:var(--surface);border-color:var(--border);border-bottom-color:var(--surface)}
     .tab-pane{display:none}
     .tab-pane.on{display:block}
 
