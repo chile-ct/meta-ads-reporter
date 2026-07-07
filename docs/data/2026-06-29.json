@@ -1,20 +1,20 @@
 {
   "week_start": "2026-06-29",
-  "week_label": "Jun 29–5, 2026",
-  "total_spend": 2739.55,
-  "generated_at": "2026-07-06T09:00:00Z",
+  "week_label": "Jun 29–Jul 5, 2026",
+  "total_spend": 2739.88,
+  "generated_at": "2026-07-07T00:00:00Z",
   "detail_available": true,
   "groups": {
     "BRAND": {
-      "spend": 1279.37,
+      "spend": 1279.49,
       "reach": 1378449,
       "avg_freq": 1.33,
-      "qe": 1077,
-      "cpe": 1.19,
-      "er": 0.0781,
+      "qe": 905,
+      "cpe": 1.41,
+      "er": 0.0657,
       "accounts": {
         "gds_brand": {
-          "spend": 142.56,
+          "spend": 142.59,
           "reach": 57829,
           "qe": 29,
           "cpe": 4.92,
@@ -23,14 +23,14 @@
           "campaigns": [
             {
               "name": "brand_eng_gds_b2c_0726",
-              "spend": 76.07,
+              "spend": 76.1,
               "reach": 33842,
               "freq": 2.1,
               "clicks": 1668,
               "cpc": 0.05,
               "ctr": 2.34,
               "qe": 19,
-              "cpe": 4.0,
+              "cpe": 4.01,
               "er": 0.0561
             },
             {
@@ -60,24 +60,24 @@
           ]
         },
         "pty_branding_sgd": {
-          "spend": 584.0,
+          "spend": 584.04,
           "reach": 637107,
-          "qe": 438,
-          "cpe": 1.33,
-          "er": 0.0688,
+          "qe": 345,
+          "cpe": 1.69,
+          "er": 0.0542,
           "avg_freq": 1.23,
           "campaigns": [
             {
               "name": "brand_eng_sale_pty_b2c_0726",
-              "spend": 265.91,
+              "spend": 265.95,
               "reach": 278278,
               "freq": 1.23,
-              "clicks": 11997,
+              "clicks": 11999,
               "cpc": 0.02,
               "ctr": 3.51,
-              "qe": 188,
-              "cpe": 1.41,
-              "er": 0.0676
+              "qe": 130,
+              "cpe": 2.05,
+              "er": 0.0467
             },
             {
               "name": "brand_eng_pty_b2b_0726",
@@ -87,9 +87,9 @@
               "clicks": 1045,
               "cpc": 0.14,
               "ctr": 0.5,
-              "qe": 2,
-              "cpe": 73.72,
-              "er": 0.0014
+              "qe": 1,
+              "cpe": 147.44,
+              "er": 0.0007
             },
             {
               "name": "brand_eng_market_index_q1_2026_b2b",
@@ -99,9 +99,9 @@
               "clicks": 681,
               "cpc": 0.05,
               "ctr": 2.73,
-              "qe": 109,
-              "cpe": 0.3,
-              "er": 0.5046
+              "qe": 94,
+              "cpe": 0.34,
+              "er": 0.4351
             },
             {
               "name": "brand_eng_sale_pty_b2c_0626",
@@ -111,9 +111,9 @@
               "clicks": 6346,
               "cpc": 0.01,
               "ctr": 12.75,
-              "qe": 28,
-              "cpe": 1.23,
-              "er": 0.0623
+              "qe": 18,
+              "cpe": 1.92,
+              "er": 0.0401
             },
             {
               "name": "brand_eng_renter_pty_b2c_0626",
@@ -123,12 +123,12 @@
               "clicks": 549,
               "cpc": 0.03,
               "ctr": 2.03,
-              "qe": 93,
-              "cpe": 0.19,
-              "er": 0.3652
+              "qe": 84,
+              "cpe": 0.21,
+              "er": 0.3298
             },
             {
-              "name": "brand_eng_pty_b2b_0626",
+              "name": "brand_eng_pty_b2b_0626 (2)",
               "spend": 72.78,
               "reach": 80164,
               "freq": 1.03,
@@ -154,24 +154,24 @@
           ]
         },
         "veh_brand": {
-          "spend": 250.8,
+          "spend": 250.85,
           "reach": 315287,
-          "qe": 160,
-          "cpe": 1.57,
-          "er": 0.0508,
+          "qe": 142,
+          "cpe": 1.77,
+          "er": 0.045,
           "avg_freq": 1.44,
           "campaigns": [
             {
               "name": "brand_eng_veh_b2c_0726",
-              "spend": 221.9,
+              "spend": 221.95,
               "reach": 284272,
               "freq": 1.48,
               "clicks": 7434,
               "cpc": 0.03,
               "ctr": 1.77,
-              "qe": 141,
-              "cpe": 1.57,
-              "er": 0.0496
+              "qe": 125,
+              "cpe": 1.78,
+              "er": 0.044
             },
             {
               "name": "brand_eng_veh_b2c_0626",
@@ -181,18 +181,18 @@
               "clicks": 625,
               "cpc": 0.05,
               "ctr": 1.88,
-              "qe": 19,
-              "cpe": 1.52,
-              "er": 0.0613
+              "qe": 17,
+              "cpe": 1.7,
+              "er": 0.0548
             }
           ]
         },
         "job_branding_sgd": {
           "spend": 302.01,
           "reach": 368226,
-          "qe": 450,
-          "cpe": 0.67,
-          "er": 0.1222,
+          "qe": 389,
+          "cpe": 0.78,
+          "er": 0.1056,
           "avg_freq": 1.35,
           "campaigns": [
             {
@@ -203,9 +203,9 @@
               "clicks": 17167,
               "cpc": 0.01,
               "ctr": 4.34,
-              "qe": 382,
-              "cpe": 0.57,
-              "er": 0.1372
+              "qe": 329,
+              "cpe": 0.66,
+              "er": 0.1182
             },
             {
               "name": "brand_job_eng_b2c_0626",
@@ -215,9 +215,9 @@
               "clicks": 4194,
               "cpc": 0.01,
               "ctr": 5.95,
-              "qe": 49,
-              "cpe": 1.15,
-              "er": 0.0783
+              "qe": 42,
+              "cpe": 1.34,
+              "er": 0.0671
             },
             {
               "name": "brand_job_eng_b2b_0626",
@@ -227,29 +227,29 @@
               "clicks": 4136,
               "cpc": 0.01,
               "ctr": 12.82,
-              "qe": 19,
-              "cpe": 1.5,
-              "er": 0.0696
+              "qe": 18,
+              "cpe": 1.58,
+              "er": 0.0659
             }
           ]
         }
       }
     },
     "GROWTH": {
-      "spend": 1228.99,
+      "spend": 1229.17,
       "reach": 447978,
       "avg_freq": 2.41,
-      "link_clicks": 35522,
+      "link_clicks": 35523,
       "accounts": {
         "growth_sgd": {
-          "spend": 445.22,
+          "spend": 445.33,
           "reach": 95628,
           "link_clicks": 1321,
           "avg_freq": 1.79,
           "campaigns": [
             {
               "name": "digital_gds_appinstall_fb_atc_web_visitor_l180d_040626",
-              "spend": 168.38,
+              "spend": 168.44,
               "reach": 30421,
               "freq": 1.76,
               "clicks": 312,
@@ -258,7 +258,7 @@
             },
             {
               "name": "digital_gds_appinstall_fb_atc_broad_040626",
-              "spend": 199.47,
+              "spend": 199.52,
               "reach": 49602,
               "freq": 1.52,
               "clicks": 752,
@@ -304,7 +304,7 @@
           ]
         },
         "job_sgd": {
-          "spend": 294.24,
+          "spend": 294.26,
           "reach": 48408,
           "link_clicks": 14092,
           "avg_freq": 4.49,
@@ -374,7 +374,7 @@
             },
             {
               "name": "digital_fb_job_baove",
-              "spend": 63.0,
+              "spend": 63.02,
               "reach": 9981,
               "freq": 4.54,
               "clicks": 3586,
@@ -384,9 +384,9 @@
           ]
         },
         "gds_elt_sgd": {
-          "spend": 489.53,
+          "spend": 489.58,
           "reach": 303942,
-          "link_clicks": 20109,
+          "link_clicks": 20110,
           "avg_freq": 2.27,
           "campaigns": [
             {
@@ -409,19 +409,19 @@
             },
             {
               "name": "digital_elt_bl_mf_clicklink_web",
-              "spend": 254.57,
+              "spend": 254.61,
               "reach": 30570,
               "freq": 7.49,
-              "clicks": 17335,
+              "clicks": 17336,
               "cpc": 0.01,
               "ctr": 7.57
             },
             {
               "name": "digital_elt_bl_tf_engagement_sanDT",
-              "spend": 88.75,
+              "spend": 88.76,
               "reach": 128861,
               "freq": 1.22,
-              "clicks": 32434,
+              "clicks": 32435,
               "cpc": 0.0,
               "ctr": 20.68
             }
@@ -430,22 +430,22 @@
       }
     },
     "VERTICAL": {
-      "spend": 231.19,
+      "spend": 231.22,
       "reach": 130600,
       "avg_freq": 2.97,
-      "qe": 647,
-      "cpl": 0.36,
+      "qe": 643,
+      "cpl": 0.24,
       "accounts": {
         "job_trade_sgd": {
-          "spend": 155.44,
+          "spend": 155.45,
           "reach": 54380,
-          "qe": 647,
+          "qe": 643,
           "cpl": 0.24,
           "avg_freq": 5.62,
           "campaigns": [
             {
               "name": "job_recruiter_growth_jun26_sales",
-              "spend": 84.06,
+              "spend": 84.07,
               "reach": 12446,
               "freq": 14.52,
               "clicks": 504,
@@ -464,7 +464,7 @@
           ]
         },
         "pty_sgd": {
-          "spend": 75.75,
+          "spend": 75.77,
           "reach": 76220,
           "link_clicks": 581,
           "avg_freq": 1.08,
@@ -480,7 +480,7 @@
             },
             {
               "name": "digital_fb_pty_let_apartment_conversion",
-              "spend": 26.23,
+              "spend": 26.25,
               "reach": 27016,
               "freq": 1.09,
               "clicks": 294,
@@ -507,7 +507,7 @@
       "group": "VERTICAL",
       "campaign": "job_recruiter_growth_jun26_sales",
       "freq": 14.52,
-      "spend": 84.06
+      "spend": 84.07
     },
     {
       "account": "job_sgd",
@@ -521,7 +521,7 @@
       "group": "GROWTH",
       "campaign": "digital_elt_bl_mf_clicklink_web",
       "freq": 7.49,
-      "spend": 254.57
+      "spend": 254.61
     },
     {
       "account": "job_sgd",
@@ -542,7 +542,7 @@
       "group": "GROWTH",
       "campaign": "digital_fb_job_baove",
       "freq": 4.54,
-      "spend": 63.0
+      "spend": 63.02
     },
     {
       "account": "job_sgd",
