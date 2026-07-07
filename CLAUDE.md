@@ -5,6 +5,22 @@
 
 ---
 
+## Session Setup (chạy đầu mỗi session)
+
+Trước khi làm bất kỳ việc gì liên quan đến GitHub push, Claude cần config git với Personal Access Token:
+
+```bash
+git remote set-url origin https://chile-ct:TOKEN@github.com/chile-ct/meta-ads-reporter.git
+git config user.email noreply@anthropic.com
+git config user.name Claude
+```
+
+**Cách lấy TOKEN:** Token được lưu trong GitHub Secrets của repo (`GH_PAT`). Nếu không có sẵn, hỏi người dùng cung cấp PAT (tạo tại github.com/settings/tokens, scope: `repo`).
+
+Nếu người dùng chưa cung cấp token khi bắt đầu session → hỏi ngay: *"Bạn có GitHub PAT không? Cần để push data lên GitHub sau khi chạy xong."*
+
+---
+
 ## Lịch chạy
 
 **Production run:** Mỗi thứ 2 lúc 9h sáng ICT
