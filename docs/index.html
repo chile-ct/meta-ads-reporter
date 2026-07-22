@@ -89,7 +89,11 @@
     .tab-pane{display:none}
     .tab-pane.on{display:block}
     .dig-sub{margin-top:16px}
-    .dig-sub .tab-bar{padding:0;border-bottom:2px solid var(--border);margin-bottom:14px}
+    .dig-sub .tab-bar{padding:6px;border:none;gap:8px;background:#eef2f7;border-radius:12px;margin-bottom:16px}
+    .dig-sub .tab-btn{border-radius:9px;border:1px solid var(--border);background:#fff;color:var(--muted);margin-bottom:0}
+    .dig-sub .tab-btn:hover{background:#f8fafc;color:var(--text)}
+    .dig-sub .tab-btn.on{background:#10b981;color:#fff;border-color:#10b981;box-shadow:0 2px 6px rgba(16,185,129,.35)}
+    .dig-sub .tab-btn.on .tab-meta{color:#e7fff6}
     .dig-sub .tab-pane{padding-top:4px}
     .vert-group{margin:0 0 18px}
     .vert-title{font-size:14px;font-weight:800;color:var(--text);margin:0 0 8px;padding:6px 10px;background:#ecfdf5;border-left:4px solid #10b981;border-radius:4px}
@@ -214,12 +218,13 @@
 
 <script>
 /* ── Constants ──────────────────────────────────────────── */
+// Exact account names as shown in Meta Ads Manager (for easy cross-checking)
 const ACCT_LBL={
-  gds_brand:'GDS Brand',pty_branding_sgd:'PTY Branding',
-  veh_brand:'VEH Brand',job_branding_sgd:'Job Branding',
-  job_sgd:'Job SGD',growth_sgd:'Growth SGD',veh_sgd:'VEH SGD',gds_elt_sgd:'GDS ELT',
-  pty_app:'PTY App',job_app:'Job App',pty_sgd:'PTY SGD',
-  pty_seller_sgd:'PTY Seller',job_trade_sgd:'Job Trade',
+  gds_brand:'gds_brand',pty_branding_sgd:'pty_branding_sgd',
+  veh_brand:'veh_brand',job_branding_sgd:'job_branding_sgd',
+  job_sgd:'job_sgd',growth_sgd:'growth_sgd',veh_sgd:'veh_sgd',gds_elt_sgd:'gds_elt_sgd',
+  pty_app:'pty_app',job_app:'job_app',pty_sgd:'pty_sgd',
+  pty_seller_sgd:'pty_seller_sgd',job_trade_sgd:'job_trade_sgd',
 };
 const B_ACCTS=['gds_brand','pty_branding_sgd','veh_brand','job_branding_sgd'];
 const G_ACCTS=['job_sgd','growth_sgd','veh_sgd','gds_elt_sgd','pty_app','job_app','pty_sgd'];
