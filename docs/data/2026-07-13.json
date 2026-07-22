@@ -1,38 +1,95 @@
 {
   "week_start": "2026-07-13",
   "week_label": "Jul 13–19, 2026",
-  "generated_at": "2026-07-22T08:03:05.014754+00:00",
+  "generated_at": "2026-07-22T08:18:45.273924+00:00",
   "groups": {
     "BRAND": {
-      "spend": 0,
-      "qe": 0,
-      "er": 0.0,
-      "cpe": 0.0,
-      "installs": 0,
-      "cpi": 0.0,
-      "active_camps": 0,
+      "spend": 2782.03,
+      "qe": 858,
+      "er": 0.0403,
+      "cpe": 3.24,
+      "installs": 1219,
+      "cpi": 2.28,
+      "active_camps": 11,
       "red_freq_camps": 0
     },
     "GROWTH": {
-      "spend": 0,
-      "qe": 0,
-      "er": 0.0,
-      "cpe": 0.0,
-      "installs": 0,
-      "cpi": 0.0,
-      "active_camps": 0,
-      "red_freq_camps": 0
+      "spend": 3604.65,
+      "qe": 179329,
+      "er": 15.9734,
+      "cpe": 0.02,
+      "installs": 2696,
+      "cpi": 1.14,
+      "active_camps": 32,
+      "red_freq_camps": 5
     },
     "VERTICAL": {
-      "spend": 0,
-      "qe": 0,
-      "er": 0.0,
-      "cpe": 0.0,
+      "spend": 144.2,
+      "qe": 444,
+      "er": 1.0472,
+      "cpe": 0.32,
       "installs": 0,
       "cpi": 0.0,
-      "active_camps": 0,
+      "active_camps": 2,
       "red_freq_camps": 0
     }
   },
-  "watch_list": []
+  "watch_list": [
+    {
+      "name": "fb_growth_pty_app_android_demand_app_rtg_let_1050_FBSDK",
+      "account": "pty_sgd",
+      "frequency": 11.05,
+      "spend": 34.95,
+      "flag": "🔴"
+    },
+    {
+      "name": "digital_veh_car_bl_mf_clicklink",
+      "account": "veh_sgd",
+      "frequency": 8.31,
+      "spend": 266.7,
+      "flag": "🔴"
+    },
+    {
+      "name": "digital_fb_job_nvkd",
+      "account": "job_sgd",
+      "frequency": 8.18,
+      "spend": 70.3,
+      "flag": "🔴"
+    },
+    {
+      "name": "digital_veh_mc_bl_mf_clicklink",
+      "account": "veh_sgd",
+      "frequency": 7.38,
+      "spend": 400.01,
+      "flag": "🔴"
+    },
+    {
+      "name": "digital_elt_bl_mf_clicklink_web",
+      "account": "gds_elt_sgd",
+      "frequency": 7.26,
+      "spend": 460.57,
+      "flag": "🔴"
+    },
+    {
+      "name": "digital_veh_car_bl_mf_clicklink_seg5",
+      "account": "veh_sgd",
+      "frequency": 5.67,
+      "spend": 243.64,
+      "flag": "🟡"
+    },
+    {
+      "name": "digital_fb_job_banhang",
+      "account": "job_sgd",
+      "frequency": 4.85,
+      "spend": 63.11,
+      "flag": "🟡"
+    },
+    {
+      "name": "digital_fb_job_baove",
+      "account": "job_sgd",
+      "frequency": 4.71,
+      "spend": 63.67,
+      "flag": "🟡"
+    }
+  ]
 }
