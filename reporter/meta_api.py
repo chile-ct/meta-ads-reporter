@@ -54,9 +54,10 @@ def get_active_campaign_ids(account_id: str) -> set:
 
 
 def fetch_campaigns(account_id: str, since: str, until: str) -> list[dict]:
+    # Currently-active campaign IDs are used ONLY to flag campaigns,
+    # never to filter them out. A campaign paused mid-week still spent
+    # money during the week, so its spend/metrics must be kept.
     active_ids = get_active_campaign_ids(account_id)
-    if not active_ids:
-        return []
 
     url = f"{META_GRAPH_URL}/act_{account_id}/insights"
     params = {
@@ -72,9 +73,6 @@ def fetch_campaigns(account_id: str, since: str, until: str) -> list[dict]:
     while url:
         data = _get(url, params)
         for row in data.get("data", []):
-            if row.get("campaign_id") not in active_ids:
-                continue
-
             actions  = row.get("actions", [])
             spend    = float(row.get("spend", 0) or 0)
             impr     = int(row.get("impressions", 0) or 0)
@@ -98,6 +96,7 @@ def fetch_campaigns(account_id: str, since: str, until: str) -> list[dict]:
             campaigns.append({
                 "id":         row.get("campaign_id"),
                 "name":       name,
+                "is_active":  row.get("campaign_id") in active_ids,
                 "spend":      spend,
                 "impressions": impr,
                 "reach":      reach,

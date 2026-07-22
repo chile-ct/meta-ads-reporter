@@ -80,6 +80,11 @@ def aggregate(campaigns: list) -> dict:
     reach        = sum(c["reach"] for c in campaigns)
     installs     = sum(c["installs"] for c in campaigns)
     inst_spend   = sum(c["spend"] for c in campaigns if c["is_install"])
+    # A campaign is counted as "active" if it spent money during the window
+    # (paused-mid-week campaigns still spent, so they count). red_freq_camps
+    # flags the ones that hit the critical frequency threshold.
+    active_camps = sum(1 for c in campaigns if c["spend"] > 0)
+    red_freq     = sum(1 for c in campaigns if c["frequency"] >= FREQ_YELLOW)
     return {
         "spend":    spend,
         "qe":       qe,
@@ -88,6 +93,8 @@ def aggregate(campaigns: list) -> dict:
         "cpe":      (spend / qe) if qe > 0 else 0.0,
         "installs": installs,
         "cpi":      (inst_spend / installs) if installs > 0 else 0.0,
+        "active_camps":   active_camps,
+        "red_freq_camps": red_freq,
         "campaigns": campaigns,
     }
 
@@ -212,6 +219,8 @@ def save_weekly_snapshot(groups_w1: dict, watch_list: list, w_label_str: str, da
                 "cpe":      round(groups_w1[name]["cpe"], 2),
                 "installs": int(groups_w1[name].get("installs", 0)),
                 "cpi":      round(groups_w1[name].get("cpi", 0), 2),
+                "active_camps":   int(groups_w1[name].get("active_camps", 0)),
+                "red_freq_camps": int(groups_w1[name].get("red_freq_camps", 0)),
             }
             for name in ("BRAND", "GROWTH", "VERTICAL")
         },

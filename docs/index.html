@@ -280,6 +280,29 @@ function deriveMetrics(m){
   };
 }
 
+/* ── Campaign counts ────────────────────────────────────────
+   active = campaigns that ran (spend > 0) in the week — includes
+   ones paused mid-week; red = campaigns with frequency ≥ 7.
+   Prefers explicit group fields, else derives from campaigns. */
+function campCounts(m){
+  if(!m)return{active:null,red:null};
+  let active=m.active_camps??null,red=m.red_freq_camps??null;
+  if(active==null||red==null){
+    let a=0,r=0,found=false;
+    if(m.accounts){
+      Object.values(m.accounts).forEach(ac=>{
+        (ac.campaigns||[]).forEach(c=>{
+          found=true;
+          if((c.spend||0)>0)a++;
+          if((c.freq||c.frequency||0)>=7)r++;
+        });
+      });
+    }
+    if(found){if(active==null)active=a;if(red==null)red=r;}
+  }
+  return{active,red};
+}
+
 /* ── Auto-generate key insights for historical weeks ────── */
 function computeInsights(c,p){
   if(c.key_insights?.length)return c.key_insights;
@@ -366,6 +389,10 @@ function renderGSTable(c,p){
   const dB=deriveMetrics(b),dG=deriveMetrics(g),dV=deriveMetrics(v);
   const pdB=deriveMetrics(pb),pdG=deriveMetrics(pg),pdV=deriveMetrics(pv);
 
+  // Campaign counts (active = ran with spend>0; red = freq≥7)
+  const cB=campCounts(b),cG=campCounts(g),cV=campCounts(v);
+  const pcB=campCounts(pb),pcG=campCounts(pg),pcV=campCounts(pv);
+
   const rows=[
     {div:'OVERVIEW'},
     {l:'Objective',
@@ -373,13 +400,13 @@ function renderGSTable(c,p){
      gv:g.objective||'Traffic/Install',
      vv:v.objective||'Traffic/Lead'},
     {l:'# Active Camps',
-     bv:b.active_camps!=null?cw(b.active_camps,pb?.active_camps,b.active_camps):'—',
-     gv:g.active_camps!=null?cw(g.active_camps,pg?.active_camps,g.active_camps):'—',
-     vv:v.active_camps!=null?cw(v.active_camps,pv?.active_camps,v.active_camps):'—'},
+     bv:cB.active!=null?cw(cB.active,pcB.active,cB.active):'—',
+     gv:cG.active!=null?cw(cG.active,pcG.active,cG.active):'—',
+     vv:cV.active!=null?cw(cV.active,pcV.active,cV.active):'—'},
     {l:'🔴 Freq≥7 Camps',
-     bv:b.red_freq_camps!=null?b.red_freq_camps:'—',
-     gv:g.red_freq_camps!=null?g.red_freq_camps:'—',
-     vv:v.red_freq_camps!=null?v.red_freq_camps:'—'},
+     bv:cB.red!=null?cB.red:'—',
+     gv:cG.red!=null?cG.red:'—',
+     vv:cV.red!=null?cV.red:'—'},
     {div:'SPEND'},
     {l:'Spend (SGD)',
      bv:cw(b.spend,pb?.spend,`SGD ${fm(b.spend)}`),
