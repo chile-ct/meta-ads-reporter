@@ -244,6 +244,42 @@ function cw(val,prev,label){
   return `<span class="cw">${label!=null?label:val}${w?' '+w:''}</span>`;
 }
 
+/* ── Derived metrics (single source of truth) ───────────────
+   impressions = reach × frequency
+   CPC = spend / clicks
+   CPM = spend / impressions × 1000
+   CTR = clicks / impressions × 100
+   Aggregates from campaigns when available (impressions & clicks
+   are additive), else falls back to reach × avg_freq / link_clicks. */
+function deriveMetrics(m){
+  if(!m)return null;
+  let imp=0,clk=0,fromDetail=false;
+  if(m.campaigns?.length){
+    fromDetail=true;
+    m.campaigns.forEach(c=>{
+      imp+=(c.reach||0)*(c.freq||c.frequency||0);
+      clk+=(c.clicks??c.qe??0);
+    });
+  }else if(m.accounts){
+    Object.values(m.accounts).forEach(a=>{
+      const d=deriveMetrics(a);
+      if(d&&(d.impressions||d.clicks)){imp+=d.impressions||0;clk+=d.clicks||0;fromDetail=true;}
+    });
+  }
+  if(!fromDetail){
+    imp=m.impressions||((m.avg_freq||0)*(m.reach||0))||0;
+    clk=m.link_clicks??m.clicks??m.qe??0;
+  }
+  const spend=m.spend||0;
+  return {
+    impressions:imp||0,
+    clicks:clk||0,
+    cpc:clk?spend/clk:0,
+    cpm:imp?spend/imp*1000:0,
+    ctr:imp?clk/imp*100:0,
+  };
+}
+
 /* ── Auto-generate key insights for historical weeks ────── */
 function computeInsights(c,p){
   if(c.key_insights?.length)return c.key_insights;
@@ -326,6 +362,10 @@ function renderGSTable(c,p){
   const gER = g.reach ? (gClk / g.reach * 100) : (g.er||0);
   const pgER = pg?.reach ? ((pgClk||0) / pg.reach * 100) : (pg?.er||null);
 
+  // Derived impressions/clicks/CPM/CPC/CTR per group (+ prev for WoW)
+  const dB=deriveMetrics(b),dG=deriveMetrics(g),dV=deriveMetrics(v);
+  const pdB=deriveMetrics(pb),pdG=deriveMetrics(pg),pdV=deriveMetrics(pv);
+
   const rows=[
     {div:'OVERVIEW'},
     {l:'Objective',
@@ -351,29 +391,29 @@ function renderGSTable(c,p){
      vv:tot?(((v.spend||0)/tot*100).toFixed(1)+'%'):'—'},
     {div:'PERFORMANCE'},
     {l:'Impressions',
-     bv:b.impressions?cw(b.impressions,pb?.impressions,fi(b.impressions)):'—',
-     gv:g.impressions?cw(g.impressions,pg?.impressions,fi(g.impressions)):'—',
-     vv:(v.impressions||0)>0?cw(v.impressions,pv?.impressions,fi(v.impressions)):'—'},
+     bv:dB.impressions?cw(dB.impressions,pdB?.impressions,fi(dB.impressions)):'—',
+     gv:dG.impressions?cw(dG.impressions,pdG?.impressions,fi(dG.impressions)):'—',
+     vv:dV.impressions?cw(dV.impressions,pdV?.impressions,fi(dV.impressions)):'—'},
     {l:'Reach',
      bv:cw(b.reach,pb?.reach,fi(b.reach)),
      gv:cw(g.reach,pg?.reach,fi(g.reach)),
      vv:cw(v.reach||0,pv?.reach,fi(v.reach||0))},
     {l:'Clicks',
-     bv:b.clicks?cw(b.clicks,pb?.clicks,fi(b.clicks)):'—',
-     gv:cw(gClk,pgClk,fi(gClk)),
-     vv:(v.clicks||0)>0?cw(v.clicks,pv?.clicks,fi(v.clicks)):'—'},
+     bv:dB.clicks?cw(dB.clicks,pdB?.clicks,fi(dB.clicks)):'—',
+     gv:dG.clicks?cw(dG.clicks,pdG?.clicks,fi(dG.clicks)):'—',
+     vv:dV.clicks?cw(dV.clicks,pdV?.clicks,fi(dV.clicks)):'—'},
     {l:'Avg CPM (SGD)',
-     bv:b.cpm?cw(b.cpm,pb?.cpm,fm(b.cpm)):'—',
-     gv:g.cpm?cw(g.cpm,pg?.cpm,fm(g.cpm)):'—',
-     vv:v.cpm?cw(v.cpm,pv?.cpm,fm(v.cpm)):'—'},
+     bv:dB.cpm?cw(dB.cpm,pdB?.cpm,fm(dB.cpm)):'—',
+     gv:dG.cpm?cw(dG.cpm,pdG?.cpm,fm(dG.cpm)):'—',
+     vv:dV.cpm?cw(dV.cpm,pdV?.cpm,fm(dV.cpm)):'—'},
     {l:'Avg CPC (SGD)',
-     bv:b.cpc?cw(b.cpc,pb?.cpc,fm(b.cpc)):'—',
-     gv:g.cpc?cw(g.cpc,pg?.cpc,fm(g.cpc)):'—',
-     vv:v.cpc?cw(v.cpc,pv?.cpc,fm(v.cpc)):'—'},
+     bv:dB.cpc?cw(dB.cpc,pdB?.cpc,fm(dB.cpc)):'—',
+     gv:dG.cpc?cw(dG.cpc,pdG?.cpc,fm(dG.cpc)):'—',
+     vv:dV.cpc?cw(dV.cpc,pdV?.cpc,fm(dV.cpc)):'—'},
     {l:'Avg CTR',
-     bv:b.ctr?cw(b.ctr,pb?.ctr,fp(b.ctr)):'—',
-     gv:g.ctr?cw(g.ctr,pg?.ctr,fp(g.ctr)):'—',
-     vv:v.ctr?cw(v.ctr,pv?.ctr,fp(v.ctr)):'—'},
+     bv:dB.ctr?cw(dB.ctr,pdB?.ctr,fp(dB.ctr)):'—',
+     gv:dG.ctr?cw(dG.ctr,pdG?.ctr,fp(dG.ctr)):'—',
+     vv:dV.ctr?cw(dV.ctr,pdV?.ctr,fp(dV.ctr)):'—'},
     {l:'Avg Frequency',
      bv:b.avg_freq?cw(b.avg_freq,pb?.avg_freq,ff(b.avg_freq)+(b.freq_flag?' '+b.freq_flag:'')):'—',
      gv:g.avg_freq?cw(g.avg_freq,pg?.avg_freq,ff(g.avg_freq)+(g.freq_flag?' '+g.freq_flag:'')):'—',
@@ -431,7 +471,11 @@ function campTable(camps,type,acctName=''){
     const nm=`<td><span class="camp-name">${camp.name}</span>${camp.audience?`<span class="camp-aud">${camp.audience}</span>`:''}</td>`;
     if(isBrand)return`<tr>${nm}<td>${fm(camp.spend)}</td><td>${fi(camp.reach)}</td><td>${freq_badge(camp.freq||camp.frequency)}</td><td>${fi(camp.qe)}</td><td>${fm(camp.cpe)}</td><td>${fp(camp.er)}</td></tr>`;
     const clk=camp.clicks??camp.qe??0;
-    const base=`${nm}<td>${fm(camp.spend)}</td><td>${fi(camp.reach)}</td><td>${fi(clk)}</td><td>${camp.ctr?fp(camp.ctr):'—'}</td><td>${fm(camp.cpc)}</td><td>${freq_badge(camp.freq||camp.frequency)}</td>`;
+    const cf=camp.freq||camp.frequency||0;
+    const cimp=(camp.reach||0)*cf;
+    const ccpc=clk?camp.spend/clk:0;
+    const cctr=cimp?clk/cimp*100:0;
+    const base=`${nm}<td>${fm(camp.spend)}</td><td>${fi(camp.reach)}</td><td>${fi(clk)}</td><td>${cctr?fp(cctr):'—'}</td><td>${ccpc?fm(ccpc):'—'}</td><td>${freq_badge(cf)}</td>`;
     if(showInstall){const inst=camp.installs??null;return`<tr>${base}<td>${inst!=null?fi(inst):'—'}</td><td>${inst>0?fm(camp.spend/inst):'—'}</td></tr>`;}
     return`<tr>${base}</tr>`;
   }).join('');
@@ -439,7 +483,7 @@ function campTable(camps,type,acctName=''){
   const tr=camps.reduce((s,c)=>s+(c.reach||0),0);
   const tc=camps.reduce((s,c)=>s+(c.clicks??c.qe??0),0);
   const tq=camps.reduce((s,c)=>s+(c.qe||0),0);
-  const ti=camps.reduce((s,c)=>s+(c.impressions||0),0);
+  const ti=camps.reduce((s,c)=>s+((c.reach||0)*(c.freq||c.frequency||0)),0);
   const tInst=camps.reduce((s,c)=>s+(c.installs||0),0);
   const af=ti&&tr?ti/tr:0;
   const totalRow=isBrand
@@ -470,15 +514,18 @@ function acctSumTable(accounts,acctList,type){
     const m=accounts[a];if(!m)return'';
     ts+=m.spend||0;tr+=m.reach||0;
     const lc=m.link_clicks??m.clicks??m.qe??0;tc+=lc;
-    tq+=m.qe||0;ti+=m.impressions||(m.avg_freq?m.avg_freq*(m.reach||0):0);
+    const d=deriveMetrics(m);
+    tq+=m.qe||0;ti+=d.impressions||0;
     const fr=m.avg_freq||0;
     if(isBrand)return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(m.qe)}</td><td>${fm(m.cpe)}</td><td>${fp(m.er)}</td><td>${freq_badge(fr)}</td></tr>`;
-    return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(lc)}</td><td>${m.ctr?fp(m.ctr):'—'}</td><td>${m.cpc?fm(m.cpc):'—'}</td><td>${freq_badge(fr)}</td></tr>`;
+    const actr=d.impressions?lc/d.impressions*100:0;
+    const acpc=lc?m.spend/lc:0;
+    return`<tr><td>${ACCT_LBL[a]||a}</td><td>${fm(m.spend)}</td><td>${fi(m.reach)}</td><td>${fi(lc)}</td><td>${actr?fp(actr):'—'}</td><td>${acpc?fm(acpc):'—'}</td><td>${freq_badge(fr)}</td></tr>`;
   }).join('');
   const af=ti&&tr?ti/tr:0;
   const totalRow=isBrand
     ?`<tr><td><strong>TOTAL</strong></td><td>${fm(ts)}</td><td>${fi(tr)}</td><td>${fi(tq)}</td><td>${fm(tq?ts/tq:0)}</td><td>${fp(tr?tq/tr*100:0)}</td><td>${freq_badge(af)}</td></tr>`
-    :`<tr><td><strong>TOTAL</strong></td><td>${fm(ts)}</td><td>${fi(tr)}</td><td>${fi(tc)}</td><td>${fp(ti&&tc?tc/ti*100:0)}</td><td>—</td><td>${freq_badge(af)}</td></tr>`;
+    :`<tr><td><strong>TOTAL</strong></td><td>${fm(ts)}</td><td>${fi(tr)}</td><td>${fi(tc)}</td><td>${fp(ti&&tc?tc/ti*100:0)}</td><td>${fm(tc?ts/tc:0)}</td><td>${freq_badge(af)}</td></tr>`;
   return`<div class="ov"><table class="ast"><thead>${th}</thead><tbody>${rows}${totalRow}</tbody></table></div>`;
 }
 
