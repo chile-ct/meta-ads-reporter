@@ -32,19 +32,27 @@ Nếu người dùng chưa cung cấp token khi bắt đầu session → hỏi n
 
 ---
 
-## 9 Ad Accounts
+## 13 Ad Accounts
 
-| Group | Account name | Account ID |
-|---|---|---|
-| BRAND | gds_brand | 253279950744492 |
-| BRAND | pty_branding_sgd | 697690298835029 |
-| BRAND | veh_brand | 937141594251635 |
-| BRAND | job_branding_sgd | 339646702235039 |
-| GROWTH | growth_sgd | 217167486615130 |
-| GROWTH | job_sgd | 1009648153146994 |
-| GROWTH | gds_elt_sgd | 655717678725444 |
-| VERTICAL | job_trade_sgd | 1581743339281376 |
-| VERTICAL | pty_sgd | 189567943020118 |
+Group = Team. Dashboard hiển thị group **GROWTH** dưới tab **Digital**. Phase (Demand/App) là metadata: App = focus install/CPI, Demand = focus link-click/QE.
+
+| Group | Account name | Account ID | Phase |
+|---|---|---|---|
+| BRAND | gds_brand | 253279950744492 | — |
+| BRAND | pty_branding_sgd | 697690298835029 | — |
+| BRAND | veh_brand | 937141594251635 | — |
+| BRAND | job_branding_sgd | 339646702235039 | — |
+| GROWTH | job_sgd | 1009648153146994 | Demand |
+| GROWTH | growth_sgd | 217167486615130 | App |
+| GROWTH | veh_sgd | 211751247179666 | Demand |
+| GROWTH | gds_elt_sgd | 655717678725444 | Demand |
+| GROWTH | pty_app | 1924712638163043 | App |
+| GROWTH | job_app | 1021879607190581 | App |
+| GROWTH | pty_sgd | 189567943020118 | Demand |
+| VERTICAL | pty_seller_sgd | 1632822317085217 | — |
+| VERTICAL | job_trade_sgd | 1581743339281376 | — |
+
+**Lưu ý MCP:** 3 account `veh_sgd`, `pty_app`, `pty_seller_sgd` hiện đang "Ads MCP disabled" — không pull được qua Meta Ads MCP (pull thủ công). Pipeline Python cron (GitHub Actions, dùng Graph API token) vẫn pull được bình thường.
 
 ---
 
@@ -102,7 +110,7 @@ time_range: {since: "YYYY-MM-DD", until: "YYYY-MM-DD"}
 fields: spend, reach, impressions, frequency, clicks, cpc, ctr, actions
 filtering: [{field: "spend", operator: "GREATER_THAN", value: "0"}]
 ```
-Pull W1 và W2 cho tất cả 9 accounts (18 API calls).
+Pull W1 và W2 cho tất cả 13 accounts (26 API calls).
 
 **Tên field action đúng tại campaign level:**
 - `actions:comment`

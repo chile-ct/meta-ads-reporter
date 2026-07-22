@@ -265,7 +265,7 @@ def main() -> None:
     print(f"  W2 : {date_ranges['w2'][0]} → {date_ranges['w2'][1]}")
     print(f"  MTD: {date_ranges['m'][0]} → {date_ranges['m'][1]}")
 
-    print("\nPulling campaign data (27 API calls)...")
+    print("\nPulling campaign data (39 API calls)...")
     results = pull_all(date_ranges)
 
     print("Aggregating metrics...")
