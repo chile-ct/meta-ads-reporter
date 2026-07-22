@@ -9,7 +9,6 @@ from reporter.config import ACCOUNTS, FREQ_GREEN, FREQ_YELLOW
 from reporter.meta_api import fetch_campaigns
 from reporter.formatters import fmt_money, fmt_int, fmt_pct, fmt_wow, freq_flag
 from reporter.slack_sender import send_reports
-from reporter.notion_writer import write_monthly_report
 
 
 # ── Date ranges ───────────────────────────────────────────────────────────────
@@ -25,12 +24,7 @@ def compute_date_ranges() -> dict:
     w2_since = (last_monday - timedelta(days=7)).strftime("%Y-%m-%d")
     w2_until = (last_sunday - timedelta(days=7)).strftime("%Y-%m-%d")
 
-    # Month-to-date through yesterday
-    m_since = today.replace(day=1).strftime("%Y-%m-%d")
-    m_until = (today - timedelta(days=1)).strftime("%Y-%m-%d")
-
     return {
-        "m":  (m_since, m_until),
         "w1": (w1_since, w1_until),
         "w2": (w2_since, w2_until),
     }
@@ -43,12 +37,6 @@ def week_label(date_ranges: dict) -> str:
     if d0.month == d1.month:
         return f"{d0.strftime('%b')} {d0.day}–{d1.day}, {d1.year}"
     return f"{d0.strftime('%b %d')} – {d1.strftime('%b %d')}, {d1.year}"
-
-
-def month_label(date_ranges: dict) -> str:
-    since, _ = date_ranges["m"]
-    d = date.fromisoformat(since)
-    return d.strftime("%B %Y")
 
 
 # ── Data pull ─────────────────────────────────────────────────────────────────
@@ -107,15 +95,6 @@ def build_groups(results: dict, period: str) -> dict:
             all_campaigns += results.get((period, group_name, acct_name), [])
         groups[group_name] = aggregate(all_campaigns)
     return groups
-
-
-def build_month_by_account(results: dict) -> dict:
-    out = {}
-    for group_name in ACCOUNTS:
-        out[group_name] = {}
-        for acct_name in ACCOUNTS[group_name]:
-            out[group_name][acct_name] = results.get(("m", group_name, acct_name), [])
-    return out
 
 
 # ── Frequency watch list ──────────────────────────────────────────────────────
@@ -260,18 +239,15 @@ def main() -> None:
     print("Computing date ranges...")
     date_ranges = compute_date_ranges()
     w_label = week_label(date_ranges)
-    m_label = month_label(date_ranges)
     print(f"  W1 : {date_ranges['w1'][0]} → {date_ranges['w1'][1]}")
     print(f"  W2 : {date_ranges['w2'][0]} → {date_ranges['w2'][1]}")
-    print(f"  MTD: {date_ranges['m'][0]} → {date_ranges['m'][1]}")
 
-    print("\nPulling campaign data (39 API calls)...")
+    print("\nPulling campaign data (26 API calls)...")
     results = pull_all(date_ranges)
 
     print("Aggregating metrics...")
     groups_w1 = build_groups(results, "w1")
     groups_w2 = build_groups(results, "w2")
-    groups_m  = build_groups(results, "m")
 
     weekly_groups = {
         name: {"w1": groups_w1[name], "w2": groups_w2[name]}
@@ -286,10 +262,6 @@ def main() -> None:
 
     print(f"Sending Slack messages (test_mode={test_mode})...")
     send_reports(weekly_groups, watch_list, insights, w_label, test_mode=test_mode)
-
-    print("Writing Notion report...")
-    month_by_account = build_month_by_account(results)
-    write_monthly_report(groups_m, month_by_account, watch_list, m_label)
 
     print("\nDone ✅")
 
