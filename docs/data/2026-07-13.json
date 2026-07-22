@@ -1,0 +1,38 @@
+{
+  "week_start": "2026-07-13",
+  "week_label": "Jul 13–19, 2026",
+  "generated_at": "2026-07-22T08:03:05.014754+00:00",
+  "groups": {
+    "BRAND": {
+      "spend": 0,
+      "qe": 0,
+      "er": 0.0,
+      "cpe": 0.0,
+      "installs": 0,
+      "cpi": 0.0,
+      "active_camps": 0,
+      "red_freq_camps": 0
+    },
+    "GROWTH": {
+      "spend": 0,
+      "qe": 0,
+      "er": 0.0,
+      "cpe": 0.0,
+      "installs": 0,
+      "cpi": 0.0,
+      "active_camps": 0,
+      "red_freq_camps": 0
+    },
+    "VERTICAL": {
+      "spend": 0,
+      "qe": 0,
+      "er": 0.0,
+      "cpe": 0.0,
+      "installs": 0,
+      "cpi": 0.0,
+      "active_camps": 0,
+      "red_freq_camps": 0
+    }
+  },
+  "watch_list": []
+}
