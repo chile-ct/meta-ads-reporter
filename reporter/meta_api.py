@@ -8,7 +8,7 @@ from reporter.config import META_GRAPH_URL, META_FIELDS
 TOKEN = os.environ.get("META_ACCESS_TOKEN", "")
 
 
-def _get(url: str, params: dict, retries: int = 3) -> dict:
+def _get(url: str, params: dict, retries: int = 3, label: str = "") -> dict:
     for attempt in range(retries):
         try:
             r = requests.get(url, params=params, timeout=30)
@@ -18,14 +18,14 @@ def _get(url: str, params: dict, retries: int = 3) -> dict:
                 if code in (4, 17, 32, 613) and attempt < retries - 1:
                     time.sleep(2 ** attempt * 5)
                     continue
-                print(f"Meta API error: {data['error']}")
+                print(f"Meta API error [{label}]: {data['error']}")
                 return {}
             return data
         except Exception as e:
             if attempt < retries - 1:
                 time.sleep(5)
             else:
-                print(f"Request failed: {e}")
+                print(f"Request failed [{label}]: {e}")
     return {}
 
 
@@ -44,7 +44,7 @@ def get_active_campaign_ids(account_id: str) -> set:
     params = {"fields": "id,effective_status", "limit": 500, "access_token": TOKEN}
     ids = set()
     while url:
-        data = _get(url, params)
+        data = _get(url, params, label=f"act_{account_id} campaigns")
         for c in data.get("data", []):
             if c.get("effective_status") == "ACTIVE":
                 ids.add(c["id"])
@@ -71,7 +71,7 @@ def fetch_campaigns(account_id: str, since: str, until: str) -> list[dict]:
 
     campaigns = []
     while url:
-        data = _get(url, params)
+        data = _get(url, params, label=f"act_{account_id} insights")
         for row in data.get("data", []):
             actions  = row.get("actions", [])
             spend    = float(row.get("spend", 0) or 0)
