@@ -23,8 +23,11 @@ Nếu người dùng chưa cung cấp token khi bắt đầu session → hỏi n
 
 ## Lịch chạy
 
-**Production run:** Mỗi thứ 2 lúc 9h sáng ICT
-**Test run:** Bất kỳ lúc nào ngoài lịch trên
+**Data pipeline (dashboard):** Nên chạy **mỗi ngày** 9h sáng ICT (cron `0 2 * * *`) để các period preset "Yesterday" / "Last 7 days" luôn mới. Mỗi lần chạy pull lại toàn bộ 7 preset.
+**Slack production report:** Vẫn theo tuần — thứ 2 lúc 9h sáng ICT (dựa trên preset `last_week`).
+**Test run:** Bất kỳ lúc nào ngoài lịch trên → Slack chỉ gửi self DM.
+
+> ⚠️ Cron hiện tại là `0 2 * * 1` (chỉ thứ 2). Đổi sang `0 2 * * *` để chạy hằng ngày. File `.github/workflows/*` chỉ push được bằng PAT có scope `workflow` (PAT hiện dùng thiếu scope này → phải sửa thủ công trên GitHub web UI).
 
 **CRITICAL — Quy tắc Slack:**
 - Production run (thứ 2 lúc 9h sáng) → gửi đến **cả 3** target
@@ -97,10 +100,8 @@ Group = Team. Dashboard hiển thị group **GROWTH** dưới tab **Digital**. P
 
 ## 8-Step Weekly Workflow
 
-### Step 1 — Date ranges
-- **W1** = tuần vừa kết thúc (Mon–Sun)
-- **W2** = tuần trước đó (Mon–Sun)
-- Thường chạy vào sáng thứ 2, nên W1 = tuần trước, W2 = 2 tuần trước
+### Step 1 — Date ranges (period presets)
+`main.py > compute_periods()` tự tính 7 preset, mỗi preset gồm `cur` (kỳ hiện tại) + `prev` (kỳ liền trước cùng độ dài). Week/month-to-date kết thúc ở hôm qua. Slack report vẫn dùng `last_week` (cur = tuần vừa rồi, prev = tuần trước đó).
 
 ### Step 2 — Pull Meta Ads data
 Dùng `mcp__Facebook_Ads_MCP__ads_get_ad_entities` cho mỗi account:
@@ -110,7 +111,9 @@ time_range: {since: "YYYY-MM-DD", until: "YYYY-MM-DD"}
 fields: spend, reach, impressions, frequency, clicks, cpc, ctr, actions
 filtering: [{field: "spend", operator: "GREATER_THAN", value: "0"}]
 ```
-Pull W1 và W2 cho tất cả 13 accounts (26 API calls).
+Pipeline Python (`main.py`) pull **7 period preset**, mỗi preset có range `cur` + range `prev` tương đương (để tính "vs kỳ trước"), cho tất cả 13 accounts → ~182 API calls. Preset: Yesterday, This week, Last week, Last 7 days, Last 30 days, This month, Last month. Week/month-to-date kết thúc ở **hôm qua** (hôm nay coi như chưa đủ ngày).
+
+Mỗi preset là 1 query Meta thật trên đúng range đó — KHÔNG cộng dồn dữ liệu ngày, vì `reach`/`frequency` không cộng được (Meta dedupe theo range).
 
 **Tên field action đúng tại campaign level:**
 - `actions:comment`
@@ -118,32 +121,37 @@ Pull W1 và W2 cho tất cả 13 accounts (26 API calls).
 - `actions:link_click`
 
 ### Step 3 — Compute metrics
-Tính theo định nghĩa ở trên cho từng group. Tính WoW %. Gán frequency flags.
+Tính theo định nghĩa ở trên cho từng group. Tính delta cur vs prev. Gán frequency flags.
 
-### Step 4 — Build JSON report
-Cấu trúc file:
+### Step 4 — Build JSON report (1 file / preset)
+Mỗi preset ghi 1 file `docs/data/<key>.json`:
 ```json
 {
-  "week_start": "YYYY-MM-DD",
-  "week_label": "Mon DD–DD, YYYY",
+  "key": "last_7d",
+  "period_label": "Last 7 days",
+  "week_label": "Jul 15–21, 2026",   // range label của kỳ hiện tại (dùng lại tên cũ)
+  "since": "YYYY-MM-DD", "until": "YYYY-MM-DD",
+  "prev_label": "Jul 8–14, 2026",
   "total_spend": 0.00,
   "generated_at": "YYYY-MM-DDTHH:MM:SSZ",
   "detail_available": true,
   "groups": {
-    "BRAND": { "spend", "reach", "avg_freq", "qe", "cpe", "er", "accounts": {...} },
-    "GROWTH": { "spend", "reach", "avg_freq", "link_clicks", "accounts": {...} },
-    "VERTICAL": { "spend", "reach", "avg_freq", "qe", "cpl", "accounts": {...} }
+    "BRAND":    { "spend","reach","impressions","avg_freq","qe","cpe","er","installs","cpi","active_camps","red_freq_camps","accounts": {...} },
+    "GROWTH":   { ...same..., "link_clicks", "accounts": {...} },
+    "VERTICAL": { ...same..., "cpl", "accounts": {...} }
   },
-  "watch_list": [ ...campaigns sorted by freq desc, all freq >= 3... ]
+  "prev": { "BRAND": {...group metrics, KHÔNG có accounts/campaigns...}, "GROWTH": {...}, "VERTICAL": {...} },
+  "watch_list": [ ...campaigns freq >= 3, sorted desc, top 8... ]
 }
 ```
-Mỗi account trong `accounts` có `campaigns` array với: name, spend, reach, freq, clicks, cpc, ctr, và metrics tương ứng (qe/cpe/er hoặc link_clicks).
+- `groups` (kỳ hiện tại) có `accounts` → mỗi account có `campaigns` array: name, spend, reach, impressions, freq, clicks, cpc, ctr, qe, cpe, er, link_clicks, installs, is_install, is_active.
+- `prev` chỉ chứa group-level metrics (không campaigns) để tính delta "vs kỳ trước" trên dashboard.
 
 ### Step 5 — Push JSON to GitHub
-- Path: `docs/data/YYYY-MM-DD.json` trên branch `main`
-- Cập nhật `docs/data/index.json` (thêm date mới vào đầu mảng)
-- Dùng `mcp__github__create_or_update_file` với SHA của file hiện tại (nếu update)
-- Nếu 403: lưu file tại `/tmp/YYYY-MM-DD.json`, báo user paste thủ công lên GitHub web UI
+- Path: `docs/data/<key>.json` trên branch `main` (yesterday, this_week, last_week, last_7d, last_30d, this_month, last_month).
+- `docs/data/index.json` = mảng `[{ "key", "label" }, ...]` theo đúng thứ tự hiển thị trên dropdown.
+- Pipeline cron (GitHub Actions) tự commit toàn bộ `docs/data/` sau khi chạy `python main.py`.
+- Nếu chạy tay và bị 403: lưu file tại `/tmp/`, báo user paste thủ công lên GitHub web UI.
 
 ### Step 6 — Build Slack messages
 
@@ -192,8 +200,10 @@ Output plain text tóm tắt: date range, total spend, key metrics, deliverables
 
 URL: `https://chile-ct.github.io/meta-ads-reporter/`
 
-Dashboard tự động load từ `docs/data/index.json` → đọc từng file JSON theo ngày.
+Dashboard load `docs/data/index.json` (mảng preset) → fetch từng `docs/data/<key>.json`. Dropdown header là **period selector** (Yesterday / This week / Last week / Last 7 days / Last 30 days / This month / Last month). Chart Overview so sánh **kỳ này vs kỳ trước** (bar chart), dùng field `prev` trong mỗi file.
 Không cần deploy gì thêm — GitHub Pages tự serve khi file được push lên `main`.
+
+> Các file tuần cũ `docs/data/YYYY-MM-DD.json` không còn được `index.json` tham chiếu (orphaned) — vô hại, có thể xoá sau nếu muốn.
 
 ---
 
