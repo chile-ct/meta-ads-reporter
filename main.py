@@ -121,7 +121,9 @@ def build_watch_list_from_results(results: dict) -> list:
                     items.append({
                         "name":      c["name"],
                         "account":   acct_name,
+                        "group":     group_name,
                         "frequency": c["frequency"],
+                        "reach":     c["reach"],
                         "flag":      freq_flag(c["frequency"]),
                         "spend":     c["spend"],
                     })
@@ -184,30 +186,91 @@ def generate_insights(groups_w1: dict, groups_w2: dict) -> list:
 
 # ── Weekly snapshot (for GitHub Pages dashboard) ──────────────────────────────
 
-def save_weekly_snapshot(groups_w1: dict, watch_list: list, w_label_str: str, date_ranges: dict) -> None:
+def _campaign_out(c: dict) -> dict:
+    """Per-campaign row the dashboard renders (superset for all tab types)."""
+    return {
+        "name":        c.get("name", ""),
+        "spend":       round(c.get("spend", 0), 2),
+        "reach":       int(c.get("reach", 0)),
+        "impressions": int(c.get("impressions", 0)),
+        "freq":        round(c.get("frequency", 0), 2),
+        "clicks":      int(c.get("clicks", 0)),
+        "cpc":         round(c.get("cpc", 0), 4),
+        "ctr":         round(c.get("ctr", 0), 4),
+        "qe":          int(c.get("qe", 0)),
+        "cpe":         round(c.get("cpe", 0), 2),
+        "er":          round(c.get("er", 0), 4),
+        "link_clicks": int(c.get("link_clicks", 0)),
+        "installs":    int(c.get("installs", 0)),
+        "is_install":  bool(c.get("is_install", False)),
+        "is_active":   bool(c.get("is_active", False)),
+    }
+
+
+def _aggregate_detail(camps: list) -> dict:
+    """Aggregate metrics for an account or group, incl. weighted avg_freq."""
+    spend      = sum(c.get("spend", 0) for c in camps)
+    reach      = sum(c.get("reach", 0) for c in camps)
+    impr       = sum(c.get("impressions", 0) for c in camps)
+    qe         = sum(c.get("qe", 0) for c in camps)
+    lc         = sum(c.get("link_clicks", 0) for c in camps)
+    clicks     = sum(c.get("clicks", 0) for c in camps)
+    installs   = sum(c.get("installs", 0) for c in camps)
+    inst_spend = sum(c.get("spend", 0) for c in camps if c.get("is_install"))
+    return {
+        "spend":          round(spend, 2),
+        "reach":          int(reach),
+        "impressions":    int(impr),
+        "clicks":         int(clicks),
+        "avg_freq":       round(impr / reach, 2) if reach else 0.0,
+        "qe":             int(qe),
+        "cpe":            round(spend / qe, 2) if qe else 0.0,
+        "er":             round(qe / reach * 100, 4) if reach else 0.0,
+        "link_clicks":    int(lc),
+        "cpl":            round(spend / qe, 2) if qe else 0.0,
+        "installs":       int(installs),
+        "cpi":            round(inst_spend / installs, 2) if installs else 0.0,
+        "active_camps":   sum(1 for c in camps if c.get("spend", 0) > 0),
+        "red_freq_camps": sum(1 for c in camps if c.get("frequency", 0) >= FREQ_YELLOW),
+    }
+
+
+def build_snapshot_groups(results: dict, period: str = "w1") -> dict:
+    """Build the full group → accounts → campaigns structure for the dashboard."""
+    groups = {}
+    for group_name in ACCOUNTS:
+        all_camps = []
+        accounts = {}
+        for acct_name in ACCOUNTS[group_name]:
+            camps = results.get((period, group_name, acct_name), [])
+            all_camps += camps
+            acct = _aggregate_detail(camps)
+            acct["campaigns"] = [_campaign_out(c) for c in camps]
+            accounts[acct_name] = acct
+        group = _aggregate_detail(all_camps)
+        group["accounts"] = accounts
+        groups[group_name] = group
+    return groups
+
+
+def save_weekly_snapshot(results: dict, watch_list: list, w_label_str: str, date_ranges: dict) -> None:
     week_start = date_ranges["w1"][0]
+    groups = build_snapshot_groups(results, "w1")
+    total_spend = sum(g["spend"] for g in groups.values())
     snapshot = {
-        "week_start":    week_start,
-        "week_label":    w_label_str,
-        "generated_at":  datetime.now(timezone.utc).isoformat(),
-        "groups": {
-            name: {
-                "spend":    round(groups_w1[name]["spend"], 2),
-                "qe":       int(groups_w1[name]["qe"]),
-                "er":       round(groups_w1[name]["er"], 4),
-                "cpe":      round(groups_w1[name]["cpe"], 2),
-                "installs": int(groups_w1[name].get("installs", 0)),
-                "cpi":      round(groups_w1[name].get("cpi", 0), 2),
-                "active_camps":   int(groups_w1[name].get("active_camps", 0)),
-                "red_freq_camps": int(groups_w1[name].get("red_freq_camps", 0)),
-            }
-            for name in ("BRAND", "GROWTH", "VERTICAL")
-        },
+        "week_start":       week_start,
+        "week_label":       w_label_str,
+        "total_spend":      round(total_spend, 2),
+        "generated_at":     datetime.now(timezone.utc).isoformat(),
+        "detail_available": True,
+        "groups":           groups,
         "watch_list": [
             {
                 "name":      item["name"],
                 "account":   item["account"],
+                "group":     item.get("group", ""),
                 "frequency": round(item["frequency"], 2),
+                "reach":     int(item.get("reach", 0)),
                 "spend":     round(item["spend"], 2),
                 "flag":      item["flag"],
             }
@@ -258,7 +321,7 @@ def main() -> None:
     insights   = generate_insights(groups_w1, groups_w2)
 
     print("\nSaving weekly snapshot for dashboard...")
-    save_weekly_snapshot(groups_w1, watch_list, w_label, date_ranges)
+    save_weekly_snapshot(results, watch_list, w_label, date_ranges)
 
     print(f"Sending Slack messages (test_mode={test_mode})...")
     send_reports(weekly_groups, watch_list, insights, w_label, test_mode=test_mode)
