@@ -93,6 +93,8 @@
     .dig-sub .tab-pane{padding-top:4px}
     .vert-group{margin:0 0 18px}
     .vert-title{font-size:14px;font-weight:800;color:var(--text);margin:0 0 8px;padding:6px 10px;background:#ecfdf5;border-left:4px solid #10b981;border-radius:4px}
+    .tab-meta{font-size:11px;font-weight:600;color:var(--muted);margin-left:6px}
+    .tab-btn.on .tab-meta{color:var(--brand)}
 
     /* ── Account block ─────────────────────────── */
     .acct-block{border:1px solid var(--border);border-radius:8px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
@@ -713,13 +715,18 @@ function renderDigitalTab(c,prev){
   if(detail){
     const appAccts=gActive.filter(a=>ACCT_PHASE[a]==='app');
     const demAccts=gActive.filter(a=>ACCT_PHASE[a]==='demand');
+    const sum=list=>list.reduce((s,a)=>s+(g.accounts[a]?.spend||0),0);
+    const appSpend=sum(appAccts),demSpend=sum(demAccts);
+    // Default to the phase that actually has more spend, so no tab looks "empty"
+    const appDefault=appSpend>=demSpend;
+    const tag=(icon,lbl,accs,spend)=>`${icon} ${lbl} <span class="tab-meta">${accs.length} acct · SGD ${fm(spend)}</span>`;
     html+=`<div class="dig-sub">
       <div class="tab-bar">
-        <button class="tab-btn on" onclick="digitalSub(this,'dig-app')">📱 App install</button>
-        <button class="tab-btn" onclick="digitalSub(this,'dig-demand')">🎯 Demand</button>
+        <button class="tab-btn${appDefault?' on':''}" onclick="digitalSub(this,'dig-app')">${tag('📱','App install',appAccts,appSpend)}</button>
+        <button class="tab-btn${appDefault?'':' on'}" onclick="digitalSub(this,'dig-demand')">${tag('🎯','Demand',demAccts,demSpend)}</button>
       </div>
-      ${digPhasePane(g,appAccts,'dig-app',true)}
-      ${digPhasePane(g,demAccts,'dig-demand',false)}
+      ${digPhasePane(g,appAccts,'dig-app',appDefault)}
+      ${digPhasePane(g,demAccts,'dig-demand',!appDefault)}
     </div>`;
   }
   return html;
