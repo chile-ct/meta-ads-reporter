@@ -1,7 +1,7 @@
 {
   "week_start": "2026-07-13",
   "week_label": "Jul 13–19, 2026",
-  "generated_at": "2026-07-22T08:20:50.509731+00:00",
+  "generated_at": "2026-07-22T08:27:17.954088+00:00",
   "groups": {
     "BRAND": {
       "spend": 2782.03,
@@ -14,13 +14,13 @@
       "red_freq_camps": 0
     },
     "GROWTH": {
-      "spend": 3604.65,
-      "qe": 179329,
-      "er": 15.9734,
+      "spend": 3675.15,
+      "qe": 179597,
+      "er": 15.705,
       "cpe": 0.02,
-      "installs": 2696,
-      "cpi": 1.14,
-      "active_camps": 32,
+      "installs": 2791,
+      "cpi": 1.13,
+      "active_camps": 34,
       "red_freq_camps": 5
     },
     "VERTICAL": {
