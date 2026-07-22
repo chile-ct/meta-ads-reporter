@@ -88,6 +88,11 @@
     .tab-btn.on{color:var(--brand);background:var(--surface);border-color:var(--border);border-bottom-color:var(--surface)}
     .tab-pane{display:none}
     .tab-pane.on{display:block}
+    .dig-sub{margin-top:16px}
+    .dig-sub .tab-bar{padding:0;border-bottom:2px solid var(--border);margin-bottom:14px}
+    .dig-sub .tab-pane{padding-top:4px}
+    .vert-group{margin:0 0 18px}
+    .vert-title{font-size:14px;font-weight:800;color:var(--text);margin:0 0 8px;padding:6px 10px;background:#ecfdf5;border-left:4px solid #10b981;border-radius:4px}
 
     /* ── Account block ─────────────────────────── */
     .acct-block{border:1px solid var(--border);border-radius:8px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
@@ -218,6 +223,11 @@ const B_ACCTS=['gds_brand','pty_branding_sgd','veh_brand','job_branding_sgd'];
 const G_ACCTS=['job_sgd','growth_sgd','veh_sgd','gds_elt_sgd','pty_app','job_app','pty_sgd'];
 const V_ACCTS=['pty_seller_sgd','job_trade_sgd'];
 const G_COLOR={BRAND:'#3b82f6',GROWTH:'#10b981',VERTICAL:'#f59e0b'};
+// Digital sub-tab phase (App install vs Demand) — from CLAUDE.md Phase table
+const ACCT_PHASE={growth_sgd:'app',pty_app:'app',job_app:'app',job_sgd:'demand',veh_sgd:'demand',gds_elt_sgd:'demand',pty_sgd:'demand'};
+// Vertical derived from account-name prefix
+const VERT_LBL={gds:'GDS / Electronics',pty:'Property',veh:'Vehicle',job:'Job',growth:'Chợ Tốt (Common)'};
+const vertOf=a=>a.split('_')[0];
 
 let periods={},order=[],cur=null,chart=null,metric='spend',page='overview';
 
@@ -699,17 +709,55 @@ function renderDigitalTab(c,prev){
   }else{
     html+=`<div class="vert-note">Spend SGD ${fm(g.spend)}, Clicks ${fi(g.link_clicks??g.clicks??g.qe??0)}</div>`;
   }
-  // 3. Per-account campaign detail
+  // 3. Sub-tabs: App install vs Demand → grouped by vertical → account campaigns
   if(detail){
-    gActive.forEach(a=>{
+    const appAccts=gActive.filter(a=>ACCT_PHASE[a]==='app');
+    const demAccts=gActive.filter(a=>ACCT_PHASE[a]==='demand');
+    html+=`<div class="dig-sub">
+      <div class="tab-bar">
+        <button class="tab-btn on" onclick="digitalSub(this,'dig-app')">📱 App install</button>
+        <button class="tab-btn" onclick="digitalSub(this,'dig-demand')">🎯 Demand</button>
+      </div>
+      ${digPhasePane(g,appAccts,'dig-app',true)}
+      ${digPhasePane(g,demAccts,'dig-demand',false)}
+    </div>`;
+  }
+  return html;
+}
+
+// Switch between App install / Demand sub-tabs inside the Digital tab
+function digitalSub(btn,pane){
+  const bar=btn.closest('.tab-bar');
+  bar.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const wrap=bar.parentElement;
+  wrap.querySelectorAll(':scope > .tab-pane').forEach(p=>p.classList.remove('on'));
+  const target=wrap.querySelector('#'+pane);
+  if(target)target.classList.add('on');
+}
+
+// Render one phase pane: accounts grouped by vertical, then per-account campaign tables
+function digPhasePane(g,accts,paneId,on){
+  const cls='tab-pane'+(on?' on':'');
+  if(!accts.length){
+    return `<div class="${cls}" id="${paneId}"><div class="vert-note">Không có account nào chạy trong kỳ này.</div></div>`;
+  }
+  const byVert={};
+  accts.forEach(a=>{const v=vertOf(a);(byVert[v]=byVert[v]||[]).push(a);});
+  let inner='';
+  Object.keys(byVert).forEach(v=>{
+    const spend=byVert[v].reduce((s,a)=>s+(g.accounts[a]?.spend||0),0);
+    inner+=`<div class="vert-group"><div class="vert-title">${VERT_LBL[v]||v.toUpperCase()} — SGD ${fm(spend)}</div>`;
+    byVert[v].forEach(a=>{
       const m=g.accounts[a];if(!m)return;
-      html+=`<div class="acct-block">
+      inner+=`<div class="acct-block">
         <div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m.spend)}</span></div>
         <div class="acct-content">${m.campaigns?.length?campTable(m.campaigns,'GROWTH',a):''}${recoList(m.recommendations)}</div>
       </div>`;
     });
-  }
-  return html;
+    inner+=`</div>`;
+  });
+  return `<div class="${cls}" id="${paneId}">${inner}</div>`;
 }
 
 /* ── VERTICAL tab ───────────────────────────────────────── */
