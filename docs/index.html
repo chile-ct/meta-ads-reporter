@@ -210,12 +210,13 @@
 const ACCT_LBL={
   gds_brand:'GDS Brand',pty_branding_sgd:'PTY Branding',
   veh_brand:'VEH Brand',job_branding_sgd:'Job Branding',
-  growth_sgd:'Growth SGD',job_sgd:'Job SGD',gds_elt_sgd:'GDS ELT',
-  job_trade_sgd:'Job Trade',pty_sgd:'PTY SGD',
+  job_sgd:'Job SGD',growth_sgd:'Growth SGD',veh_sgd:'VEH SGD',gds_elt_sgd:'GDS ELT',
+  pty_app:'PTY App',job_app:'Job App',pty_sgd:'PTY SGD',
+  pty_seller_sgd:'PTY Seller',job_trade_sgd:'Job Trade',
 };
 const B_ACCTS=['gds_brand','pty_branding_sgd','veh_brand','job_branding_sgd'];
-const G_ACCTS=['growth_sgd','job_sgd','gds_elt_sgd'];
-const V_ACCTS=['job_trade_sgd','pty_sgd'];
+const G_ACCTS=['job_sgd','growth_sgd','veh_sgd','gds_elt_sgd','pty_app','job_app','pty_sgd'];
+const V_ACCTS=['pty_seller_sgd','job_trade_sgd'];
 const G_COLOR={BRAND:'#3b82f6',GROWTH:'#10b981',VERTICAL:'#f59e0b'};
 
 let periods={},order=[],cur=null,chart=null,metric='spend',page='overview';
@@ -684,11 +685,12 @@ function renderDigitalTab(c,prev){
   }else{
     html+=autoGroupHighlight(g,pg,'GROWTH');
   }
-  // 2. Account summary table + demographics
+  // 2. Account summary table + demographics — only accounts that ran (spend>0)
   const G_DEMO_LBL={growth_sgd:'Common Chợ Tốt',job_sgd:'JOB',gds_elt_sgd:'GDS'};
+  const gActive=G_ACCTS.filter(a=>g.accounts?.[a]?.spend>0);
   if(g.accounts){
-    html+=`<div class="pb">${acctSumTable(g.accounts,G_ACCTS,'GROWTH')}</div>`;
-    const acctDemos=G_ACCTS.filter(a=>g.accounts[a]?.demographics);
+    html+=`<div class="pb">${acctSumTable(g.accounts,gActive,'GROWTH')}</div>`;
+    const acctDemos=gActive.filter(a=>g.accounts[a]?.demographics);
     if(acctDemos.length){
       acctDemos.forEach(a=>{html+=renderDemoChart(g.accounts[a].demographics,G_COLOR.GROWTH,G_DEMO_LBL[a]||a);});
     }else if(g.demographics){
@@ -699,7 +701,7 @@ function renderDigitalTab(c,prev){
   }
   // 3. Per-account campaign detail
   if(detail){
-    G_ACCTS.forEach(a=>{
+    gActive.forEach(a=>{
       const m=g.accounts[a];if(!m)return;
       html+=`<div class="acct-block">
         <div class="acct-head"><strong>${ACCT_LBL[a]||a}</strong><span class="acct-spend">SGD ${fm(m.spend)}</span></div>
