@@ -6,7 +6,7 @@
   "until": "2026-07-19",
   "week_start": "2026-07-13",
   "total_spend": 6601.38,
-  "generated_at": "2026-07-22T08:58:30.799929+00:00",
+  "generated_at": "2026-07-22T09:19:28.073213+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -1011,7 +1011,7 @@
     "VERTICAL": {
       "spend": 144.2,
       "reach": 42399,
-      "impressions": 125318,
+      "impressions": 125320,
       "clicks": 492,
       "avg_freq": 2.96,
       "qe": 444,
@@ -1027,7 +1027,7 @@
         "pty_seller_sgd": {
           "spend": 73.53,
           "reach": 0,
-          "impressions": 3203,
+          "impressions": 3205,
           "clicks": 0,
           "avg_freq": 0.0,
           "qe": 108,
@@ -1044,7 +1044,7 @@
               "name": "promax_limit_5k_test3",
               "spend": 73.53,
               "reach": 0,
-              "impressions": 3203,
+              "impressions": 3205,
               "freq": 0.0,
               "clicks": 0,
               "cpc": 0.0,
