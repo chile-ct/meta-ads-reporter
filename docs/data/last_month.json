@@ -6,7 +6,7 @@
   "until": "2026-07-31",
   "week_start": "2026-07-01",
   "total_spend": 30902.48,
-  "generated_at": "2026-08-03T05:31:22.367525+00:00",
+  "generated_at": "2026-08-10T03:43:16.188776+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -296,7 +296,7 @@
               "link_clicks": 27,
               "installs": 642,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             }
           ]
         },
@@ -331,7 +331,7 @@
               "link_clicks": 30,
               "installs": 927,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             }
           ]
         }
@@ -1215,13 +1215,13 @@
     "VERTICAL": {
       "spend": 1926.7,
       "reach": 174580,
-      "impressions": 1043280,
+      "impressions": 1043416,
       "clicks": 3694,
       "avg_freq": 5.98,
-      "qe": 3820,
+      "qe": 3825,
       "cpe": 0.5,
-      "er": 2.1881,
-      "link_clicks": 3817,
+      "er": 2.191,
+      "link_clicks": 3822,
       "cpl": 0.5,
       "installs": 3,
       "cpi": 6.21,
@@ -1231,13 +1231,13 @@
         "pty_seller_sgd": {
           "spend": 536.15,
           "reach": 4976,
-          "impressions": 42806,
+          "impressions": 42905,
           "clicks": 285,
-          "avg_freq": 8.6,
-          "qe": 1048,
+          "avg_freq": 8.62,
+          "qe": 1053,
           "cpe": 0.51,
-          "er": 21.0611,
-          "link_clicks": 1047,
+          "er": 21.1616,
+          "link_clicks": 1052,
           "cpl": 0.51,
           "installs": 3,
           "cpi": 6.21,
@@ -1299,15 +1299,15 @@
               "name": "newchurn acquire",
               "spend": 275.37,
               "reach": 0,
-              "impressions": 11257,
+              "impressions": 11356,
               "freq": 0.0,
               "clicks": 0,
               "cpc": 0.0,
               "ctr": 0.0,
-              "qe": 612,
+              "qe": 617,
               "cpe": 0.45,
               "er": 0.0,
-              "link_clicks": 612,
+              "link_clicks": 617,
               "installs": 0,
               "is_install": false,
               "is_active": true
@@ -1334,7 +1334,7 @@
         "job_trade_sgd": {
           "spend": 1390.55,
           "reach": 169604,
-          "impressions": 1000474,
+          "impressions": 1000511,
           "clicks": 3409,
           "avg_freq": 5.9,
           "qe": 2772,
@@ -1521,7 +1521,7 @@
               "name": "recruiter_L1M_discount 50 tier 1&2",
               "spend": 37.74,
               "reach": 0,
-              "impressions": 1080,
+              "impressions": 1117,
               "freq": 0.0,
               "clicks": 0,
               "cpc": 0.0,
@@ -1631,19 +1631,19 @@
       "red_freq_camps": 0
     },
     "GROWTH": {
-      "spend": 13947.74,
-      "reach": 2269451,
-      "impressions": 9460406,
-      "clicks": 712822,
-      "avg_freq": 4.17,
-      "qe": 582423,
+      "spend": 13659.04,
+      "reach": 2203483,
+      "impressions": 9266296,
+      "clicks": 702366,
+      "avg_freq": 4.21,
+      "qe": 574712,
       "cpe": 0.02,
-      "er": 25.6636,
-      "link_clicks": 582002,
+      "er": 26.082,
+      "link_clicks": 574293,
       "cpl": 0.02,
-      "installs": 10384,
-      "cpi": 1.33,
-      "active_camps": 78,
+      "installs": 10327,
+      "cpi": 1.32,
+      "active_camps": 74,
       "red_freq_camps": 9
     },
     "VERTICAL": {
