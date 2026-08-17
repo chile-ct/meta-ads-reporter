@@ -6,7 +6,7 @@
   "until": "2026-07-31",
   "week_start": "2026-07-01",
   "total_spend": 30902.48,
-  "generated_at": "2026-08-10T03:43:16.188776+00:00",
+  "generated_at": "2026-08-17T02:51:50.961041+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -210,7 +210,7 @@
               "link_clicks": 24,
               "installs": 49,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "brand_eng_sale_pty_thodiacamp_b2c_exclude_quan12_0726_0826",
@@ -1413,7 +1413,7 @@
               "link_clicks": 383,
               "installs": 0,
               "is_install": false,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "recruiter_new_17k_jul26",
@@ -1631,19 +1631,19 @@
       "red_freq_camps": 0
     },
     "GROWTH": {
-      "spend": 13659.04,
-      "reach": 2203483,
-      "impressions": 9266296,
-      "clicks": 702366,
-      "avg_freq": 4.21,
-      "qe": 574712,
+      "spend": 13947.74,
+      "reach": 2269451,
+      "impressions": 9460406,
+      "clicks": 712822,
+      "avg_freq": 4.17,
+      "qe": 582423,
       "cpe": 0.02,
-      "er": 26.082,
-      "link_clicks": 574293,
+      "er": 25.6636,
+      "link_clicks": 582002,
       "cpl": 0.02,
-      "installs": 10327,
-      "cpi": 1.32,
-      "active_camps": 74,
+      "installs": 10384,
+      "cpi": 1.33,
+      "active_camps": 78,
       "red_freq_camps": 9
     },
     "VERTICAL": {
