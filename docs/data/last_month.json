@@ -6,7 +6,7 @@
   "until": "2026-07-31",
   "week_start": "2026-07-01",
   "total_spend": 30902.48,
-  "generated_at": "2026-08-17T02:51:50.961041+00:00",
+  "generated_at": "2026-08-24T02:54:50.552718+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -56,7 +56,7 @@
               "link_clicks": 8,
               "installs": 140,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             }
           ]
         },
@@ -159,7 +159,7 @@
               "link_clicks": 10,
               "installs": 32,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "brand_eng_pty_B2S_b2b_0726_0826",
@@ -881,7 +881,7 @@
               "link_clicks": 2429,
               "installs": 849,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "fb_growth_pty_app_android_install_app_pro_thodia_bau_072126_HCM_atc",
@@ -1206,7 +1206,7 @@
               "link_clicks": 259,
               "installs": 0,
               "is_install": false,
-              "is_active": true
+              "is_active": false
             }
           ]
         }
