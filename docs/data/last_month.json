@@ -6,7 +6,7 @@
   "until": "2026-07-31",
   "week_start": "2026-07-01",
   "total_spend": 30902.48,
-  "generated_at": "2026-08-24T02:54:50.552718+00:00",
+  "generated_at": "2026-08-31T07:52:56.935620+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -108,7 +108,7 @@
               "link_clicks": 40,
               "installs": 502,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "brand_eng_renter_b2s_pty_b2c_0726_0826",
@@ -1647,20 +1647,20 @@
       "red_freq_camps": 9
     },
     "VERTICAL": {
-      "spend": 1294.65,
-      "reach": 467561,
-      "impressions": 1695379,
-      "clicks": 5058,
-      "avg_freq": 3.63,
-      "qe": 3243,
-      "cpe": 0.4,
-      "er": 0.6936,
-      "link_clicks": 3237,
-      "cpl": 0.4,
+      "spend": 0,
+      "reach": 0,
+      "impressions": 0,
+      "clicks": 0,
+      "avg_freq": 0.0,
+      "qe": 0,
+      "cpe": 0.0,
+      "er": 0.0,
+      "link_clicks": 0,
+      "cpl": 0.0,
       "installs": 0,
       "cpi": 0.0,
-      "active_camps": 14,
-      "red_freq_camps": 3
+      "active_camps": 0,
+      "red_freq_camps": 0
     }
   },
   "prev_label": "Jun 1–30, 2026"
