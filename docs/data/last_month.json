@@ -6,7 +6,7 @@
   "until": "2026-08-31",
   "week_start": "2026-08-01",
   "total_spend": 48247.8,
-  "generated_at": "2026-09-07T06:46:25.415640+00:00",
+  "generated_at": "2026-09-14T07:20:14.375581+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -364,7 +364,7 @@
               "link_clicks": 14,
               "installs": 172,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             }
           ]
         },
@@ -726,7 +726,7 @@
               "link_clicks": 90911,
               "installs": 710,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "digital_veh_mc_bl_mf_clicklink_seg2",
@@ -743,7 +743,7 @@
               "link_clicks": 47413,
               "installs": 336,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "digital_veh_car_bl_mf_clicklink_seg5",
@@ -760,7 +760,7 @@
               "link_clicks": 42585,
               "installs": 85,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "fb_growth_veh_web_N/A_demand_traffic_pro_MCGas_bau_081426",
@@ -1102,7 +1102,7 @@
               "link_clicks": 1305,
               "installs": 654,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             },
             {
               "name": "fb_growth_pty_app_android_install_app_pro_thodia_bau_082426_HCM_atc_targeting_promoscheme",
