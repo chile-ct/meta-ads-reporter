@@ -6,7 +6,7 @@
   "until": "2026-08-31",
   "week_start": "2026-08-01",
   "total_spend": 48247.8,
-  "generated_at": "2026-09-21T07:23:58.283024+00:00",
+  "generated_at": "2026-09-28T07:55:46.587617+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -1341,7 +1341,7 @@
               "link_clicks": 1264,
               "installs": 0,
               "is_install": false,
-              "is_active": true
+              "is_active": false
             }
           ]
         }
