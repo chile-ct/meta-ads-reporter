@@ -6,7 +6,7 @@
   "until": "2026-09-30",
   "week_start": "2026-09-01",
   "total_spend": 21669.03,
-  "generated_at": "2026-10-05T07:53:36.442760+00:00",
+  "generated_at": "2026-10-12T08:15:36.624750+00:00",
   "detail_available": true,
   "groups": {
     "BRAND": {
@@ -56,7 +56,7 @@
               "link_clicks": 354,
               "installs": 163,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             }
           ]
         },
@@ -1072,7 +1072,7 @@
               "is_active": false
             },
             {
-              "name": "digital_fb_pty_sell_house_lead",
+              "name": "digital_fb_pty_sell_house_lead_archived",
               "spend": 32.69,
               "reach": 7934,
               "impressions": 18052,
@@ -1086,10 +1086,10 @@
               "link_clicks": 1686,
               "installs": 0,
               "is_install": false,
-              "is_active": true
+              "is_active": false
             },
             {
-              "name": "digital_fb_pty_sell_apartment_lead",
+              "name": "digital_fb_pty_sell_apartment_lead_archived",
               "spend": 33.05,
               "reach": 7741,
               "impressions": 20462,
@@ -1103,7 +1103,7 @@
               "link_clicks": 591,
               "installs": 3,
               "is_install": true,
-              "is_active": true
+              "is_active": false
             }
           ]
         }
